@@ -24,7 +24,14 @@ router.get("/", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("Telle-dashboard", {leads: leads, date: date.newDateTopBar(), greeting: getGreeting()});
+            const leadsToday = leads.length;
+             Lead.countDocuments({status: "Hot"}, function(err, hotLeads){
+                if(err){
+                    console.log(err);
+                } else {
+                    res.render("Telle-dashboard", {leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
+                }
+            });
         }
     })
 });
