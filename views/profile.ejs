@@ -1,0 +1,135 @@
+<%- include('partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+<link rel="stylesheet" href="/css/profile.css">
+
+<%- include('partials/sidebar')  -%>
+
+    <div class="flex-grow-1 whole-body">
+        <div class="container-fluid topBar mb-0">
+            <div class="row mb-0">
+                <div class="col-md-6">
+                    <div class="Search-anything">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for anything here.">
+                            <div class="input-group-append">
+                                <button class="btn " type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="language d-flex align-items-center">
+                        <i class="fa-solid fa-language fs-3 h-100"></i>
+                        <form action="/language" method="post">
+                            <select class="form-select d-inline" >
+                                <option>English (US)</option>
+                                <option>English (UK)</option>
+                                <option>French</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="GoodMorning text-end me-4">
+                        <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i> <%= greeting %></span>
+                        <span class="m-0 p-0 d-block date"><%= date %> </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-6 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/profile" class="text-decoration-none text-dark">My Profile</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                   
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card ">
+                        <div class="card-body">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                                <span class="text-dark mt-3 fs-5 fw-bold">Akash Yadav</span>
+                                <span class="text-muted fs-6 role">TelleCaller</span>
+                                <div class="edit-details mt-2">
+                                    <button class="btn btn-primary"> <i class="fa-solid fa-pen"></i> Edit Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                  <p class="mb-0">Full Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                  <p class="text-muted name mb-0">Akash Yadav</p>
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                  <p class="text-muted email mb-0">example@example.com</p>
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <p class="mb-0">Phone</p>
+                                </div>
+                                <div class="col-sm-9">
+                                  <p class="text-muted phone mb-0">8989898898</p>
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <p class="mb-0">Mobile</p>
+                                </div>
+                                <div class="col-sm-9">
+                                  <p class="text-muted mb-0">(098) 765-4321</p>
+                                </div>
+                              </div>
+                              <hr>
+                              <div class="row">
+                                <div class="col-sm-3">
+                                  <p class="mb-0">Address</p>
+                                </div>
+                                <div class="col-sm-9">
+                                  <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                </div>
+                              </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
+
+    </div>
+
+<%- include('partials/footer')  -%>
+
+
