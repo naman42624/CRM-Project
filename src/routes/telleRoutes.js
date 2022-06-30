@@ -46,6 +46,17 @@ router.get("/Telle-leads", function(req, res){
     res.render("Telle-leads", {date: date.newDateTopBar(), greeting: getGreeting()});
 });
 
+// All Followups
+router.get("/allFollowups", function(req, res){
+    Followup.find({}, function(err, followups){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("allFollowups", {followups: followups, date: date.newDateTopBar(), greeting: getGreeting()});
+        }
+    }).populate("lead");
+});
+
 // Hot leads and cold leads list for Telle-leads
 router.get("/Telle-leads/:status", function(req, res){
     const status = _.capitalize(req.params.status);
