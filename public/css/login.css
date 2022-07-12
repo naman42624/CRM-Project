@@ -1,0 +1,13 @@
+body {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+section {
+    background-color: hsl(0, 0%, 96%);
+    background-image: url("https://www.transparenttextures.com/patterns/crissxcross.png");
+}
+
+.about {
+    background-color: hsl(0, 0%, 96%);
+}

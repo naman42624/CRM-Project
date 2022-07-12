@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    padding: 20px;
+   background-color:hsl(0, 0%, 96%);
+   /* background-image: url("https://www.transparenttextures.com/patterns/cubes.png"); */
+   /* background-image: url("https://www.transparenttextures.com/patterns/black-orchid.png"); */
+   background-image: url("https://www.transparenttextures.com/patterns/crissxcross.png");
+}
+
+.cont {
+    min-height: 100vh;
+}
