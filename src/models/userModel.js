@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -9,10 +10,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
-    },
+    password: String,
     address: {
         type: String,
     },
@@ -22,9 +20,18 @@ const userSchema = new mongoose.Schema({
         maxlength: 10,
         minlength: 10
     },
+    avatar: {
+        type: Buffer,
+        contentType: String,
+        default: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+    },
     role: {
         type: String,
         default: "user"
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
     },
     isTellecaller: {
         type: Boolean,
@@ -56,9 +63,10 @@ const userSchema = new mongoose.Schema({
     // }
 });
 
-const User = mongoose.model("User", userSchema);
+userSchema.plugin(passportLocalMongoose);
+const User = mongoose.model('User', userSchema);
 
-module.exports = { User, userSchema };
+module.exports = { User };
 
 
 

@@ -1,0 +1,81 @@
+<%- include('partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/login.css">
+
+
+<section>
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col col-xl-10">
+          <div class="card about" style="border-radius: 1rem;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 ">
+                <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                  alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" /> -->
+                  <h1 class="mt-5 ps-5 pt-5 fw-bold ls-tight">
+                    The Best <br> <span class="text-danger">Immigiration Consultants</span> <br> For You.
+                  </h1>
+                    <p class="text-muted m-5">
+                        Our certified & reliable Immigration Consultant professionals can help you get a positive decision on your case, providing immigiration services in all different areas of countries.
+                    </p>
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                <div class="card-body bg-dark p-4 p-lg-5 text-black">
+  
+                  <form action="/user/login" method="POST">
+  
+                    <div class="d-flex align-items-center mb-3 pb-1">
+                      <!-- <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i> -->
+                      <img src="https://bellsoverseas.com/wp-content/uploads/2020/11/Bells-Overseas.png" alt="logo" class="w-50 h-50">
+                      <!-- <span class="h1 fw-bold mb-0">Bells Overseas</span> -->
+                    </div>
+  
+                    <h5 class="fw-normal mb-3 pb-3 text-danger" style="letter-spacing: 1px;">Login into your account</h5>
+  
+                    <div class="form-floating mb-4">
+                      <input type="email" id="form2Example17" name="username" class="form-control form-control-lg" placeholder="Email" required>
+                      <label class="form-label text-muted" for="form2Example17">Email</label>
+                    </div>
+  
+                    <div class="form-floating mb-4">
+                      <input type="password" id="form2Example27" name="password" class="form-control form-control-lg" placeholder="Password" required>
+                      <label class="form-label text-muted" for="form2Example27">Password</label>
+                    </div>
+  
+                    <div class="pt-1 d-grid mb-4">
+                      <button class="btn btn-danger btn-lg" type="submit">Login</button>
+                    </div>
+  
+                    <a class="small text-muted text-decoration-none" href="#!">Forgot password?</a>
+                    <p class="mb-4 pb-lg-2 text-secondary">Don't have an account? 
+                        <a href="/user/register" class="text-decoration-none text-primary" style="color: #1221c3;">Register here</a>
+                    </p>
+                    <div class="d-flex justify-content-center">
+                        <a href="#!" class="small text-secondary text-decoration-none me-5">Terms of use</a>
+                        <a href="#!" class="small text-secondary text-decoration-none">Privacy policy</a>
+                    </div>
+
+                    <div class="mt-2">
+                        <p class="text-center text-secondary">
+                            © 2022 Bells Overseas. All rights reserved.
+                        </p>
+                    </div>
+                    
+                  </form>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<%- include('partials/footer')  -%>
+
+<script src="/js/login.js"></script>
+</body>
+</html>
