@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const {User} = require("../models/userModel");
@@ -6,6 +7,17 @@ const sharp = require("sharp");
 const auth = require("../middlewares/auth");
 const upload = require("../middlewares/avatarUpload");
 
+// For email verification
+const nodemailer = require("nodemailer");
+const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require('uuid');
+
+// models
+const Tellecaller = require("../models/tellecallerModel");
+const Task = require("../models/taskModel");
+
+// Controllers
+const { assignedBy, assignedTo, createTask } = require("../controllers/taskController");
 
 const passport = require('passport');
 const date = require("../config/utilities/date");
@@ -23,6 +35,127 @@ passport.deserializeUser(function(id, done){
     });
 });
 
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
+    }
+});
+
+const sendEmail = async (user) => {
+    const token = uuidv4() + user.id;
+    const url = "http://localhost:3000/user/verify/" + user.id + "/" + token;
+
+    const hashedToken = await bcrypt.hash(token, 10);
+        const userVerification = new UserVerification({
+            userId: user.id,
+            token: hashedToken,
+            createdAt: new Date(),      
+            expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000)
+        });
+        userVerification.save((err)=>{
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log("User verification saved")
+                }
+            });
+            const resendUrl = "http://localhost:3000/user/resend/" + user.id + "/" + user.email; 
+
+    let mailOptions = {
+        from: 'Bells Overseas <'+process.env.EMAIL+'>',
+        to: user.email,
+        subject: "Verify your Bells Overseas Email Address",
+        html: `<h1>Verify your email</h1>
+                <h2>Hi ${user.name},</h2>
+                <p>Thanks for signing up to Bells Overseas!</p>
+                <p>Please click on the link below to verify your email and proceed further.</p>
+                <a href=${url}><button style="background-color:green;">Verify</button></a>
+                <br>
+                <p> This link will expire after <b style="color:red;">2 hours</b>. To request another verification link, please click <a href=${resendUrl}>here</a>.</p>
+                <p>If you did not sign up to <b>Bells Overseas</b>, please ignore this email.</p>
+                <p>Regards,</p>
+                <p>Bells Overseas.</p>
+                `
+    };
+    transporter.sendMail(mailOptions, function(err, info){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Email sent: " + info.response);
+        }
+    });
+}
+
+router.get("/verify/:id/:token", auth, (req, res)=>{
+    const id = req.params.id;
+    const token = req.params.token;
+    UserVerification.findOne({userId: id}, (err, userVerification)=>{
+        if(err){
+            console.log(err);
+        }
+        else if(userVerification){
+            if(userVerification.expiresAt > Date.now()){
+                bcrypt.compare(token, userVerification.token, (err, result)=>{
+                    if(result){
+                        User.findById(id, (err, user)=>{
+                            if(err){
+                                console.log(err);
+                            }
+                            else if(user){
+                                user.isVerified = true;
+                                user.save((err)=>{
+                                    if(err){
+                                        console.log(err);
+                                    }
+                                    else{
+                                    //    passport.authenticate("local")(req, res, ()=>{
+                                            console.log("User logged in");
+                                            res.redirect("/");
+                                        // });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        res.send("Invalid link");
+                    }
+                });
+            }
+            else{
+                res.send("Link expired");
+                res.redirect("/user/login");
+            }
+        }
+        else{
+            res.send("Invalid link");
+        }
+    });
+});
+
+router.get("/resend/:id/:email", (req, res) => {
+    UserVerification.findOneAndDelete({userId: req.params.id}, (err)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log("User verification deleted");
+        }
+    });
+    User.findById(req.params.id, (err, user)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            sendEmail(user);
+            res.redirect("https://mail.google.com/mail/u/?authuser="+req.params.email);
+        }
+    });
+})
+
 router.get("/register", function(req, res){
     res.render("register");
 });
@@ -32,23 +165,19 @@ router.get("/login", function(req, res){
 });
 
 // User Profile Page
-router.get("/profile", function(req, res){
+router.get("/profile", auth, function(req, res){
     // console.log(req.user);
     // console.log(req.session);
     // console.log(req.isAuthenticated());
-    if(req.isAuthenticated()){
         User.findById(req.user._id, function(err, user){
             if(err){
                 console.log(err);
             } else {
+                // console.log(user.avatar.contentType);
                 const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
                 res.render("profile", {avatarSrc: avatarSrc, user: user, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         })
-    }
-    else{
-        res.redirect("/user/login");
-    }
 });
 
 router.post("/register" , function(req, res){
@@ -60,24 +189,11 @@ router.post("/register" , function(req, res){
         address: req.body.address,
         phone: req.body.phone,
         role: req.body.role,
-        isVerified: false,
-        isTellecaller: false,
-        isCounsellor: false,
-        isAdmin: false,
-        isFoe: false
+        isVerified: false
     });
-    if(req.body.role === "admin"){
-        user.isAdmin = true;
-    }
-    if(req.body.role === "counsellor"){
-        user.isCounsellor = true;
-    }
-    if(req.body.role === "tellecaller"){
-        user.isTellecaller = true;
-    }
-    if(req.body.role === "foe"){
-        user.isFoe = true;
-    }
+
+    // user.avatar = sharp("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp").resize({width: 250, height: 250}).png().toBuffer();
+    // user.avatar.contentType = "image/webp";
     console.log(user);
     
     User.register(user, req.body.password, function(err, user,){
@@ -87,17 +203,22 @@ router.post("/register" , function(req, res){
         }
         else{
             console.log("User registered");
+            sendEmail(user);
             passport.authenticate("local")(req, res, function(err){
                 if(err){
                     console.log(err);
                 }
                 else{
                     console.log("User logged in");
-                res.redirect("/");
+                res.redirect("/user/verify");
                 }
             });
         }
     })
+});
+
+router.get("/verify", auth, function(req, res){
+    res.render("verify",{email: req.user.email, name: req.user.name});
 });
 
 
@@ -106,7 +227,6 @@ router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, 
     console.log(req.file);
     const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer();
     req.user.avatar = buffer;
-    req.user.avatar.contentType = req.file.mimetype;
     await req.user.save();
     res.redirect("/user/profile");
 },(error, req, res, next)=>{
@@ -116,7 +236,7 @@ router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, 
 
 router.delete("/deleteAvatar", auth, async function(req, res){
     try{
-        req.user.avatar = await sharp(new Buffer.from("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp")).resize({width: 250, height: 250}).png().toBuffer();
+        req.user.avatar = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp";
         await req.user.save();
         res.redirect("/user/profile");
     }
@@ -152,5 +272,11 @@ router.get('/logout', function(req, res){
         }
       });
 });
+
+// Task routes
+router.get("/task", auth, assignedTo);
+router.post("/task/create", auth, createTask);
+router.get("/task/assignedBy", auth, assignedBy);
+router.get("/task/assignedTo", auth, assignedTo);
 
 module.exports = router;

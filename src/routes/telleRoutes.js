@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 
 // Dates
 const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");
@@ -11,12 +10,14 @@ const getGreeting = require("../config/utilities/greeting");
 // Models
 const Lead = require("../models/leadModel");
 const {User} = require("../models/userModel");
-// const Task = require("./src/models/task");
+const Task = require("../models/taskModel");
 const Tellecaller = require("../models/tellecallerModel");
 const {Followup} = require("../models/followupModel");
-// const Foe = require("./src/models/foe");
 
 const auth = require("../middlewares/auth");
+
+// Controllers
+const { assignedBy, assignedTo, createTask } = require("../controllers/taskController");
 
 // Library for utility functions for general tasks
 const _ = require('lodash');
@@ -224,5 +225,8 @@ router.post("/callResponse/:id", auth, function(req, res){
         }
     });
 });
+
+// Task routes
+
 
 module.exports = router;

@@ -1,10 +1,10 @@
 <%- include('partials/header')  -%> 
-<!-- Sidebar styles for this template -->
+
 <link href="/css/sidebar.css" rel="stylesheet">
 
 <link rel="stylesheet" href="/css/Telle-leadsList.css">
-<link rel="stylesheet" href="/css/profile.css">
 
+<!-- <link rel="stylesheet" href="/css/home.css"> -->
 </head>
 <body>
   
@@ -80,16 +80,17 @@
               
               <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none position-relative" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src=<%= avatarSrc %>  alt="icon" width="38" height="40" class="rounded me-2 ms-2">
+                  <img src=<%= avatarSrc %>  alt="" width="38" height="40" class="rounded me-2 ms-2">
                   <div>
-                      <strong><%= user.name %> </strong>
+                      <strong><%= user.name %></strong>
                   <p class="role-desc m-0"><%= user.role %></p>
                   </div>
                     <i class="fa-solid fa-ellipsis-vertical position-absolute end-0"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
-                  <li><a class="dropdown-item" href="/user/profile"><i class="fa-solid fa-user me-2"></i>  My Profile</a></li>
+                  <li><a class="dropdown-item" href="user/profile"><i class="fa-solid fa-user me-2"></i>  My Profile</a></li>
                   <li><hr class="dropdown-divider"></li>
+
                   <li><a class="dropdown-item text-danger" href="/user/logout"><i class="fa-solid fa-right-from-bracket me-2"></i>  Log out</a></li>
                 </ul>
               </div>
@@ -152,7 +153,6 @@
             </div>
       <!-- </div> -->
   <!-- </div> -->
-
     <div class="flex-grow-1 whole-body">
         <div class="container-fluid topBar mb-0">
             <div class="row mb-0">
@@ -175,14 +175,13 @@
                             <select class="form-select d-inline" >
                                 <option>English (US)</option>
                                 <option>English (UK)</option>
-                                <option>French</option>
                             </select>
                         </form>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="GoodMorning text-end me-4">
-                        <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i> <%= greeting %></span>
+                        <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i>Good Morning</span>
                         <span class="m-0 p-0 d-block date"><%= date %> </span>
                     </div>
                 </div>
@@ -195,116 +194,153 @@
                     <div class="fs-2 breadcrumbForLeads">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/profile" class="text-decoration-none text-dark">My Profile</a></li>
+                                <li class="breadcrumb-item"><a href="/user/task" class="text-decoration-none text-dark">Tasks</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">List of Tasks (<span class="count">4</span>)</li>
                             </ol>
                         </nav>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card ">
-                        <div class="card-body">
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <img src=<%= avatarSrc %>  alt="avatar" class="rounded-circle img-fluid w-50 h-50" >
-                                <span class="text-dark mt-3 fs-5 fw-bold"><%= user.name %> </span>
-                                <span class="text-muted fs-6 role"><%= user.role %> </span>
-                                <div class="edit-details mt-2">
-                                    <!-- delete avatar -->
-                                    <form action="/user/deleteAvatar" method="delete">
-                                        <button type="submit" class="btn mt-3 btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                    <a href="#uploadAvatar" data-bs-toggle="modal" data-bs-target="#uploadAvatar"  class="btn btn-sm btn-warning"> <i class="fa-solid fa-pen"></i></a>
-                                    <div class="modal fade" id="uploadAvatar" tabindex="-1" aria-labelledby="uploadAvatarLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form action="/user/uploadAvatar" method="POST" enctype="multipart/form-data">
-                                                    <div class="modal-header text-center">
-                                                        <h5 class="modal-title w-100 fw-semibold" id="uploadAvatarLabel">Update Avatar</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body mx-4">
-                                                            <div class="form-group d-flex flex-column justify-content-center align-items-center mb-3">
-                                                                <img src=<%= avatarSrc %> id="preview" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-
-                                                                <!-- choose afile  -->
-                                                                <div>
-                                                                    <!-- delete avatar -->
-                                                                    
-                                                                    <input type="file" name="avatar" id="avatar" class="d-none">
-                                                                    <label for="avatar" class="mt-3 btn btn-sm btn-warning">Choose</label>
-                                                                </div>
-                                                                
-
-                                                            </div>
-                                                    </div>
-                                                    <div class="modal-footer d-flex justify-content-center text-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Update</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+                   <div class="add-new-item  text-end">
+                        <a href="#addNewLead" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addNewLead"><i class="fa-solid fa-plus"></i> Add New Task</a>
+                   </div>
+                   <!-- Modal -->
+                   <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/user/task/create" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Tasks</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                </div>
+                                    <div class="modal-body mx-4">
+                                        
+                                            <div class="form-group mb-3">
+                                                <label for="taskName" class="mb-1">Name</label>
+                                                <input type="text" class="form-control" name="name" placeholder="Enter name" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskDescription" class="mb-1">Description</label>
+                                                <input type="text" class="form-control" name="description" placeholder="Enter Description" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskAssignedTo" class="mb-1">AssignedTo</label>
+                                                <select class="form-select" name="assingnedTo" required>
+                                                    <option value="">Select AssignedTo</option>
+                                                    <% for(var i = 0; i < allUsers.length; i++){ %>
+                                                    <option value="<%= allUsers[i]._id %>"><%- allUsers[i].name %> (<%- allUsers[i]._id.toString().slice(-4) %>)</option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskPriority" class="mb-1">Priority</label>
+                                                <input type="number" class="form-control" name="priority" placeholder="Enter Priority(1-5)">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskDueDate" class="mb-1">Due Date</label>
+                                                <input type="date" class="form-control" name="dueDate" placeholder="Enter Due Date">
+                                            </div>
+                                           
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
                             </div>
-                        </div>`
-                        
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                  <p class="mb-0">Full Name</p>
-                                </div>
-                                <div class="col-sm-9">
-                                  <p class="text-muted name mb-0"><%= user.name %> </p>
-                                </div>
-                              </div>
-                              <hr>
-                              <div class="row">
-                                <div class="col-sm-3">
-                                  <p class="mb-0">Email</p>
-                                </div>
-                                <div class="col-sm-9">
-                                  <p class="text-muted email mb-0"><%= user.username %></p>
-                                </div>
-                              </div>
-                              <hr>
-                              <div class="row">
-                                <div class="col-sm-3">
-                                  <p class="mb-0">Phone</p>
-                                </div>
-                                <div class="col-sm-9">
-                                  <p class="text-muted phone mb-0"><%= user.phone %></p>
-                                </div>
-                              </div>
-                              <hr>
-                              <div class="row">
-                                <div class="col-sm-3">
-                                  <p class="mb-0">Mobile</p>
-                                </div>
-                                <div class="col-sm-9">
-                                  <p class="text-muted mb-0"><%= user.phone %></p>
-                                </div>
-                              </div>
-                              <hr>
-                              <div class="row">
-                                <div class="col-sm-3">
-                                  <p class="mb-0">Address</p>
-                                </div>
-                                <div class="col-sm-9">
-                                  <p class="text-muted mb-0"><%= user.address %></p>
-                                </div>
-                              </div>
                         </div>
-                        
+                  </div>
+                </div>
+                
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <div class="fs-5 breadcrumbForLeads">
+                                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedTo" class="text-decoration-none text-dark"> Tasks Assigned To Me</a> (<span class="count">4</span>)    </li>
+                                        <li class="breadcrumb-item" aria-current="page"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedBy" class="text-decoration-none text-dark"> Tasks Assigned By Me</a> (<span class="count">4</span>)</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <h3>Pending Tasks</h3>
+                                <table class="table table-hover" id="List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th><%- person %></th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                            <th>Completed</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% for(var i = 0; i < tasks.length; i++){ %>
+                                            <% if(tasks[i].completed === false){ %>
+                                            <tr>
+                                                <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
+                                                <td><%= tasks[i].name %></td>
+                                                <td><%= tasks[i].description.toString().slice(0,10) %></td>
+                                                <% if(tasks[i].assingnedBy.name === undefined){ %>
+                                                    <td><%= tasks[i].assingnedTo.name %></td>
+                                                <% } else{ %>
+                                                    <td><%= tasks[i].assingnedBy.name %></td>
+                                                <% } %>
+                                                <td><%= tasks[i].priority %></td>
+                                                <td><%= tasks[i].dueDate %></td>
+                                                <td><%= tasks[i].completed %></td>
+                                            </a>
+                                            </tr>
+                                            <% } %>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                                       
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <h3>Completed Tasks</h3>
+                                <table class="table table-hover" id="List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th><%- person %></th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                            <th>Completed</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% for(var i = 0; i < tasks.length; i++){ %>
+                                            <% if(tasks[i].completed === true){ %>
+                                            <tr>
+                                                <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
+                                                <td><%= tasks[i].name %></td> </a>
+                                                <td><%= tasks[i].description.toString().slice(0,10) %></td>
+                                                <% if(tasks[i].assingnedBy.name === undefined){ %>
+                                                    <td><%= tasks[i].assingnedTo.name %></td>
+                                                <% } else{ %>
+                                                    <td><%= tasks[i].assingnedBy.name %></td>
+                                                <% } %>
+                                                <td><%= tasks[i].priority %></td>
+                                                <td><%= tasks[i].dueDate %></td>
+                                                <td><%= tasks[i].completed %></td>
+                                            </tr>
+                                            <% } %> 
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -315,6 +351,5 @@
 
 <%- include('partials/footer')  -%>
 
-<script src="/js/profile.js"></script>
 </body>
 </html>

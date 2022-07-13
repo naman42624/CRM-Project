@@ -55,25 +55,25 @@
         }
     })
 
-    // $('#password').change(function() {
-    //     if(!isValidPassword($(this).val())){
-    //         $(this).css('border', '2px solid red');
-    //         $('.passWarning').text('*Password must be atleast 8 characters long and must contain atleast one uppercase, one lowercase, one number and one special character');
-    //     }
-    //     else{
-    //         $(this).css('border', '2px solid green');
-    //         $('.passWarning').text('');
-    //     }
-    // })
+    $('#password').change(function() {
+        if(!isValidPassword($(this).val())){
+            $(this).css('border', '2px solid red');
+            $('.passWarning').text('*Password must be atleast 8 characters long and must contain atleast one uppercase, one lowercase, one number and one special character');
+        }
+        else{
+            $(this).css('border', '2px solid green');
+            $('.passWarning').text('');
+        }
+    })
 
-    // $('#cpassword').change(function() {
-    //     if(!isValidPassword($(this).val())){
-    //         $(this).css('border', '2px solid red');
-    //     }
-    //     else{
-    //         $(this).css('border', '2px solid green');
-    //     }
-    // })
+    $('#cpassword').change(function() {
+        if(!isValidPassword($(this).val())){
+            $(this).css('border', '2px solid red');
+        }
+        else{
+            $(this).css('border', '2px solid green');
+        }
+    })
 
     $('#phone').change(function() {
         if(!isValidPhone($(this).val())){
@@ -98,22 +98,22 @@
             $('#email').attr('placeholder', 'Email is not valid');
             count++;
         }
-        // if(!isValidPassword($('#password').val())){
-        //     $('#password').css('border', '2px solid red');
-        //     $('#cpassword').css('border', '2px solid red');
-        //     $('.passWarning').text('*Password must be atleast 8 characters long and must contain atleast one uppercase, one lowercase, one number and one special character');
-        //     count++;
-        // }
-        // else
-        // if($('#password').val() !== $('#cpassword').val()){
-        //     $('#cpassword').css('border', '2px solid red');
-        //     $('#password').css('border', '2px solid red');
-        //     $('#cpassword').val('');
-        //     $('#password').val('');
-        //     $('#password').attr('placeholder', 'Password does not match');
-        //     $('#cpassword').attr('placeholder', 'Password does not match');
-        //     count++;
-        // }
+        if(!isValidPassword($('#password').val())){
+            $('#password').css('border', '2px solid red');
+            $('#cpassword').css('border', '2px solid red');
+            $('.passWarning').text('*Password must be atleast 8 characters long and must contain atleast one uppercase, one lowercase, one number and one special character');
+            count++;
+        }
+        else
+        if($('#password').val() !== $('#cpassword').val()){
+            $('#cpassword').css('border', '2px solid red');
+            $('#password').css('border', '2px solid red');
+            $('#cpassword').val('');
+            $('#password').val('');
+            $('#password').attr('placeholder', 'Password does not match');
+            $('#cpassword').attr('placeholder', 'Password does not match');
+            count++;
+        }
         if(!isValidPhone($('#phone').val())){
             $('#phone').css('border', '2px solid red');
             $('#phone').val('');

@@ -23,44 +23,16 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: Buffer,
         contentType: String,
-        default: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+        default: "https://freesvg.org/img/winkboy.png"
     },
     role: {
         type: String,
-        default: "user"
+        default: "User"
     },
     isVerified: {
         type: Boolean,
         default: false
-    },
-    isTellecaller: {
-        type: Boolean,
-        default: false
-    },
-    isCounsellor: {
-        type: Boolean,
-        default: false
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
-    isFoe: {
-        type: Boolean,
-        default: false
     }
-    // tellecallerId: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Tellecaller"
-    // },
-    // counsellorId: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Counsellor"
-    // },
-    // foeId: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Foe"
-    // }
 });
 
 userSchema.plugin(passportLocalMongoose);
