@@ -174,7 +174,7 @@ router.get("/profile", auth, function(req, res){
                 console.log(err);
             } else {
                 // console.log(user.avatar.contentType);
-                const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+                const avatarSrc = "data:image/webp;base64," + user.avatar.toString("base64");
                 res.render("profile", {avatarSrc: avatarSrc, user: user, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         })
@@ -192,7 +192,7 @@ router.post("/register" , function(req, res){
         isVerified: false
     });
 
-    // user.avatar = sharp("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp").resize({width: 250, height: 250}).png().toBuffer();
+    user.avatar = sharp(Buffer.from("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp")).resize({width: 250, height: 250}).png().toBuffer();
     // user.avatar.contentType = "image/webp";
     console.log(user);
     
@@ -234,17 +234,17 @@ router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, 
 }
 );
 
-router.delete("/deleteAvatar", auth, async function(req, res){
+router.post("/deleteAvatar", auth, async function(req, res){
     try{
         req.user.avatar = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp";
         await req.user.save();
+        console.log(req.user);
         res.redirect("/user/profile");
     }
     catch(err){
         res.status(500).send(err);
     }
-}
-);
+});
 
 router.post("/login", function(req, res){
     const user = new User({

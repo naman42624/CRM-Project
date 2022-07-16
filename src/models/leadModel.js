@@ -7,7 +7,10 @@ const leadsSchema = new mongoose.Schema({
       },
       interestedCountry: String,
       college: String,
-      leadFrom: String,
+      leadFrom: {
+        type: String,
+        default: "Excel"
+      },
       status: {
           type: String,
       },

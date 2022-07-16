@@ -17,7 +17,6 @@ const {Followup} = require("../models/followupModel");
 const auth = require("../middlewares/auth");
 
 // Controllers
-const { assignedBy, assignedTo, createTask } = require("../controllers/taskController");
 
 // Library for utility functions for general tasks
 const _ = require('lodash');
@@ -63,7 +62,7 @@ router.get("/allFollowups", auth, function(req, res){
         } else {
             res.render("allFollowups", {avatarSrc: avatarSrc, user: user, followups: followups, date: date.newDateTopBar(), greeting: getGreeting()});
         }
-    }).populate("lead");
+    }).populate("lead followupBy");
 });
 
 // Hot leads and cold leads list for Telle-leads
@@ -179,7 +178,7 @@ router.post("/Telle-leadsList", auth, function(req, res){
     console.log(req.body);
     const lead = new Lead(req.body);
     lead.save();
-    res.redirect("/Telle-leads/" + req.body.leadStatus);
+    res.redirect("/Telle-leads/" + req.body.status);
 });
 
 router.post("/callResponse/:id", auth, function(req, res){
@@ -198,7 +197,8 @@ router.post("/callResponse/:id", auth, function(req, res){
                 time: new Date().toLocaleTimeString("en-GB"),
                 comments: "",
                 lead : id,
-                call : callResponse
+                call : callResponse,
+                followupBy: req.user.id
             });
             newfollowup.save();
         } else {

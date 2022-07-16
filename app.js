@@ -30,6 +30,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 // Routes
 const userRoutes = require("./src/routes/userRoutes");
 const telleRoutes = require("./src/routes/telleRoutes");
+const counsellorRoutes = require("./src/routes/counsellorRoutes");
 
 const app = express();
 
@@ -49,12 +50,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 // app.use(passport.authenticate('local'));
 
-
-
 connectDB();
+
+const enrolledRoutes = require("./src/routes/enrolledRoutes");
+
 
 app.use("/user", userRoutes);
 app.use("/", telleRoutes);
+app.use("/counsellor", counsellorRoutes);
+app.use("/enrolled", enrolledRoutes);
+
+// 403 error page - unauthorized access
+app.get("/403", (req, res) => {
+    res.render("403");
+});
+
+// 404 error page - page not found
+app.get("/404", (req, res) => {
+    res.render("404");
+});
 
 app.listen(3000, function(){
     console.log("Server started on port 3000");

@@ -213,12 +213,14 @@
                                 <img src=<%= avatarSrc %>  alt="avatar" class="rounded-circle img-fluid w-50 h-50" >
                                 <span class="text-dark mt-3 fs-5 fw-bold"><%= user.name %> </span>
                                 <span class="text-muted fs-6 role"><%= user.role %> </span>
-                                <div class="edit-details mt-2">
+                                <div class="edit-details d-flex mt-2">
                                     <!-- delete avatar -->
-                                    <form action="/user/deleteAvatar" method="delete">
+                                    <div class="me-2">
+                                      <form action="/user/deleteAvatar" method="post">
                                         <button type="submit" class="btn mt-3 btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                    <a href="#uploadAvatar" data-bs-toggle="modal" data-bs-target="#uploadAvatar"  class="btn btn-sm btn-warning"> <i class="fa-solid fa-pen"></i></a>
+                                      </form>
+                                    </div>
+                                    <a href="#uploadAvatar" data-bs-toggle="modal" data-bs-target="#uploadAvatar"  class="btn mt-3 btn-sm btn-warning"> <i class="fa-solid fa-pen"></i></a>
                                     <div class="modal fade" id="uploadAvatar" tabindex="-1" aria-labelledby="uploadAvatarLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
