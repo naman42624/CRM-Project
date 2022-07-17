@@ -1,0 +1,158 @@
+<%- include('./partials/header.ejs') -%>
+
+    <link rel="stylesheet" href="/css/application.css">
+    </head>
+
+    <body>
+        <!-- Tab-bar -->
+        <%- include('tabBar') -%>
+
+            <div class="p-4">
+                <div class="head">
+                    <h3 class="mb-3">Upload Documents of </h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover" width="100%" cellspacing="0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Student Enrolment Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <td>
+                                        <%= user.name %>
+                                    </td>
+                                    <td>
+                                        <%= user.username %>
+                                    </td>
+                                    <td>
+                                        <%= user.phone %>
+                                    </td>
+                                    <td>
+                                        <% const cDate1=new Date(user.enrollmentDate).toLocaleDateString("en-GB") %>
+                                            <%= cDate1 %>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs nav-fill bg-light">
+                    <li class="nav-item active">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/personal/<%= user._id %>">Personal Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/academic/<%= user._id %>">Academic Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/work/<%= user._id %>">Work Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/test/<%= user._id %>">Test Information</a>
+                    </li>
+                </ul>
+                <div>
+                    <h3>Educational Information</h3>
+                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <label
+                            for="countryOfStudy"></label>
+                        <input type="text" name="countryOfStudy" id="countryOfStudy" value=""><br>
+                        <label for="highestDegree"></label>
+                        <select name="highestDegree" id="highestDegree" onchange="this.form.submit()">
+                            <option id="Master" value="Master">Master</option>
+                            <option id="Bachelor" value="Bachelor">Bachelor</option>
+                            <option id="twelve" value="12th">12th Or Equivalent</option>
+                        </select><br>
+                    </form>
+                </div>
+                <div>
+                    <h4>Post Graduation(if applicable)</h4>
+                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST">
+                        <label for="masterName">Name</label>
+                        <input type="text" name="masterName" id="masterName"><br>
+                        <label for="masterUniversity">University</label>
+                        <input type="text" name="masterUniversity" id="masterUniversity"><br>
+                        <label for="masterLocation">Location</label>
+                        <input type="text" name="masterLocation" id="masterLocation"><br>
+                        <label for="masterGrade">Grade</label>
+                        <input type="text" name="masterGrade" id="masterGrade"><br>
+                        <label for="masterYearOfPassing">Year Of Passing</label>
+                        <input type="text" name="masterYearOfPassing" id="masterYearOfPassing"><br>
+                        <div class="submit">
+                            <input type="submit" value="Save">
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h4>Undergraduate(if applicable)</h4>
+                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <label
+                            for="undergraduateName">Name</label>
+                        <input type="text" name="undergraduateName" id="undergraduateName"><br>
+                        <label for="undergraduateUniversity">University</label>
+                        <input type="text" name="undergraduateUniversity" id="undergraduateUniversity"><br>
+                        <label for="undergraduateLocation">Location</label>
+                        <input type="text" name="undergraduateLocation" id="undergraduateLocation"><br>
+                        <label for="undergraduateGrade">Grade</label>
+                        <input type="text" name="undergraduateGrade" id="undergraduateGrade"><br>
+                        <label for="undergraduateYearOfPassing">Year Of Passing</label>
+                        <input type="text" name="undergraduateYearOfPassing" id="undergraduateYearOfPassing"><br>
+                        <div class="submit">
+                            <input type="submit" value="Save">
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h4>Grade 12th or equivalent(if applicable)</h4>
+                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <Label
+                            for="twelveBoard">Board</Label>
+                        <input type="text" name="twelveBoard" id="twelveBoard"><br>
+                        <Label for="twelveSchool">School</Label>
+                        <input type="text" name="twelveSchool" id="twelveSchool"><br>
+                        <Label for="twelveLocation">Location</Label>
+                        <input type="text" name="twelveLocation" id="twelveLocation"><br>
+                        <Label for="twelveGrade">Grade</Label>
+                        <input type="text" name="twelveGrade" id="twelveGrade"><br>
+                        <Label for="twelveYearOfPassing">Year Of Passing</Label>
+                        <input type="text" name="twelveYearOfPassing" id="twelveYearOfPassing"><br>
+                        <div class="submit">
+                            <input type="submit" value="Save">
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <h4>Grade 10th(if applicable)</h4>
+                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <Label
+                            for="tenthBoard">Board</Label>
+                        <input type="text" name="tenthBoard" id="tenthBoard"><br>
+                        <Label for="tenthSchool">School</Label>
+                        <input type="text" name="tenthSchool" id="tenthSchool"><br>
+                        <Label for="tenthLocation">Location</Label>
+                        <input type="text" name="tenthLocation" id="tenthLocation"><br>
+                        <Label for="tenthGrade">Grade</Label>
+                        <input type="text" name="tenthGrade" id="tenthGrade"><br>
+                        <Label for="tenthYearOfPassing">Year Of Passing</Label>
+                        <input type="text" name="tenthYearOfPassing" id="tenthYearOfPassing"><br>
+                        <div class="submit">
+                            <input type="submit" value="Save">
+                        </div>
+                    </form>
+                </div>
+
+                <script>
+                    $(document).ready(function () {
+                        let d = document.getElementById('dob').value;
+                        console.log(d);
+                        let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                        document.getElementById('dob').value = datestring;
+                    })
+                </script>
+
+
+                <%- include('./partials/footer') -%>
+
+    </body>
+
+    </html>
