@@ -1,4 +1,4 @@
-<%- include('partials/header')  -%> 
+<%- include('../partials/header')  -%> 
 <!-- Sidebar styles for this template -->
 <link href="/css/sidebar.css" rel="stylesheet">
 
@@ -195,7 +195,7 @@
                     <div class="fs-2 breadcrumbForLeads">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
+                                <li class="breadcrumb-item"><a href="/Counsellor-leads" class="text-decoration-none text-dark">Leads</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><span class="leadName"><%= lead.name %> </span></li>
                             </ol>
                         </nav>
@@ -204,7 +204,7 @@
                 </div>
                 <div class="col-md-6">
                    <div class="add-new-item  text-end">
-                        <a href="#updateLead" class="btn btn-primary editDetails" data-bs-toggle="modal" data-bs-target="#updateLead" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Edit Details</a>
+                        <a href="#updateLead" class="btn btn-primary editDetails" data-bs-toggle="modal" data-bs-target="#updateLead" value="<%= lead.call %>/<%= lead.counsellorFollowUps %>"><i class="fa-solid fa-pen"></i> Edit Details</a>
                    </div>
                    <!-- Edit Modal -->
                    <div class="modal fade" id="updateLead" tabindex="-1" aria-labelledby="updateLeadLabel" aria-hidden="true">
@@ -284,10 +284,10 @@
                         </div>
                     </div>
                 </div>
-                <h1>Counsellor-lead</h1>
+
                 <div class="col-md-6">
                     <div class="text-end">
-                        <a href="/leads/<%= lead._id %>/followUps" class="btn btn-warning"><i class="fas fa-table mr-1"></i> FollowUps</a>
+                        <a href="/myleads/<%= lead._id %>/followUps" class="btn btn-warning"><i class="fas fa-table mr-1"></i> FollowUps</a>
                     </div>
                 </div>
             </div>
@@ -433,7 +433,7 @@
     </div>
 
 
-<%- include('partials/footer')  -%>
+<%- include('../partials/footer')  -%>
 
 </body>
 </html>

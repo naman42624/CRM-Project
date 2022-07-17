@@ -11,7 +11,8 @@ router.get("/counsellor/home", auth, counsellorController.counsellorDashboard);
 // router.get("/counsellor/tasks", auth, counsellorController.counsellorTasks);
 router.get("/counsellor/myleads/:status", auth, counsellorController.myleads);
 router.get("/counsellor/leads", auth, counsellorController.lead);
-// router.get("/myleads/:id", auth, counsellorController.myleadsPage);
+router.get("/myleads/:id", auth, counsellorController.myleadsPage);
 // router.get("/managestudents", auth, counsellorController.managestudents);
-
+router.post("/:Frompage/myleads/:id", auth, counsellorController.updateLead);
+// router.get("/myleads/:id/followUps",auth, counsellorController.)
 module.exports = router;

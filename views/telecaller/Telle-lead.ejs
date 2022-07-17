@@ -270,7 +270,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="Search">
                         <div class="input-group">
                             <form action="/searchLeadDetails" method="POST"></form>
@@ -284,7 +284,95 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-3">
+                    <div class="add-new-item  text-end">
+                        <a href="#updateCounsellor" class="btn btn-info editDetails" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Assign Counsellor</a>
+                   </div>
+                    <div class="modal fade" id="updateCounsellor" tabindex="-1" aria-labelledby="updateCounsellorLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateCounsellorLabel">Assign Counsellor</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadCounsellor" class="mb-1">Counsellor</label>
+                                            <select class="form-select" name="counsellor" required>
+                                                <option value="<%= lead.counsellor %>"><%= (lead.counsellor)?lead.counsellor.name:"" %> </option>
+                                                <% counsellors.forEach(function(counsellor){ %> 
+                                                <option value="<%= counsellor._id %>"><%= counsellor.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> -->
+                <div class="col-md-7 d-flex justify-content-end">
+                    <div class="add-new-item me-4 text-end">
+                        <a href="#updateScheduledWalksInDate" class="btn btn-dark editDetails" data-bs-toggle="modal" data-bs-target="#updateScheduledWalksInDate" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-calendar-check"></i> Schedule WalkIn</a>
+                   </div>
+                    <div class="modal fade" id="updateScheduledWalksInDate" tabindex="-1" aria-labelledby="updateScheduledWalksInDateLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateScheduledWalksInDateLabel">Schedule WalksIn</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadScheduledWalksInDate" class="mb-1">Scheduled WalksIn Date</label>
+                                            <input type="date" class="form-control" name="scheduledWalksInDate" value="<%= lead.scheduledWalksInDate %>" placeholder="Enter Scheduled WalksIn Date" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Schedule</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-new-item me-4 text-end">
+                        <a href="#updateCounsellor" class="btn btn-info editDetails" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-user-plus"></i> Assign Counsellor</a>
+                   </div>
+                    <div class="modal fade" id="updateCounsellor" tabindex="-1" aria-labelledby="updateCounsellorLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateCounsellorLabel">Assign Counsellor</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadCounsellor" class="mb-1">Counsellor</label>
+                                            <select class="form-select" name="counsellor" required>
+                                                <option value="<%= lead.counsellor %>"><%= (lead.counsellor)?lead.counsellor.name:"" %> </option>
+                                                <% counsellors.forEach(function(counsellor){ %> 
+                                                <option value="<%= counsellor._id %>"><%= counsellor.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-end">
                         <a href="/leads/<%= lead._id %>/followUps" class="btn btn-warning"><i class="fas fa-table mr-1"></i> FollowUps</a>
                     </div>
@@ -369,19 +457,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card h-100">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span class="card-title fs-5 fw-semibold">Course</span>
-                        </div>
-                        <div class="card-body d-flex justify-content-center align-items-center">
-                            <div class="text-muted">
-                                <span><%= lead.course %> </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="card h-100">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span class="card-title fs-5 fw-semibold">FollowUp Date</span>
@@ -396,6 +472,30 @@
                 <div class="col-md-3">
                     <div class="card h-100">
                         <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Course</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.course %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Counsellor</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= (lead.counsellor)?lead.counsellor.name:"" %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <span class="card-title fs-5 fw-semibold">Call</span>
                         </div>
                         <div class="card-body d-flex justify-content-center align-items-center">
@@ -408,7 +508,19 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Scheduled WalkIn</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= new Date(lead.scheduledWalksInDate).toLocaleDateString("en-GB") %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
                     <div class="card h-100">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span class="card-title fs-5 fw-semibold">Comments</span>
@@ -421,11 +533,6 @@
                     </div>
                 </div>
             </div>
-            <div class="add-new-item  text-end">
-                <form action="/enrolledUser/enroll/<%= lead._id %>" method="POST">
-                </i><button type="submit"> Mark as Enrolled</button>
-            </form>
-           </div>
         </div>
                             
 
@@ -436,5 +543,4 @@
 
 </body>
 </html>
-
 

@@ -195,7 +195,7 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads (<span class="count">4</span>)</li>
+                                <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads</li>
                             </ol>
                         </nav>
                     </div>
@@ -319,19 +319,19 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <% leads.forEach(function(lead) { %>
+                                        <% for(var i=0; i<leads.length; i++){ %>
                                             <tr>
-                                                <td><a href="/leads/<%= lead._id %> " class="text-decoration-none text-dark"><%= lead.name %></a></td>
+                                                <td><a href="/leads/<%= leads[i]._id %> " class="text-decoration-none text-dark"><%= leads[i].name %></a></td>
                                                 <td>
-                                                    <%= lead.interestedCountry %>
+                                                    <%= leads[i].interestedCountry %>
                                                 </td>
-                                                <td><%= lead.phone %></td>
+                                                <td><%= leads[i].phone %></td>
 
-                                                <td><a href="#updateDate<%= lead._id %>" class="btn text-decoration-none text-dark editDetails w-100" data-bs-toggle="modal" data-bs-target="#updateDate<%= lead._id %>" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><%= lead.telleFollowUpDate %></a>
-                                                <div class="modal fade" id="updateDate<%= lead._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
+                                                <td><a href="#updateDate<%= leads[i]._id %>" class="btn text-decoration-none text-dark editDetails w-100" data-bs-toggle="modal" data-bs-target="#updateDate<%= leads[i]._id %>" value="<%= leads[i].call %>/<%= leads[i].telleFollowUps %>"><%= leads[i].telleFollowUpDate %></a>
+                                                <div class="modal fade" id="updateDate<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= lead._id %>" method="POST">
+                                                            <form action="/<%= status %>/leads/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateDateLabel">Update Next FollowUp Date</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -351,11 +351,11 @@
                                                     </div>
                                                 </div>
                                                 </td>
-                                                <td><a href="#updateCall<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= lead._id %>" ><%= lead.call %></a>
-                                                <div class="modal fade" id="updateCall<%= lead._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
+                                                <td><a href="#updateCall<%= leads[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= leads[i]._id %>" ><%= leads[i].call %></a>
+                                                <div class="modal fade" id="updateCall<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/callResponse/<%= lead._id %>" method="POST">
+                                                            <form action="/callResponse/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCallLabel">Update Call Response</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -364,7 +364,7 @@
                                                                         <div class="form-group mb-3">
                                                                             <label for="callResponse" class="mb-1">Call Response</label>
                                                                             <select class="form-select" name="callResponse" required>
-                                                                                <option selected><%= lead.call %> </option>
+                                                                                <option selected><%= leads[i].call %> </option>
                                                                                 <option>Answered</option>
                                                                                 <option>Not Picked</option>
                                                                                 <option>Answered & Cut</option>
@@ -381,22 +381,12 @@
                                                     </div>
                                                 </div>
                                                 </td>
-                                                <!-- <form action="/callResponse/<%= lead._id %> " method="POST">
-                                                    <td>
-                                                        <select class="form-select d-inline" name="callResponse" onchange="this.form.submit()">
-                                                            <option selected><%= lead.call %> </option>
-                                                            <option>Answered</option>
-                                                            <option>Not Picked</option>
-                                                            <option>Answered & Cut</option>
-                                                            <option>Other</option>
-                                                        </select>
-                                                    </td>
-                                                </form> -->
-                                                <td><a href="#updateComment<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= lead._id %>" ><%= lead.comments %></a></td>
-                                                <div class="modal fade" id="updateComment<%= lead._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
+                                        
+                                                <td><a href="#updateComment<%= leads[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= leads[i]._id %>" ><%= leads[i].comments %></a></td>
+                                                <div class="modal fade" id="updateComment<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= lead._id %>" method="POST">
+                                                            <form action="/<%= status %>/leads/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCommentLabel">Update Comments</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -404,7 +394,7 @@
                                                                 <div class="modal-body mx-4">
                                                                         <div class="form-group mb-3">
                                                                             <label for="comments" class="mb-1">Comments</label>
-                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
+                                                                            <input type="text" class="form-control" name="comments" value="<%= leads[i].comments %>" placeholder="Enter Comments" required>
                                                                         </div>
                                                                 </div>
                                                                 <div class="modal-footer d-flex justify-content-center text-center">
@@ -416,7 +406,7 @@
                                                     </div>
                                                 </div>
                                             </tr>
-                                        <% }); %>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>

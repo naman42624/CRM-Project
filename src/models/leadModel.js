@@ -45,6 +45,7 @@ const leadsSchema = new mongoose.Schema({
     type: String
   },
   walksIn: Boolean,
+  scheduledWalksInDate: Date,
   walksInDate: Date,
   walksInTime: String,
   counsellor: {

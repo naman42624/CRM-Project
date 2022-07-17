@@ -29,30 +29,30 @@ module.exports.counsellorDashboard = async function(req, res) {
 // hotLead(tele)--> counsellor (if after 2 followups counsellor does not mark cold then 4 more followups will be needed to mark lead cold)
 module.exports.lead = async function(req,res){
     try{
+        const user = req.user
         const hotLeads = await Leads.countDocuments({status: 'Hot', counsellor: req.user._id})
         const coldLeads = await Leads.countDocuments({status: 'Cold', counsellor: req.user._id})
         const allLeads = await Leads.countDocuments({counsellor: req.user._id})
-        console.log(hotLeads)
-        console.log(coldLeads)
-        console.log(allLeads)
-        const avatarSrc = "data:image/png;base64," + counsellor.avatar.toString("base64");
-        res.render('counsellor/Counsellor-leads', {hotLeads, coldLeads, avatarSrc ,allLeads,date: date.newDateTopBar(), greeting: getGreeting()})
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        res.render('counsellor/Counsellor-leads', {hotLeads, coldLeads, avatarSrc,user ,allLeads,date: date.newDateTopBar(), greeting: getGreeting()})
     } catch(err){
 
     }
 }
 
-module.exports.myleads = function(req, res){
+module.exports.myleads = async function(req, res){
     try{
-    const status = _.capitalize(req.params.status);
+        console.log("LEADS")
+    const status = req.params.status
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
     if(status === "All"){
-        const leads = Leads.find({Counsellor: user._id})
-        res.render("counsellor/Counsellor-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});   
+        const leads = await Leads.find({counsellor: user._id})
+        console.log(leads)
+        res.render("counsellor/Counsellor-leadsList", {avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});   
     }
     else {
-        const leads = Leads.find({Counsellor: user._id, status: status})
+        const leads = await Leads.find({counsellor: user._id, status: status})
         res.render("counsellor/Counsellor-leadsList", {avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
     }
 } catch(err) {
@@ -68,8 +68,9 @@ module.exports.myleadsPage = async function(req, res) {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
         console.log("myleadsPage");
-        const leads = await Leads.findbyId({ id });
-        res.render('counsellor/Counsellor-lead', {avatarSrc, user, leads, date: date.newDateTopBar(), greeting: getGreeting()});
+        const lead = await Leads.findById(id);
+        console.log(lead)
+        res.render('counsellor/Counsellor-lead', {avatarSrc, user, lead, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch (err) {
         res.send(err);
     }
@@ -81,7 +82,7 @@ module.exports.followups = async function(req,res){
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
         const followup = await Followup.find({lead: id}).populate('lead')
-        res.render('counsellor/Counsellor-followup',{avatarSrc, user, followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()})
+        res.render('counsellor/Counsellor-followup',{avatarSrc, user, followup, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()})
     } catch(err){
         res.send(err)
     }
@@ -92,7 +93,7 @@ module.exports.myfollowups = async function(req,res){
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
         const followup = await Followup.find({followupBy: user._id}).populate('followupBy')
-        res.render('counsellor/Counsellor-followup',{avatarSrc, user, followups, date: date.newDateTopBar(), greeting: getGreeting()})
+        res.render('counsellor/Counsellor-followup',{avatarSrc, user, followup, date: date.newDateTopBar(), greeting: getGreeting()})
     } catch(err){
         res.send(err)
     }
@@ -105,4 +106,44 @@ module.exports.manageStudent = async function(req, res, next) {
     } catch(err){
         res.send(err);
     }
+}
+
+module.exports.updateLead = async function(req, res){
+    // console.log(req.body);
+    const id = req.params.id;
+    console.log(id);
+    if(req.body.comments){
+        Followup.findOne({lead: id, date: today}, function(err, followup){
+            if(!followup){
+                const newfollowup = new Followup({
+                    date: today,
+                    time: new Date().toLocaleTimeString("en-GB"),
+                    comments: req.body.comments,
+                    lead : id,
+                    followupBy: req.user._id
+                });
+                newfollowup.save();
+            } else {
+                followup.comments = req.body.comments;
+                followup.save();
+            }
+        });
+    }
+    if(req.body.counsellorFollowUpDate)
+    req.body.counsellorFollowUpDate = new Date(req.body.counsellorFollowUpDate).toLocaleDateString("en-GB");
+
+    const lead = req.body;
+    console.log(lead);
+    Lead.findByIdAndUpdate(id, lead, function(err, lead){
+        if(err){
+            console.log(err);
+        } else
+        if(lead) {
+            if(req.params.Frompage === "i"){
+            res.redirect("/myleads/" + id);
+            } else {
+            res.redirect("/myleads/" + req.params.Frompage);
+            }
+        }
+    });
 }
