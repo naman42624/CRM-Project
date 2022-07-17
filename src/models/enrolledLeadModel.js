@@ -27,6 +27,10 @@ const enrolledLeadSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    lead : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Lead'
+    },
     status: {
         type: String,
         trim: true,

@@ -9,7 +9,8 @@ const getGreeting = require("../config/utilities/greeting");
 
 // models
 const {User} = require("../models/userModel");
-const {Lead} = require("../models/leadModel");
+const Lead = require("../models/leadModel");
+const Task = require("../models/taskModel");
 const Document = require("../models/documentModel");
 
 // middlewares
@@ -17,8 +18,17 @@ const auth = require("../middlewares/auth");
 const counsAboveAuth = require("../middlewares/counsAboveAuth");
 
 
-router.get("/", (req, res) => {
-    res.render("counsellor/dashboard",{date: date.newDateTopBar(), greeting: getGreeting()});
+router.get("/",auth, counsAboveAuth, async (req, res) => {
+    try {
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy');
+        const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
+        const leads = await Lead.find({telleFollowUpDate: today}).populate('counsellor');
+        res.render("counsellor/dashboard",{date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 

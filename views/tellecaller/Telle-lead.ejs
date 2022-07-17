@@ -1,8 +1,9 @@
-<%- include('partials/header')  -%> 
+<%- include('../partials/header')  -%> 
 <!-- Sidebar styles for this template -->
 <link href="/css/sidebar.css" rel="stylesheet">
 
 <link rel="stylesheet" href="/css/Telle-leadsList.css">
+<link rel="stylesheet" href="/css/leads.css">
 
 </head>
 <body>
@@ -181,7 +182,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="GoodMorning text-end me-4">
-                        <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i><%= greeting %></span>
+                        <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i> <%= greeting %> </span>
                         <span class="m-0 p-0 d-block date"><%= date %> </span>
                     </div>
                 </div>
@@ -195,226 +196,338 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads (<span class="count">4</span>)</li>
+                                <li class="breadcrumb-item active" aria-current="page"><span class="leadName"><%= lead.name %> </span></li>
                             </ol>
                         </nav>
                     </div>
-                    <!-- <div class="fs-6 m-0">
-                        List of Cold Leads
-                    </div> -->
+                    
                 </div>
                 <div class="col-md-6">
                    <div class="add-new-item  text-end">
-                        <a href="#addNewLead" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addNewLead"><i class="fa-solid fa-plus"></i> Add New Item</a>
+                        <a href="#updateLead" class="btn btn-primary editDetails" data-bs-toggle="modal" data-bs-target="#updateLead" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Edit Details</a>
                    </div>
-                   <!-- Modal -->
-                   <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
+                   <!-- Edit Modal -->
+                   <div class="modal fade" id="updateLead" tabindex="-1" aria-labelledby="updateLeadLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/Telle-leadsList" method="POST">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
                                     <div class="modal-header text-center">
-                                        <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Lead</h5>
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateLeadLabel">Update Details</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body mx-4">
                                         
                                             <div class="form-group mb-3">
                                                 <label for="leadName" class="mb-1">Name</label>
-                                                <input type="text" class="form-control" name="name" placeholder="Enter name" required>
+                                                <input type="text" class="form-control" name="name" value="<%= lead.name %>" placeholder="Enter name" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadPhone" class="mb-1">Phone</label>
-                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone" required>
+                                                <input type="text" class="form-control" name="phone" value="<%=lead.phone %>" placeholder="Enter Phone" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadEmail" class="mb-1">Email</label>
-                                                <input type="email" class="form-control" name="email" placeholder="Enter Email" required>
+                                                <input type="email" class="form-control" name="email" value="<%= lead.email %>" placeholder="Enter Email" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadCountry" class="mb-1">Interested Country</label>
-                                                <input type="text" class="form-control" name="interestedCountry" placeholder="Enter Interested Country" required>
+                                                <input type="text" class="form-control" name="interestedCountry" value="<%= lead.interestedCountry %>" placeholder="Enter Interested Country" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadCollege" class="mb-1">College/University</label>
-                                                <input type="text" class="form-control" name="college" placeholder="Enter College/University" required>
+                                                <input type="text" class="form-control" name="college" value="<%= lead.college %>" placeholder="Enter College/University" required>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadCourse" class="mb-1">Course</label>
-                                                <input type="text" class="form-control" name="course" placeholder="Enter Course">
+                                                <input type="text" class="form-control" name="course" value="<%= lead.course %>" placeholder="Enter Course">
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="leadComments" class="mb-1">Comments</label>
-                                                <input type="textarea" class="form-control" name="comments" placeholder="Any Comments">
+                                                <input type="textarea" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Any Comments">
                                             </div>
 
                                             <div class="form-group mb-3">
-                                                <label for="leadStatus" class="mb-1">Status</label>
+                                                <label for="leadStatus" class="mb-1">Select New Status</label>
                                                 <select class="form-select" name="status" required>
-                                                    <option>- Select Status -</option>
+                                                    <option>- No Status -</option>
                                                     <option>Cold</option>
                                                     <option>Hot</option>
+                                                    <option>Dead</option>
+                                                    <option>Not Eligible</option>
                                                 </select>
                                             </div>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center text-center">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                  </div>
+                    </div>
                 </div>
                 
             </div>
+
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="Search">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search">
-                            <div class="input-group-append">
-                                <button class="btn " type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="text-end">
-                        <div class="d-flex align-items-center justify-content-end">
-                            <i class="fa-solid fa-filter fs-3 h-100"></i>
-                            <form action="/filterLeads" method="POST">
-                                <select class="form-select d-inline" onchange="this.form.submit()">
-                                    <option selected>- Select Group -</option>
-                                    <option>Name</option>
-                                    <option>StudentID</option>
-                                    <option>Status</option>
-                                </select>
+                            <form action="/searchLeadDetails" method="POST"></form>
+                                <input type="text" class="form-control" placeholder="Search in Details">
+                                <div class="input-group-append">
+                                    <button class="btn " type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
+                <!-- <div class="col-md-3">
+                    <div class="add-new-item  text-end">
+                        <a href="#updateCounsellor" class="btn btn-info editDetails" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Assign Counsellor</a>
+                   </div>
+                    <div class="modal fade" id="updateCounsellor" tabindex="-1" aria-labelledby="updateCounsellorLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateCounsellorLabel">Assign Counsellor</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadCounsellor" class="mb-1">Counsellor</label>
+                                            <select class="form-select" name="counsellor" required>
+                                                <option value="<%= lead.counsellor %>"><%= (lead.counsellor)?lead.counsellor.name:"" %> </option>
+                                                <% counsellors.forEach(function(counsellor){ %> 
+                                                <option value="<%= counsellor._id %>"><%= counsellor.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> -->
+                <div class="col-md-7 d-flex justify-content-end">
+                    <div class="add-new-item me-4 text-end">
+                        <a href="#updateScheduledWalksInDate" class="btn btn-dark editDetails" data-bs-toggle="modal" data-bs-target="#updateScheduledWalksInDate" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-calendar-check"></i> Schedule WalkIn</a>
+                   </div>
+                    <div class="modal fade" id="updateScheduledWalksInDate" tabindex="-1" aria-labelledby="updateScheduledWalksInDateLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateScheduledWalksInDateLabel">Schedule WalksIn</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadScheduledWalksInDate" class="mb-1">Scheduled WalksIn Date</label>
+                                            <input type="date" class="form-control" name="scheduledWalksInDate" value="<%= lead.scheduledWalksInDate %>" placeholder="Enter Scheduled WalksIn Date" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Schedule</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-new-item me-4 text-end">
+                        <a href="#updateCounsellor" class="btn btn-info editDetails" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-user-plus"></i> Assign Counsellor</a>
+                   </div>
+                    <div class="modal fade" id="updateCounsellor" tabindex="-1" aria-labelledby="updateCounsellorLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/i/leads/<%= lead._id %>" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="updateCounsellorLabel">Assign Counsellor</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group mb-3">
+                                            <label for="leadCounsellor" class="mb-1">Counsellor</label>
+                                            <select class="form-select" name="counsellor" required>
+                                                <option value="<%= lead.counsellor %>"><%= (lead.counsellor)?lead.counsellor.name:"" %> </option>
+                                                <% counsellors.forEach(function(counsellor){ %> 
+                                                <option value="<%= counsellor._id %>"><%= counsellor.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <a href="/leads/<%= lead._id %>/followUps" class="btn btn-warning"><i class="fas fa-table mr-1"></i> FollowUps</a>
+                    </div>
+                </div>
             </div>
             
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card mb-4">
-                        <div class="card-header"><i class="fas fa-table mr-1"></i><span id="status"> <%= status %>  </span>Leads</div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover" id="List" width="100%" cellspacing="0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Interested Country</th>
-                                            <th>Phone</th>
-                                            <th>FollowUp Date</th>
-                                            <th>Call</th>
-                                            <th>Comments</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-group-divider">
-                                        <% leads.forEach(function(lead) { %>
-                                            <tr>
-                                                <td><a href="/leads/<%= lead._id %> " class="text-decoration-none text-dark"><%= lead.name %></a></td>
-                                                <td>
-                                                    <%= lead.interestedCountry %>
-                                                </td>
-                                                <td><%= lead.phone %></td>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Name</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.name %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Email</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.email %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Interested Country</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.interestedCountry %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Phone</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.phone %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Status</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.status %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                                <td><a href="#updateDate<%= lead._id %>" class="btn text-decoration-none text-dark w-100 editDetails" data-bs-toggle="modal" data-bs-target="#updateDate<%= lead._id %>" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><%= lead.telleFollowUpDate %></a>
-                                                <div class="modal fade" id="updateDate<%= lead._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= lead._id %>" method="POST">
-                                                                <div class="modal-header text-center">
-                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateDateLabel">Update Next FollowUp Date</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body mx-4">
-                                                                        <div class="form-group mb-3">
-                                                                            <label for="telleFollowUpDate" class="mb-1">Next FollowUp Date</label>
-                                                                            <input type="date" class="form-control" name="telleFollowUpDate" placeholder="Enter Next FollowUp Date" required>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer d-flex justify-content-center text-center">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                </td>
-                                                <td><a href="#updateCall<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= lead._id %>" ><%= lead.call %></a>
-                                                <div class="modal fade" id="updateCall<%= lead._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="/callResponse/<%= lead._id %>" method="POST">
-                                                                <div class="modal-header text-center">
-                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateCallLabel">Update Call Response</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body mx-4">
-                                                                        <div class="form-group mb-3">
-                                                                            <label for="callResponse" class="mb-1">Call Response</label>
-                                                                            <select class="form-select" name="callResponse" required>
-                                                                                <option selected><%= lead.call %> </option>
-                                                                                <option>Answered</option>
-                                                                                <option>Not Picked</option>
-                                                                                <option>Answered & Cut</option>
-                                                                                <option>Other</option>
-                                                                            </select>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer d-flex justify-content-center text-center">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                </td>
-                                                <!-- <form action="/callResponse/<%= lead._id %> " method="POST">
-                                                    <td>
-                                                        <select class="form-select d-inline" name="callResponse" onchange="this.form.submit()">
-                                                            <option selected><%= lead.call %> </option>
-                                                            <option>Answered</option>
-                                                            <option>Not Picked</option>
-                                                            <option>Answered & Cut</option>
-                                                            <option>Other</option>
-                                                        </select>
-                                                    </td>
-                                                </form> -->
-                                                <td><a href="#updateComment<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= lead._id %>" ><%= lead.comments %></a></td>
-                                                <div class="modal fade" id="updateComment<%= lead._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= lead._id %>" method="POST">
-                                                                <div class="modal-header text-center">
-                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateCommentLabel">Update Comments</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body mx-4">
-                                                                        <div class="form-group mb-3">
-                                                                            <label for="comments" class="mb-1">Comments</label>
-                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer d-flex justify-content-center text-center">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
+
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">College/University</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.college %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">FollowUp Date</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.telleFollowUpDate %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Course</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.course %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Counsellor</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= (lead.counsellor)?lead.counsellor.name:"" %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Call</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.call %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Scheduled WalkIn</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= new Date(lead.scheduledWalksInDate).toLocaleDateString("en-GB") %> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="card-title fs-5 fw-semibold">Comments</span>
+                        </div>
+                        <div class="card-body d-flex justify-content-center align-items-center">
+                            <div class="text-muted">
+                                <span><%= lead.comments %> </span>
                             </div>
                         </div>
                     </div>
@@ -425,8 +538,10 @@
 
     </div>
 
-<%- include('partials/footer')  -%>
 
+<%- include('../partials/footer')  -%>
 
 </body>
 </html>
+
+

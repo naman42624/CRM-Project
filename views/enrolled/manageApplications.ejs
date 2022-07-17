@@ -162,7 +162,7 @@
               <svg class="bi pe-none me-2" width="16" height="16">
                 <use xlink:href="#grid" />
               </svg>
-              <span> Manage Applications</span>
+              <span>Applications</span>
             </a>
           </li>
           <li class="collapse-head sidebar-button">
@@ -270,7 +270,7 @@
             <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header"><i class="fas fa-table mr-1"></i>
-                  Enrolled Students
+                  Applications
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
@@ -279,24 +279,21 @@
                         <tr>
                           <th>Date Created</th>
                           <th>Name</th>
-                          <th>Email</th>
-                          <th>Mobile</th>
+                          <th>University</th>
+                          <th>Intake</th>
                           <th>Created By</th>
-                          <th>Assigned To</th>
                           <th>Status</th>
                         </tr>
                       </thead>
                       <tbody class="table-group-divider">
-                        <% students.forEach(function(student){ %> 
-                          
+                        <% applications.forEach(function(application){ %> 
                         <tr>
-                          <td><%= new Date(student.enrollmentDate).toLocaleDateString("en-GB") %></td>
-                          <td><a href="/enrolled/document/<%= student._id %>" class="text-decoration-none text-dark"><%= student.name %></a></td>
-                          <td><%= student.username %></td>
-                          <td><%= student.phone %></td>
-                          <td><%= student.enrolledBy %></td>
-                          <td><%= student.assignedTo %></td>
-                          <td><%= student.status %></td>
+                          <td><%= new Date(application.appliedAt).toLocaleDateString("en-GB") %></td>
+                          <td><a href="/enrolled/profile/<%= application.enrolledLead._id %>" class="text-decoration-none text-dark"><%= application.name %></a></td>
+                          <td><%= application.institute %></td>
+                          <td><%= application.intake %></td>
+                          <td><%= application.appliedBy.name %></td>
+                          <td><%= application.status %></td>
                         </tr>
                         <% }) %>
                       </tbody>
@@ -315,7 +312,6 @@
 
       <%- include('../partials/footer') -%>
 
-        <script src="/js/profile.js"></script>
   </body>
 
   </html>

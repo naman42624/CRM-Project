@@ -45,11 +45,12 @@ const leadsSchema = new mongoose.Schema({
         type: String
       },
       walksIn: Boolean,
+      scheduledWalksInDate: Date,
       walksInDate: Date,
       walksInTime: String,
       counsellor:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Counsellor"
+        ref: "User"
       },
       city: String,
       visaType: String,

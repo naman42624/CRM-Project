@@ -22,11 +22,13 @@ const auth = require("../middlewares/auth");
 const _ = require('lodash');
 
 // Dashboard
-router.get("/", auth , function(req, res){
+router.get("/", auth , async function(req, res){
     // console.log(req.user);
     // console.log(req.session);
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+    const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
+    const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
         Lead.find({telleFollowUpDate: today}, function(err, leads){
             if(err){
                 console.log(err);
@@ -36,7 +38,7 @@ router.get("/", auth , function(req, res){
                     if(err){
                         console.log(err);
                     } else {
-                        res.render("Telle-dashboard", {avatarSrc: avatarSrc, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
+                        res.render("tellecaller/Telle-dashboard", {avatarSrc: avatarSrc, taskCount, tasks, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
                     }
                 });
             }
@@ -49,7 +51,7 @@ router.get("/", auth , function(req, res){
 router.get("/Telle-leads", auth, function(req, res){
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("Telle-leads", {avatarSrc: avatarSrc,  user: user, date: date.newDateTopBar(), greeting: getGreeting()});
+    res.render("tellecaller/Telle-leads", {avatarSrc: avatarSrc,  user: user, date: date.newDateTopBar(), greeting: getGreeting()});
 });
 
 // All Followups
@@ -76,7 +78,7 @@ router.get("/Telle-leads/:status", auth, function(req, res){
             if(err){
                 console.log(err);
             } else {
-                res.render("Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
+                res.render("tellecaller/Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         });
     }
@@ -86,37 +88,37 @@ router.get("/Telle-leads/:status", auth, function(req, res){
                 console.log(err);
             } else
             if(leads) {
-                res.render("Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
+                res.render("tellecaller/Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         });
     }
 });
 
 // Individual lead page for Telle-leads
-router.get("/leads/:id", auth, function(req, res){ 
-    const id = req.params.id;
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    Lead.findById(id, function(err, lead){
-        if(err){
-            console.log(err);
-        } else
-        if(lead) {
-            res.render("lead", {avatarSrc: avatarSrc, user: user, lead: lead, date: date.newDateTopBar(), greeting: getGreeting()});
-        }
-    });
-});
-
-router.get("/Telle-task", auth, function(req, res){
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("Telle-task", {avatarSrc: avatarSrc, user: user});
+router.get("/leads/:id", auth, async function(req, res){ 
+    try {
+        const id = req.params.id;
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const counsellors = await User.find({role: "Counsellor"});
+        Lead.findById(id, function(err, lead){
+            if(err){
+                console.log(err);
+            } else
+            if(lead) {
+                res.render("tellecaller/Telle-lead", {avatarSrc: avatarSrc, user: user, counsellors, lead: lead, date: date.newDateTopBar(), greeting: getGreeting()});
+            }
+        }).populate("counsellor");
+    } catch (error) {
+        console.log(error);
+    }
+    
 });
 
 router.get("/Telle-reports", auth, function(req, res){
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("Telle-reports", {avatarSrc: avatarSrc, user: user});
+    res.render("tellecaller/Telle-reports", {avatarSrc: avatarSrc, user: user});
 });
 
 // Followups for a lead
@@ -128,7 +130,7 @@ router.get("/leads/:id/followups", auth, function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("followup", {avatarSrc: avatarSrc, user: user, followups: followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()});
+            res.render("tellecaller/Telle-followup", {avatarSrc: avatarSrc, user: user, followups: followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()});
         }
     }).populate("lead");
 });

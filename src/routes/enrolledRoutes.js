@@ -220,7 +220,7 @@ router.get("/manageStudents", auth, counsAboveAuth, async (req, res) => {
     try{
         const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const students = await EnrolledLead.find({});
+        const students = await (await EnrolledLead.find({})).populate("lead");
         res.render("enrolled/manageStudents", {students, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
         res.send(err);
@@ -232,7 +232,7 @@ router.get("/manageApplications", auth, counsAboveAuth, async (req, res) => {
     try{
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const applications = await Application.find({});
+        const applications = await Application.find({}).populate("enrolledLead appliedBy");
         res.render("enrolled/manageApplications", {applications, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
         res.send(err);

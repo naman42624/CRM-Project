@@ -5,6 +5,10 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    enrolledLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'EnrolledLead'
+    },
     program: {
         type: String,
         required: true,
