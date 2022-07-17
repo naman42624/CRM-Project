@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const path = require("path");
 const multer = require("multer");
 const crypto = require("crypto");
 const {GridFsStorage} = require("multer-gridfs-storage");
@@ -13,6 +14,13 @@ const {User} = require("../models/userModel");
 const {Lead} = require("../models/leadModel");
 const Document = require("../models/documentModel");
 const EnrolledLead = require("../models/enrolledLeadModel");
+const Application = require("../models/applicationModel");
+
+// Dates
+const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");
+const today = new Date().toLocaleDateString("en-GB");
+const date = require("../config/utilities/date");
+const getGreeting = require("../config/utilities/greeting");
 
 
 // middlewares
@@ -59,28 +67,35 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 // Routes
-router.get("/application", auth, counsAboveAuth, (req, res) => {
-    res.render("applications/application");
+router.get("/application/:enrolledId", auth, counsAboveAuth, (req, res) => {
+    res.render("enrolled/individual/application" , {enrolledId: req.params.enrolledId});
 });
 
-router.get("/profile", auth, counsAboveAuth, (req, res) => {
-    res.render("applications/profile");
-});
-
-router.get("/document", auth, counsAboveAuth, (req, res) => {
-    res.render("applications/document");
+router.get("/profile/:enrolledId", auth, counsAboveAuth, (req, res) => {
+    res.render("enrolled/individual/profile", {enrolledId: req.params.enrolledId});
 });
 
 // Respective Document page route for each Enrolled Lead
-router.get("/document/:enrolledId", auth, counsAboveAuth, (req, res) => {
-    Document.findOne({enrolledLead: req.params.enrolledId}, function(err, document){
-        if(err){
-            console.log(err);
-        }
-        else{
-            res.send(document);
-        }
-    });  
+router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        const tenth = await Document.findOne({enrolledLead: enrolledId, documentName: "10th"});
+        const twelfth = await Document.findOne({enrolledLead: enrolledId, documentName: "12th"});
+        const bachelors = await Document.findOne({enrolledLead: enrolledId, documentName: "bachelors"});
+        const provisionalFinal = await Document.findOne({enrolledLead: enrolledId, documentName: "provisionalFinal"});
+        const applicationForm = await Document.findOne({enrolledLead: enrolledId, documentName: "applicationForm"});
+        const declaration = await Document.findOne({enrolledLead: enrolledId, documentName: "declaration"});
+        const passport = await Document.findOne({enrolledLead: enrolledId, documentName: "passport"});
+        const statementOfPurpose = await Document.findOne({enrolledLead: enrolledId, documentName: "statementOfPurpose"});
+        const letterOfRecommendation = await Document.findOne({enrolledLead: enrolledId, documentName: "letterOfRecommendation"});
+        const englishLanguageCertificate = await Document.findOne({enrolledLead: enrolledId, documentName: "englishLanguageCertificate"});
+        const portfolio = await Document.findOne({enrolledLead: enrolledId, documentName: "portfolio"});
+        const otherDocuments = await Document.findOne({enrolledLead: enrolledId, documentName: "otherDocuments"});
+        res.render("enrolled/individual/document", { enrolledLead, tenth, twelfth, bachelors, provisionalFinal, applicationForm, declaration, passport, statementOfPurpose, letterOfRecommendation, englishLanguageCertificate, portfolio, otherDocuments });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 // Display uploaded files
@@ -102,8 +117,8 @@ router.get("/document/:enrolledId/:fileName", auth, counsAboveAuth, (req, res) =
     });
 });
 
-router.get("/payment", auth, counsAboveAuth, (req, res) => {
-    res.render("applications/payment");
+router.get("/payment/:enrolledId", auth, counsAboveAuth, (req, res) => {
+    res.render("enrolled/individual/payment", {enrolledId: req.params.enrolledId});
 });
 
 // Toggle valid document or not
@@ -120,7 +135,7 @@ router.post("/checkbox/:enrolledId/:name", auth, counsAboveAuth, (req, res) => {
         else
         if(document){
             console.log(document);
-            res.redirect("/enrolled/document");
+            res.redirect("/enrolled/document/" + req.params.enrolledId);
         }
         else{
             console.log("No document found");
@@ -150,7 +165,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                         console.log(err);
                     }
                     else{
-                        res.redirect("/enrolled/document");
+                        res.redirect("/enrolled/document/" + req.params.enrolledId);
                     }
                 });
             }
@@ -165,7 +180,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                         console.log(err);
                     }
                     else{
-                        res.redirect("/enrolled/document");
+                        res.redirect("/enrolled/document/" + req.params.enrolledId);
                     }
                 });
             }
@@ -190,7 +205,7 @@ router.delete("/file/:enrolledId/:docName/:fileId", auth, counsAboveAuth, (req, 
                 else
                 if(document){
                     console.log(document);
-                    res.redirect("/enrolled/document");
+                    res.redirect("/enrolled/document/" + req.params.enrolledId);
                 }
                 else{
                     console.log("No document found");
@@ -199,6 +214,30 @@ router.delete("/file/:enrolledId/:docName/:fileId", auth, counsAboveAuth, (req, 
             });
         }
     });
+})
+
+router.get("/manageStudents", auth, counsAboveAuth, async (req, res) => {
+    try{
+        const user = req.user;
+    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const students = await EnrolledLead.find({});
+        res.render("enrolled/manageStudents", {students, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch(err){
+        res.send(err);
+        console.log(err);
+    }
+});
+
+router.get("/manageApplications", auth, counsAboveAuth, async (req, res) => {
+    try{
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const applications = await Application.find({});
+        res.render("enrolled/manageApplications", {applications, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch(err){
+        res.send(err);
+        console.log(err);
+    }
 })
 
 

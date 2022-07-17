@@ -1,4 +1,4 @@
-<%- include('partials/header')  -%> 
+<%- include('../partials/header')  -%> 
 <!-- Sidebar styles for this template -->
 <link href="/css/sidebar.css" rel="stylesheet">
 
@@ -69,8 +69,7 @@
 </svg>
 
 <main class="d-flex flex-nowrap">
-  <!-- <div class="row"> -->
-      <!-- <div class="col-md-2"> -->
+        <!-- SideBar -->
           <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 20%;">
               <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
@@ -127,6 +126,18 @@
                       </ul>
                     </div>
                   </li>
+                  <li class="sidebar-button">
+                    <a href="/enrolled/allEnrolled" class="nav-link text-white">
+                      <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                      Manage Students
+                    </a>
+                  </li>
+                  <li class="sidebar-button">
+                    <a href="/enrolled/" class="nav-link text-white">
+                      <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                      Manage Applications   
+                    </a>
+                  </li>
                   <hr>
                   <li class="collapse-head-Contact sidebar-button">
                       <a class="nav-link d-flex align-items-center text-white"  href="#collapseContact" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="collapseContact">
@@ -150,9 +161,8 @@
                 </ul>
                 <hr>
             </div>
-      <!-- </div> -->
-  <!-- </div> -->
 
+        <!-- Main Content -->
 <div class="flex-grow-1 whole-body">
     <div class="container-fluid topBar mb-0">
         <div class="row mb-0">
@@ -382,7 +392,7 @@
 </div>
 
 
-<%- include('partials/footer')  -%>
+<%- include('../partials/footer')  -%>
 
 
 

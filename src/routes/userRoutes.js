@@ -89,6 +89,8 @@ const sendEmail = async (user) => {
     });
 }
 
+// @route   GET /user/verify/:id/:token
+// @desc    Verify user email and redirect to dashboard
 router.get("/verify/:id/:token", auth, (req, res)=>{
     const id = req.params.id;
     const token = req.params.token;
@@ -111,10 +113,8 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
                                         console.log(err);
                                     }
                                     else{
-                                    //    passport.authenticate("local")(req, res, ()=>{
-                                            console.log("User logged in");
-                                            res.redirect("/");
-                                        // });
+                                        console.log("User logged in");
+                                        res.redirect("/");
                                     }
                                 });
                             }
@@ -136,6 +136,8 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
     });
 });
 
+// @route   GET /user/resend/:id/:email
+// @desc    Resend email verification link
 router.get("/resend/:id/:email", (req, res) => {
     UserVerification.findOneAndDelete({userId: req.params.id}, (err)=>{
         if(err){
@@ -166,20 +168,12 @@ router.get("/login", function(req, res){
 
 // User Profile Page
 router.get("/profile", auth, function(req, res){
-    // console.log(req.user);
-    // console.log(req.session);
-    // console.log(req.isAuthenticated());
-        User.findById(req.user._id, function(err, user){
-            if(err){
-                console.log(err);
-            } else {
-                // console.log(user.avatar.contentType);
-                const avatarSrc = "data:image/webp;base64," + user.avatar.toString("base64");
-                res.render("profile", {avatarSrc: avatarSrc, user: user, date: date.newDateTopBar(), greeting: getGreeting()});
-            }
-        })
+    const user = req.user;
+    const avatarSrc = "data:image/webp;base64," + user.avatar.toString("base64");
+    res.render("profile", {avatarSrc: avatarSrc, user: user, date: date.newDateTopBar(), greeting: getGreeting()});
 });
 
+// Register User
 router.post("/register" , function(req, res){
     console.log(req.body);
     const user = new User({
@@ -217,12 +211,12 @@ router.post("/register" , function(req, res){
     })
 });
 
+// Verify User page
 router.get("/verify", auth, function(req, res){
     res.render("verify",{email: req.user.email, name: req.user.name});
 });
 
-
-
+// Upload avatar
 router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, res){
     console.log(req.file);
     const buffer = await sharp(req.file.buffer).resize({width: 250, height: 250}).png().toBuffer();
@@ -234,6 +228,7 @@ router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, 
 }
 );
 
+// Delete avatar
 router.post("/deleteAvatar", auth, async function(req, res){
     try{
         req.user.avatar = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp";
@@ -246,6 +241,7 @@ router.post("/deleteAvatar", auth, async function(req, res){
     }
 });
 
+// Login User
 router.post("/login", function(req, res){
     const user = new User({
         username: req.body.username,
@@ -263,6 +259,7 @@ router.post("/login", function(req, res){
     });
 });
 
+// Logout User
 router.get('/logout', function(req, res){
     req.logout(function(err) {
         if (err) {
