@@ -59,7 +59,10 @@ const leadsSchema = new mongoose.Schema({
   counsellorFollowUpDate: {
     type: String
   },
-
+  washot:{
+    type: Boolean,
+    default: false
+  },
   city: String,
   visaType: String,
   latestQualification: String,

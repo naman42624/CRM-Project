@@ -164,7 +164,7 @@
                     <div class="fs-2 breadcrumbForLeads">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
+                                <li class="breadcrumb-item"><a href="/counsellor-leads" class="text-decoration-none text-dark">Leads</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads (<span class="count">4</span>)</li>
                             </ol>
                         </nav>
@@ -181,7 +181,7 @@
                    <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/Telle-leadsList" method="POST">
+                                <form action="/counsellor-leadsList" method="POST">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Lead</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -291,25 +291,25 @@
                                     <tbody class="table-group-divider">
                                         <% for(var i=0; i<leads.length; i++){ %>
                                             <tr>
-                                                <td><a href="/myleads/<%= leads[i]._id %> " class="text-decoration-none text-dark"><%= leads[i].name %></a></td>
+                                                <td><a href="/counsellor/leads/<%= leads[i]._id %> " class="text-decoration-none text-dark"><%= leads[i].name %></a></td>
                                                 <td>
                                                     <%= leads[i].interestedCountry %>
                                                 </td>
                                                 <td><%= leads[i].phone %></td>
 
-                                                <td><a href="#updateDate<%= leads[i]._id %>" class="btn text-decoration-none text-dark editDetails w-100" data-bs-toggle="modal" data-bs-target="#updateDate<%= leads[i]._id %>" value="<%= leads[i].call %>/<%= leads[i].telleFollowUps %>"><%= leads[i].telleFollowUpDate %></a>
+                                                <td><a href="#updateDate<%= leads[i]._id %>" class="btn text-decoration-none text-dark editDetail w-100" data-bs-toggle="modal" data-bs-target="#updateDate<%= leads[i]._id %>" value="<%= leads[i].call %>/<%= leads[i].counsellorFollowUps %>"><%= leads[i].counsellorFollowUpDate %></a>
                                                 <div class="modal fade" id="updateDate<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= leads[i]._id %>" method="POST">
+                                                            <form action="/<%= status %>/counsellor/update/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateDateLabel">Update Next FollowUp Date</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body mx-4">
                                                                         <div class="form-group mb-3">
-                                                                            <label for="telleFollowUpDate" class="mb-1">Next FollowUp Date</label>
-                                                                            <input type="date" class="form-control" name="telleFollowUpDate" placeholder="Enter Next FollowUp Date" required>
+                                                                            <label for="counsellorFollowUpDate" class="mb-1">Next FollowUp Date</label>
+                                                                            <input type="date" class="form-control" name="counsellorFollowUpDate" placeholder="Enter Next FollowUp Date" required>
                                                                         </div>
                                                                 </div>
                                                                 <div class="modal-footer d-flex justify-content-center text-center">
@@ -325,7 +325,7 @@
                                                 <div class="modal fade" id="updateCall<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/callResponse/<%= leads[i]._id %>" method="POST">
+                                                            <form action="/counsellor/callResponse/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCallLabel">Update Call Response</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -356,7 +356,7 @@
                                                 <div class="modal fade" id="updateComment<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/<%= status %>/leads/<%= leads[i]._id %>" method="POST">
+                                                            <form action="/<%= status %>/counsellor-leads/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCommentLabel">Update Comments</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

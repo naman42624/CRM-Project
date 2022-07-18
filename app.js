@@ -16,7 +16,7 @@ const auth = require('./src/middlewares/auth')
 // Routes
 const userRoutes = require("./src/routes/userRoutes");
 const telleRoutes = require("./src/routes/telleRoutes");
-const enrolledUserRoutes = require("./src/routes/enrolledUserRoutes");
+const enrolledRoutes = require("./src/routes/enrolledRoutes");
 const counsellorRoutes = require("./src/routes/counsellorRoutes")
 const app = express();
 
@@ -42,7 +42,7 @@ connectDB();
 
 app.use("/user", userRoutes);
 app.use("/", telleRoutes);
-app.use("/enrolledUser", enrolledUserRoutes);
+app.use("/enrolled", enrolledRoutes);
 app.use('/' , counsellorRoutes)
 app.get('/',auth ,(req,res)=>{
     if(req.user.role === "TelleCaller"){

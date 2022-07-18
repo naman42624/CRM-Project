@@ -1,11 +1,12 @@
-<%- include('./partials/header.ejs') -%>
+<%- include('../partials/header.ejs') -%>
 
     <link rel="stylesheet" href="/css/application.css">
     </head>
 
     <body>
         <!-- Tab-bar -->
-        <%- include('tabBar') -%>
+        <%- include('../partials/navBar') -%> 
+        <%-  include('../partials/tabBar', {lead: user}) -%>  
 
             <div class="p-4">
                 <div class="head">
@@ -43,16 +44,16 @@
 
                 <ul class="nav nav-tabs nav-fill bg-light">
                     <li class="nav-item active">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/personal/<%= user._id %>">Personal Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= user._id %>">Personal Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/academic/<%= user._id %>">Academic Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= user._id %>">Academic Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/work/<%= user._id %>">Work Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= user._id %>">Work Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/test/<%= user._id %>">Test Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= user._id %>">Test Information</a>
                     </li>
                 </ul>
 
@@ -63,14 +64,14 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="/enrolledUser/save/personal/<%= user._id %>" method="POST">
+                        <form action="/enrolled/save/personal/<%= user._id %>" method="POST">
                             <div class="form-group">
                                 <label for="dob">Date Of Birth</label>
-                                <input type="date" name="dob" id="dob">
+                                <input type="date" name="dob" id="dob" required>
                             </div><br>
                             <div class="form-group">
                                 <label for="gender">Gender</label>
-                                <select name="gender" id="gender">
+                                <select name="gender" id="gender" required>
                                     <option value="">
                                         <%= personalInfo.gender %>
                                     </option>
@@ -81,7 +82,7 @@
                             </div><br>
                             <div class="form-group">
                                 <label for="maritalStatus">Marital Status</label>
-                                <select name="maritalStatus" id="maritalStatus">
+                                <select name="maritalStatus" id="maritalStatus" required>
                                     <option value="">
                                         <%= personalInfo.maritalStatus %>
                                     </option>
@@ -225,23 +226,23 @@
                     <div class="card-body">
                         <div class="form-group">
                         <label for="emergencyname">Name</label>
-                        <input type="text" name="emergencyname" id="emergencyname"  value="<%= personalInfo.emergencyname %>">
+                        <input type="text" name="emergencyname" id="emergencyname"  value="<%= personalInfo.emergencyname %>" required>
                         </div><br>
                         <div class="form-group">
                         <label for="emergencyrelationship">Relationship</label>
-                        <input type="text" name="emergencyrelationship" id="emergencyrelationship" value="<%= personalInfo.emergencyrelationship %>">
+                        <input type="text" name="emergencyrelationship" id="emergencyrelationship" value="<%= personalInfo.emergencyrelationship %>" required>
                         </div><br>
                         <div class="form-group">
                         <label for="emergencyphone">Phone</label>
-                        <input type="text" name="emergencyphone" id="emergencyphone" value="<%= personalInfo.emergencyphone %>">
+                        <input type="text" name="emergencyphone" id="emergencyphone" value="<%= personalInfo.emergencyphone %>" required>
                         </div><br>
                         <div class="form-group">
                         <label for="emergencyemail">Email</label>
-                        <input type="text" name="emergencyemail" id="emergencyemail" value="<%= personalInfo.emergencyemail %>">
+                        <input type="text" name="emergencyemail" id="emergencyemail" value="<%= personalInfo.emergencyemail %>" required>
                         </div><br>
                         <div class="form-group">
                         <label for="anyOtherInformation">Any Other Information</label>
-                        <input type="text" name="anyOtherInformation" id="anyOtherInformation" value="<%= personalInfo.anyOtherInformation %>">
+                        <input type="text" name="anyOtherInformation" id="anyOtherInformation" value="<%= personalInfo.anyOtherInformation %>" >
                         </div><br>
                     </div>
                 </div>
@@ -260,7 +261,7 @@
                 </script>
 
 
-                <%- include('./partials/footer') -%>
+                <%- include('../partials/footer') -%>
 
     </body>
 

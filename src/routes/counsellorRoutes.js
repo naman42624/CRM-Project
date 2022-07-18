@@ -2,17 +2,37 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const auth = require("../middlewares/auth");
-const upload = require("../middlewares/avatarUpload");
 // Controllers
 const counsellorController = require("../controllers/counsellorController");
 
+// Dashboard
 router.get("/counsellor/home", auth, counsellorController.counsellorDashboard);
-// router.get("/counsellor_profile", auth, counsellorController.counsellorProfile);
-// router.get("/counsellor/tasks", auth, counsellorController.counsellorTasks);
-router.get("/counsellor/myleads/:status", auth, counsellorController.myleads);
-router.get("/counsellor/leads", auth, counsellorController.lead);
-router.get("/myleads/:id", auth, counsellorController.myleadsPage);
-// router.get("/managestudents", auth, counsellorController.managestudents);
-router.post("/:Frompage/myleads/:id", auth, counsellorController.updateLead);
-// router.get("/myleads/:id/followUps",auth, counsellorController.)
+
+// Leads Section
+router.get("/counsellor-leads", auth, counsellorController.counsellorLeadsPage);
+
+// All Followups
+router.get("/counsellor/allFollowups", auth, counsellorController.allFollowUps);
+
+// Hot leads and cold leads list for Counsellor-leads
+router.get("/counsellor-leads/:status", auth, counsellorController.leadsStatus);
+
+// Individual lead page for counsellor-leads
+router.get("/counsellor/leads/:id", auth, counsellorController.leadsPage);
+
+// Reports Page
+router.get("/counsellor-reports", auth, counsellorController.counsellorReport)
+
+// Followups for a lead
+router.get("/counsellor-leads/:id/followups", auth, counsellorController.leadFollowUp);
+
+// Update details of a lead from individual lead page and leads list page
+router.post("/:Frompage/counsellor/update/:id", auth, counsellorController.updateLead)
+
+// Adding a new lead from telle-leads list page
+router.post("/counsellor-leadsList", auth, counsellorController.createLead);
+
+//updating call response
+router.post("/counsellor/callResponse/:id", auth, counsellorController.updateCallResponse);
+
 module.exports = router;

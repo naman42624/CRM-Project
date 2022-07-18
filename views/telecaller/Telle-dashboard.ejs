@@ -96,24 +96,9 @@
               <hr>
           
               <ul class="nav nav-pills flex-column mb-auto">
-                <%if(user.role === "TelleCaller"){ %>
+
                     <%- include('../partials/Telle-sidebar') -%>
-                <%} else if(user.role === "Counsellor"){ %>
-                    <%- include('../partials/Counsellor-sidebar') -%>
-                <%} else if(user.role === "FOE"){ %>
-                    <%- include('../partials/FOE-sidebar') -%>
-                <%} else if(user.role === "Branch Manager"){ %>
-                    <%- include('../partials/Branch-sidebar') -%>
-                <%} else if(user.role === "SOP Team"){ %>
-                    <%- include('../partials/SOP-sidebar') -%>
-                <%} else if(user.role === "Filing Team"){ %>
-                    <%- include('../partials/Filing-sidebar') -%>
-                <%} else if(user.role === "Application Team"){ %>
-                    <%- include('../partials/Application-sidebar') -%>
-                <%} else if(user.role === "Interview Team"){ %>
-                    <%- include('../partials/Interview-sidebar') -%>
-                <%} %>
-            
+        
                   
                   <hr>
                   <li class="collapse-head-Contact sidebar-button">
@@ -204,7 +189,7 @@
                     </div>
                     <div class="card-footer border-success bg-success bg-opacity-50">
                         <div class="d-flex justify-content-center align-items-center">
-                            <span class="text-muted"><a href="/task" class="text-decoration-none text-muted"> View Detailed Report <i class="fa-solid fa-angles-right"></i></a></span>
+                            <span class="text-muted"><a href="/user/task" class="text-decoration-none text-muted"> View Detailed Report <i class="fa-solid fa-angles-right"></i></a></span>
                         </div>
                     </div>
                 </div>
@@ -246,7 +231,7 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span class="card-title fs-5 fw-bold">Tasks</span>
-                        <i class="fa-solid fa-angles-right h-100"></i>
+                        <a href="/user/task" class="text-decoration-none text-dark"><i class="fa-solid fa-angles-right h-100"></i></a>
                     </div>
                     
                     <div class="card-body">
@@ -265,7 +250,7 @@
                                     
                                     <tr>
                                         <td>
-                                            <a href="#" class="text-decoration-none text-dark">
+                                            <a href="/task/<%= tasks[i]._id %>" class="text-decoration-none text-dark">
                                                 <span class="text-muted"><%= tasks[i].name %></span>
                                             </a>
                                         </td>

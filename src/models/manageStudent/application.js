@@ -25,6 +25,11 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    enrolledLead:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'enrolledUser'
+    },
     appliedAt: {
         type: Date,
         default: Date.now,

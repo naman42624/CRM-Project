@@ -28,7 +28,7 @@ module.exports.enroll_post = async (req, res) => {
         });
         console.log(user);
         await user.save();
-        res.redirect('/enrolledUser/enroll/get/' + user.id);
+        res.redirect('/enrolled/enroll/get/' + user.id);
         // res.render('enroll', { user });
     } catch (err) {
         res.send(err);
@@ -44,7 +44,7 @@ module.exports.personal_get = async (req, res) => {
         const testInfo = await test.find({ user: id });
         const user = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('enroll', { user, personalInfo, academicInfo, workInfo, testInfo });
+        res.render('common/enroll', { user, personalInfo, academicInfo, workInfo, testInfo });
     } catch (err) {
         res.send(err);
     }
@@ -65,7 +65,7 @@ module.exports.personal_post = async (req, res) => {
             console.log(personalInfo);
             await personalInfo.save();
         }
-        res.redirect('/enrolledUser/enroll/get/' + req.params.id);
+        res.redirect('/enrolled/enroll/get/' + req.params.id);
         // res.render('enroll', { user });
     } catch (err) {
         res.send(err);
@@ -82,7 +82,7 @@ module.exports.academic_get = async (req, res) => {
         const testInfo = await test.find({ user: id });
         const user = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('educational', { user, personalInfo, academicInfo, workInfo, testInfo });
+        res.render('common/educational', { user, personalInfo, academicInfo, workInfo, testInfo });
     } catch (err) {
         res.send(err);
     }
@@ -106,7 +106,7 @@ module.exports.academic_post = async (req, res) => {
             console.log(academicInfo);
             await academicInfo.save();
         }
-        res.redirect('/enrolledUser/enroll/get/' + req.params.id);
+        res.redirect('/enrolled/enroll/get/' + req.params.id);
         // res.render('enroll', { user });
     } catch (err) {
         res.send(err);
@@ -123,7 +123,7 @@ module.exports.work_get = async (req, res) => {
         const testInfo = await test.find({ user: id });
         const user = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('work', { user, personalInfo, academicInfo, workInfo, testInfo });
+        res.render('common/work', { user, personalInfo, academicInfo, workInfo, testInfo });
     } catch (err) {
         res.send(err);
     }
@@ -144,7 +144,7 @@ module.exports.work_post = async (req, res) => {
         console.log(workInfo);
         await workInfo.save();
         }
-        res.redirect('/enrolledUser/enroll/get/' + req.params.id);
+        res.redirect('/enrolled/enroll/get/' + req.params.id);
         // res.render('enroll', { user });
     } catch (err) {
         res.send(err);
@@ -161,7 +161,7 @@ module.exports.test_get = async (req, res) => {
         const testInfo = await test.find({ user: id });
         const user = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('test', { user, personalInfo, academicInfo, workInfo, testInfo });
+        res.render('common/test', { user, personalInfo, academicInfo, workInfo, testInfo });
     } catch (err) {
         res.send(err);
     }
@@ -175,7 +175,7 @@ module.exports.test_post = async (req, res) => {
         });
         console.log(testInfo);
         await testInfo.save();
-        res.redirect('/enrolledUser/enroll/get/' + req.params.id);
+        res.redirect('/enrolled/enroll/get/' + req.params.id);
         // res.render('enroll', { user });
     } catch (err) {
         res.send(err);
@@ -227,7 +227,7 @@ module.exports.enroll_get = async (req, res) => {
         const testInfo = await test.find({ user: id });
         const user = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('enroll', { user, personalInfo, academicInfo, workInfo, testInfo });
+        res.render('common/enroll', { user, personalInfo, academicInfo, workInfo, testInfo });
     } catch (err) {
         res.send(err);
     }
@@ -296,8 +296,8 @@ module.exports.profile = async (req, res) => {
 
 module.exports.document = async (req, res) => {
     try {
-        const user = await enrolledUser.findById(req.params.id);
-        res.render('document', { user });
+        const lead = await enrolledUser.findById(req.params.id);
+        res.render('common/document', { enrolledLead: lead });
     } catch (err) {
         res.send(err);
     }

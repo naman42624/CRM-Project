@@ -1,12 +1,13 @@
-<%- include('./partials/header.ejs') -%>
+<%- include('../partials/header.ejs') -%>
 
     <link rel="stylesheet" href="/css/application.css">
     </head>
 
     <body>
-        <!-- Tab-bar -->
-        <%- include('tabBar') -%>
-
+         <!-- Tab-bar -->
+         <%- include('../partials/navBar') -%> 
+         <%-  include('../partials/tabBar') -%>  
+ 
             <div class="p-4">
                 <div class="head">
                     <h3 class="mb-3">Upload Documents of </h3>
@@ -43,21 +44,21 @@
 
                 <ul class="nav nav-tabs nav-fill bg-light">
                     <li class="nav-item active">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/personal/<%= user._id %>">Personal Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= user._id %>">Personal Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/academic/<%= user._id %>">Academic Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= user._id %>">Academic Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/work/<%= user._id %>">Work Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= user._id %>">Work Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolledUser/save/test/<%= user._id %>">Test Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= user._id %>">Test Information</a>
                     </li>
                 </ul>
                 <div>
                     <h3>Educational Information</h3>
-                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <label
+                    <form action="/enrolled/save/academic/<%= user._id %>" method="POST"> <label
                             for="countryOfStudy"></label>
                         <input type="text" name="countryOfStudy" id="countryOfStudy" value=""><br>
                         <label for="highestDegree"></label>
@@ -151,7 +152,7 @@
                 </script>
 
 
-                <%- include('./partials/footer') -%>
+                <%- include('../partials/footer') -%>
 
     </body>
 
