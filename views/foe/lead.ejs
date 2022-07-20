@@ -21,7 +21,7 @@
                     <div class="fs-2 breadcrumbForLeads">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/tellecaller/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
+                                <li class="breadcrumb-item"><a href="/foe/leads" class="text-decoration-none text-dark">Leads</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><span class="leadName"><%= lead.name %> </span></li>
                             </ol>
                         </nav>
@@ -30,13 +30,13 @@
                 </div>
                 <div class="col-md-6">
                    <div class="add-new-item  text-end">
-                        <a href="#updateLead" class="btn btn-primary editDetails" data-bs-toggle="modal" data-bs-target="#updateLead" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Edit Details</a>
+                        <a href="#updateLead" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateLead" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-pen"></i> Edit Details</a>
                    </div>
                    <!-- Edit Modal -->
                    <div class="modal fade" id="updateLead" tabindex="-1" aria-labelledby="updateLeadLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/tellecaller/i/leads/<%= lead._id %>" method="POST">
+                                <form action="/foe/i/leads/<%= lead._id %>" method="POST">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 fw-semibold" id="updateLeadLabel">Update Details</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -67,11 +67,6 @@
                                                 <label for="leadCourse" class="mb-1">Course</label>
                                                 <input type="text" class="form-control" name="course" value="<%= lead.course %>" placeholder="Enter Course">
                                             </div>
-                                            <div class="form-group mb-3">
-                                                <label for="leadComments" class="mb-1">Comments</label>
-                                                <input type="textarea" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Any Comments">
-                                            </div>
-
                                             <div class="form-group mb-3">
                                                 <label for="leadStatus" class="mb-1">Select New Status</label>
                                                 <select class="form-select" name="status" required>
@@ -111,13 +106,13 @@
                     </div>
                 </div>
                 <div class="col-md-7 d-flex justify-content-end">
-                    <div class="add-new-item me-4 text-end">
-                        <a href="#updateScheduledWalksInDate" class="btn btn-dark editDetails" data-bs-toggle="modal" data-bs-target="#updateScheduledWalksInDate" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-calendar-check"></i> Schedule WalkIn</a>
+                    <div class="add-new-item me-3 text-end">
+                        <a href="#updateScheduledWalksInDate" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#updateScheduledWalksInDate" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-calendar-check"></i> Schedule WalkIn</a>
                    </div>
                     <div class="modal fade" id="updateScheduledWalksInDate" tabindex="-1" aria-labelledby="updateScheduledWalksInDateLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/tellecaller/i/leads/<%= lead._id %>" method="POST">
+                                <form action="/foe/i/leads/<%= lead._id %>" method="POST">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 fw-semibold" id="updateScheduledWalksInDateLabel">Schedule WalksIn</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -136,13 +131,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="add-new-item me-4 text-end">
-                        <a href="#updateCounsellor" class="btn btn-info editDetails" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-user-plus"></i> Assign Counsellor</a>
+                    <div class="add-new-item me-3 text-end">
+                        <a href="#updateCounsellor" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#updateCounsellor" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><i class="fa-solid fa-user-plus"></i> Assign Counsellor</a>
                    </div>
                     <div class="modal fade" id="updateCounsellor" tabindex="-1" aria-labelledby="updateCounsellorLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/tellecaller/i/leads/<%= lead._id %>" method="POST">
+                                <form action="/foe/i/leads/<%= lead._id %>" method="POST">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 fw-semibold" id="updateCounsellorLabel">Assign Counsellor</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -167,7 +162,13 @@
                         </div>
                     </div>
                     <div class="text-end">
-                        <a href="/tellecaller/leads/<%= lead._id %>/followUps" class="btn btn-warning"><i class="fas fa-table mr-1"></i> FollowUps</a>
+                        <form action="/foe/markWalkIn/<%= lead._id %> " method="post">
+                            <% if(lead.walksIn) { %> 
+                            <button type="submit" class="btn btn-light"><i class="fa-solid text-danger fa-circle-xmark"></i> Mark Walk-In</button>
+                            <% } else { %>
+                            <button type="submit" class="btn btn-light"><i class="fa-solid text-success fa-circle-check"></i>  Mark Walk-In</button>
+                            <% } %>
+                        </form>
                     </div>
                 </div>
             </div>

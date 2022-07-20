@@ -8,6 +8,10 @@ const documentSchema = new mongoose.Schema({
         fileId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "uploads.files"
+        },
+        uploadedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
         }
     }],
     isValid: {

@@ -1,0 +1,103 @@
+<%- include('../../partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/application.css">
+</head>
+<body>
+    <!-- Tab-bar -->
+    <%- include('navBar') -%> 
+    <%- include('tabBar',{enrolledId})  -%>
+
+    <div class="p-4">
+        <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+            <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+            <div class="table-responsive">
+                <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                    <thead class="">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Student Url Link</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                          <tr>
+                            <td><%= enrolledLead.name %> </td>
+                            <td><%= enrolledLead.email %></td>
+                            <td><%= enrolledLead.phone %></td>
+                            <td><a href="#" class="text-decoration-none text-white">Some link</a></td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <%- include('applicationTabbar',{enrolledId, applications})  -%>
+        <div class="p-2 d-flex flex-nowrap px-4 bg-light">
+            <div class="flex-shrink-0" style="width: 38%;">
+                <% applications.forEach(function(application){ %>
+                <a class="text-decoration-none allApplications text-muted fw-normal p-0" href="/enrolled/application/<%= enrolledId %>/applied/<%= application._id %>">
+                    <div class="d-flex flex-column card me-2 mb-2" >
+                        <div class="card-body pb-0">
+                            <div class="d-flex mb-0 justify-content-between">
+                                <p class="fw-bold text-primary"><%= (application._id).toString().slice(-5) %></p>
+                                <p class="fw-bold text-secondary"><%= (application.appliedAt).toLocaleDateString("en-GB") %>  <%= (application.appliedAt).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
+                            </div>
+                            <p class="mb-0 fs-5"><%= application.program %></p>
+                            <p class="mt-0 fs-6 pt-0"><%= application.institution %></p>
+                        </div>
+                    </div>
+                </a>
+                <% }) %>
+            </div>
+            <div class="flex-grow-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex mb-0 justify-content-between">
+                            <p class="fw-normal text-secondary"><%= (displayApplication.updatedAt).toLocaleDateString("en-GB") %>  <%= (displayApplication.appliedAt).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
+                            <!-- status select-->
+                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
+                            <div class="d-flex flex-column">
+                                <select class="custom-select border rounded-3 px-2" id="status" name="status" onchange="this.form.submit()">
+                                    <option class="<%= displayApplication.status.value %>" selected><%= displayApplication.status.name %></option>
+                                    <option class="1">Enrolled</option>
+                                    <option class="2">Application Sent</option>
+                                    <option class="3">Application Applied</option>
+                                    <option class="4">Offer Letter Recieved</option>
+                                    <option class="5">Offer Letter Rejected</option>
+                                    <option class="6">Document Requested By Institution</option>
+                                    <option class="7">Partial Fee Paid</option>
+                                    <option class="7">Full Fee Paid</option>
+                                    <option class="8">Document Requested for Filing</option>
+                                    <option class="9">Visa File Processing</option>
+                                    <option class="10">Visa Approved</option>
+                                    <option class="10">Visa Rejected</option>
+                                    <option class="11">Biometrics Done</option>
+                                    <option class="12">Interview Done</option>
+                                    <option class="13">Interview Cleared</option>
+                                    <option class="14">Interview Rejected</option>
+                                    <option class="15">Interview Scheduled</option>
+                                </select>
+                            </div>
+                            </form>
+                        </div>
+                        <p class="fw-bold text-primary"><%= (displayApplication._id).toString().slice(-5) %></p>
+                        <h5 class="fs-4 text-muted"><%= displayApplication.program %> </h5>
+                        <p class="fs-5 fw-bold text-secondary"><%= displayApplication.institution %> </p>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+        <div id="footer" class="mt-5 text-center text-secondary">
+            © 2022 Bells Overseas. All rights reserved.
+        </div>
+    </div>
+
+      
+
+
+
+<%- include('../../partials/footer')  -%>
+<script src="/js/application.js"></script>
+</body>
+</html>

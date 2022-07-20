@@ -1,0 +1,34 @@
+<div class="container-fluid topBar mb-0">
+    <div class="row mb-0">
+        <div class="col-md-6">
+            <div class="Search-anything">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for anything here.">
+                    <div class="input-group-append">
+                        <button class="btn " type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="language d-flex align-items-center">
+                <i class="fa-solid fa-language fs-3 h-100"></i>
+                <form action="/language" method="post">
+                    <select class="form-select d-inline" >
+                        <option>English (US)</option>
+                        <option>English (UK)</option>
+                        <option>French</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="GoodMorning text-end me-4">
+                <span class="m-0 p-0 d-block fw-semibold"><i class="fa-solid fa-sun text-warning me-1"></i><%= greeting %></span>
+                <span class="m-0 p-0 d-block date"><%= date %> </span>
+            </div>
+        </div>
+    </div>
+</div>

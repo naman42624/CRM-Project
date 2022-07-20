@@ -38,5 +38,5 @@ const enrolledLeadSchema = new mongoose.Schema({
     }
 },{timestamps: true})
 
-const enrolledLead = mongoose.model('enrolledLead', enrolledLeadSchema)
-module.exports = enrolledLead;
+const EnrolledLead = mongoose.model('EnrolledLead', enrolledLeadSchema)
+module.exports = EnrolledLead;

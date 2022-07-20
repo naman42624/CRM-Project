@@ -1,0 +1,30 @@
+<!-- access forbidden -->
+
+<%- include('partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/500.css">
+
+</head>
+<body class="bg-dark text-white">
+        <div>
+            <div class='container'>
+                <span class="error-num">5</span>
+                <div class='eye'></div>
+                <div class='eye'></div>
+                
+                <h2 class="text-center text-uppercase fw-bold">Internal <span class="text-info">Server</span> Error!</h2>
+                <p class="sub-text">Oh eyeballs! Something went wrong. We're <span class="italic text-warning fw-semibold">looking</span> to see what happened.</p>
+              
+              <div class="d-flex justify-content-center">
+                <a class="btn btn-lg btn-danger" href="javascript:history.back()">Go Back</a>
+              </div>
+              <div id="footer" class="mt-5 text-center text-secondary">
+                © 2022 Bells Overseas. All rights reserved.
+            </div>
+        </div>
+
+<%- include('partials/footer')  -%>
+
+<script src="/js/500.js"></script>
+</body>
+</html>

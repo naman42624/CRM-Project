@@ -31,6 +31,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userRoutes = require("./src/routes/userRoutes");
 const telleRoutes = require("./src/routes/telleRoutes");
 const counsellorRoutes = require("./src/routes/counsellorRoutes");
+const foeRoutes = require("./src/routes/foeRoutes");
 
 const app = express();
 
@@ -56,9 +57,10 @@ const enrolledRoutes = require("./src/routes/enrolledRoutes");
 
 
 app.use("/user", userRoutes);
-app.use("/", telleRoutes);
+app.use("/tellecaller", telleRoutes);
 app.use("/counsellor", counsellorRoutes);
 app.use("/enrolled", enrolledRoutes);
+app.use("/foe", foeRoutes);
 
 // 403 error page - unauthorized access
 app.get("/403", (req, res) => {
@@ -68,6 +70,11 @@ app.get("/403", (req, res) => {
 // 404 error page - page not found
 app.get("/404", (req, res) => {
     res.render("404");
+});
+
+// 500 error page - server error
+app.get("/500", (req, res) => {
+    res.render("500");
 });
 
 app.get('/favicon.ico', (req, res) => res.status(204));

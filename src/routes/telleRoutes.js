@@ -11,7 +11,6 @@ const getGreeting = require("../config/utilities/greeting");
 const Lead = require("../models/leadModel");
 const {User} = require("../models/userModel");
 const Task = require("../models/taskModel");
-const Tellecaller = require("../models/tellecallerModel");
 const {Followup} = require("../models/followupModel");
 
 const auth = require("../middlewares/auth");
@@ -32,11 +31,13 @@ router.get("/", auth , async function(req, res){
         Lead.find({telleFollowUpDate: today}, function(err, leads){
             if(err){
                 console.log(err);
+                res.redirect("/500");
             } else {
                 const leadsToday = leads.length;
                  Lead.countDocuments({status: "Hot"}, function(err, hotLeads){
                     if(err){
                         console.log(err);
+                        res.redirect("/500");
                     } else {
                         res.render("tellecaller/Telle-dashboard", {avatarSrc: avatarSrc, taskCount, tasks, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
                     }
@@ -48,19 +49,28 @@ router.get("/", auth , async function(req, res){
 
 
 // Leads section
-router.get("/Telle-leads", auth, function(req, res){
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("tellecaller/Telle-leads", {avatarSrc: avatarSrc,  user: user, date: date.newDateTopBar(), greeting: getGreeting()});
+router.get("/Telle-leads", auth, async function(req, res){
+    try {
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const hotCount = await Lead.countDocuments({status: "Hot"});
+        const coldCount = await Lead.countDocuments({status: "Cold"});
+        const allCount = await Lead.countDocuments();
+        res.render("tellecaller/Telle-leads", {hotCount, coldCount, allCount, avatarSrc,  user, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // All Followups
 router.get("/allFollowups", auth, function(req, res){
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    Followup.find({}, function(err, followups){
+    Followup.find({followupBy: user._id}, function(err, followups){
         if(err){
             console.log(err);
+            res.redirect("/500");
         } else {
             res.render("allFollowups", {avatarSrc: avatarSrc, user: user, followups: followups, date: date.newDateTopBar(), greeting: getGreeting()});
         }
@@ -77,8 +87,10 @@ router.get("/Telle-leads/:status", auth, function(req, res){
         Lead.find({}, function(err, leads){
             if(err){
                 console.log(err);
+                res.redirect("/500");
             } else {
-                res.render("tellecaller/Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
+                const count = leads.length;
+                res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         });
     }
@@ -86,9 +98,11 @@ router.get("/Telle-leads/:status", auth, function(req, res){
         Lead.find({status: status}, function(err, leads){
             if(err){
                 console.log(err);
+                res.redirect("/500");
             } else
             if(leads) {
-                res.render("tellecaller/Telle-leadsList", {avatarSrc: avatarSrc, user: user, leads: leads, status: status, date: date.newDateTopBar(), greeting: getGreeting()});
+                const count = leads.length;
+                res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
             }
         });
     }
@@ -111,6 +125,7 @@ router.get("/leads/:id", auth, async function(req, res){
         }).populate("counsellor");
     } catch (error) {
         console.log(error);
+        res.redirect("/500");
     }
     
 });
@@ -118,7 +133,7 @@ router.get("/leads/:id", auth, async function(req, res){
 router.get("/Telle-reports", auth, function(req, res){
     const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("tellecaller/Telle-reports", {avatarSrc: avatarSrc, user: user});
+    res.render("tellecaller/Telle-reports", {avatarSrc, user, date: date.newDateTopBar(), greeting: getGreeting()});
 });
 
 // Followups for a lead
@@ -129,10 +144,11 @@ router.get("/leads/:id/followups", auth, function(req, res){
     Followup.find({lead: id}, function(err, followups){
         if(err){
             console.log(err);
+            res.redirect("/500");
         } else {
             res.render("tellecaller/Telle-followup", {avatarSrc: avatarSrc, user: user, followups: followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()});
         }
-    }).populate("lead");
+    }).populate("lead followupBy");
 });
 
 // Update details of a lead from individual lead page and leads list page
@@ -158,18 +174,21 @@ router.post("/:Frompage/leads/:id", auth, function(req, res){
     }
     if(req.body.telleFollowUpDate)
     req.body.telleFollowUpDate = new Date(req.body.telleFollowUpDate).toLocaleDateString("en-GB");
+    if(req.body.scheduledWalksInDate)
+    req.body.scheduledWalksInDate = new Date(req.body.scheduledWalksInDate).toLocaleDateString("en-GB");
 
     const lead = req.body;
     console.log(lead);
     Lead.findByIdAndUpdate(id, lead, function(err, lead){
         if(err){
             console.log(err);
+            res.redirect("/500");
         } else
         if(lead) {
             if(req.params.Frompage === "i"){
-            res.redirect("/leads/" + id);
+            res.redirect("/tellecaller/leads/" + id);
             } else {
-            res.redirect("/Telle-leads/" + req.params.Frompage);
+            res.redirect("/tellecaller/Telle-leads/" + req.params.Frompage);
             }
         }
     });
@@ -212,6 +231,7 @@ router.post("/callResponse/:id", auth, function(req, res){
     Lead.findByIdAndUpdate(id, lead, function(err, lead){
         if(err){
             console.log(err);
+            res.redirect("/500");
         } else
         if(lead) {
             lead.telleFollowUps += 1;

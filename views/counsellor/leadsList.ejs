@@ -7,7 +7,8 @@
 </head>
 <body>
   
-    <%- include('sidebar',{user, avatarSrc})  -%> 
+
+    <%- include('sidebar',{user, avatarSrc})  -%>
 
     <div class="flex-grow-1 whole-body">
         
@@ -19,7 +20,7 @@
                     <div class="fs-2 breadcrumbForLeads">
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/tellecaller/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
+                                <li class="breadcrumb-item"><a href="/counsellor/leads" class="text-decoration-none text-dark">Leads</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads (<span class="count"><%= count %></span>)</li>
                             </ol>
                         </nav>
@@ -36,7 +37,7 @@
                    <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="/tellecaller/Telle-leadsList" method="POST">
+                                <form action="/counsellor-leadsList" method="POST">
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Lead</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -70,6 +71,10 @@
                                             <div class="form-group mb-3">
                                                 <label for="leadComments" class="mb-1">Comments</label>
                                                 <input type="textarea" class="form-control" name="comments" placeholder="Any Comments">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadFrom" class="mb-1">Lead From</label>
+                                                <input type="textarea" class="form-control" name="leadFrom" placeholder="Source Of the Lead">
                                             </div>
 
                                             <div class="form-group mb-3">
@@ -121,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-4">
@@ -140,27 +145,27 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
-                                        <% leads.forEach(function(lead) { %>
+                                        <% for(var i=0; i<leads.length; i++){ %>
                                             <tr>
-                                                <td><a href="/tellecaller/leads/<%= lead._id %> " class="text-decoration-none text-dark"><%= lead.name %></a></td>
+                                                <td><a href="/counsellor/lead/<%= leads[i]._id %> " class="text-decoration-none text-dark"><%= leads[i].name %></a></td>
                                                 <td>
-                                                    <%= lead.interestedCountry %>
+                                                    <%= leads[i].interestedCountry %>
                                                 </td>
-                                                <td><%= lead.phone %></td>
+                                                <td><%= leads[i].phone %></td>
 
-                                                <td><a href="#updateDate<%= lead._id %>" class="btn text-decoration-none text-dark w-100 editDetails" data-bs-toggle="modal" data-bs-target="#updateDate<%= lead._id %>" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><%= lead.telleFollowUpDate %></a>
-                                                <div class="modal fade" id="updateDate<%= lead._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
+                                                <td><a href="#updateDate<%= leads[i]._id %>" class="btn text-decoration-none text-dark editDetail w-100" data-bs-toggle="modal" data-bs-target="#updateDate<%= leads[i]._id %>" value="<%= leads[i].call %>/<%= leads[i].counsellorFollowUps %>"><%= leads[i].counsellorFollowUpDate %></a>
+                                                <div class="modal fade" id="updateDate<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/tellecaller/<%= status %>/leads/<%= lead._id %>" method="POST">
+                                                            <form action="/<%= status %>/counsellor/update/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateDateLabel">Update Next FollowUp Date</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body mx-4">
                                                                         <div class="form-group mb-3">
-                                                                            <label for="telleFollowUpDate" class="mb-1">Next FollowUp Date</label>
-                                                                            <input type="date" class="form-control" name="telleFollowUpDate" placeholder="Enter Next FollowUp Date" required>
+                                                                            <label for="counsellorFollowUpDate" class="mb-1">Next FollowUp Date</label>
+                                                                            <input type="date" class="form-control" name="counsellorFollowUpDate" placeholder="Enter Next FollowUp Date" required>
                                                                         </div>
                                                                 </div>
                                                                 <div class="modal-footer d-flex justify-content-center text-center">
@@ -172,11 +177,11 @@
                                                     </div>
                                                 </div>
                                                 </td>
-                                                <td><a href="#updateCall<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= lead._id %>" ><%= lead.call %></a>
-                                                <div class="modal fade" id="updateCall<%= lead._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
+                                                <td><a href="#updateCall<%= leads[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= leads[i]._id %>" ><%= leads[i].call %></a>
+                                                <div class="modal fade" id="updateCall<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/tellecaller/callResponse/<%= lead._id %>" method="POST">
+                                                            <form action="/counsellor/callResponse/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCallLabel">Update Call Response</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -185,7 +190,7 @@
                                                                         <div class="form-group mb-3">
                                                                             <label for="callResponse" class="mb-1">Call Response</label>
                                                                             <select class="form-select" name="callResponse" required>
-                                                                                <option selected><%= lead.call %> </option>
+                                                                                <option selected><%= leads[i].call %> </option>
                                                                                 <option>Answered</option>
                                                                                 <option>Not Picked</option>
                                                                                 <option>Answered & Cut</option>
@@ -202,11 +207,12 @@
                                                     </div>
                                                 </div>
                                                 </td>
-                                                <td><a href="#updateComment<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= lead._id %>" ><%= lead.comments %></a></td>
-                                                <div class="modal fade" id="updateComment<%= lead._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
+                                        
+                                                <td><a href="#updateComment<%= leads[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= leads[i]._id %>" ><%= leads[i].comments %></a></td>
+                                                <div class="modal fade" id="updateComment<%= leads[i]._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="/tellecaller/<%= status %>/leads/<%= lead._id %>" method="POST">
+                                                            <form action="/<%= status %>/counsellor-leads/<%= leads[i]._id %>" method="POST">
                                                                 <div class="modal-header text-center">
                                                                     <h5 class="modal-title w-100 fw-semibold" id="updateCommentLabel">Update Comments</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -214,7 +220,7 @@
                                                                 <div class="modal-body mx-4">
                                                                         <div class="form-group mb-3">
                                                                             <label for="comments" class="mb-1">Comments</label>
-                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
+                                                                            <input type="text" class="form-control" name="comments" value="<%= leads[i].comments %>" placeholder="Enter Comments" required>
                                                                         </div>
                                                                 </div>
                                                                 <div class="modal-footer d-flex justify-content-center text-center">
@@ -226,7 +232,7 @@
                                                     </div>
                                                 </div>
                                             </tr>
-                                        <% }); %>
+                                        <% } %>
                                     </tbody>
                                 </table>
                             </div>

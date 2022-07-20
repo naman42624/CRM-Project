@@ -13,8 +13,31 @@ const methodOverride = require("method-override");
 const {User} = require("../models/userModel");
 const {Lead} = require("../models/leadModel");
 const Document = require("../models/documentModel");
-const EnrolledLead = require("../models/enrolledLeadModel");
 const Application = require("../models/applicationModel");
+const EnrolledLead = require("../models/enrolledLeadModel");
+
+// Status Array
+const statusArray = new Map(
+    [   ["Enrolled", 1],
+        ["Application Sent", 2],
+        ["Application Applied", 3],
+        ["Offer Letter Recieved", 4],
+        ["Offer Letter Rejected", 5],
+        ["Document Requested By Institution", 6],
+        ["Partial Fee Paid", 7],
+        ["Full Fee Paid", 7],
+        ["Document Requested for Filing", 8],
+        ["Visa File Processing", 9],
+        ["Visa Approved", 10],
+        ["Visa Rejected", 10],
+        ["Biometrics Done", 11],
+        ["Withdrawn", 12],
+        ["Completed", 13],
+        ["Cancelled", 14],
+        ["Pending", 15]
+    ]
+);
+
 
 // Dates
 const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");
@@ -26,8 +49,6 @@ const getGreeting = require("../config/utilities/greeting");
 // middlewares
 const auth = require("../middlewares/auth");
 const counsAboveAuth = require("../middlewares/counsAboveAuth");
-// let {gfs, gridfsBucket} = require("../middlewares/documentUpload");
-// const {upload} = require("../middlewares/documentUpload");
 
 router.use(methodOverride("_method")); // for put and delete requests of files in forms (to update and delete) 
 
@@ -67,12 +88,71 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 // Routes
-router.get("/application/:enrolledId", auth, counsAboveAuth, (req, res) => {
-    res.render("enrolled/individual/application" , {enrolledId: req.params.enrolledId});
+router.get("/application/:enrolledId/applyTo", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        const applications = await Application.find({enrolledLead: enrolledId});
+        res.render("enrolled/individual/application" , {applications, enrolledId, enrolledLead});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
-router.get("/profile/:enrolledId", auth, counsAboveAuth, (req, res) => {
-    res.render("enrolled/individual/profile", {enrolledId: req.params.enrolledId});
+router.post('/application/:enrolledId/applyTo', auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+            const newApplication = new Application({
+                ...req.body,
+                appliedBy: req.user._id,
+                appliedAt: new Date(),
+                enrolledLead: enrolledId,
+            });
+            newApplication.save();
+            res.redirect("/enrolled/application/" + enrolledId+ "/applyTo");
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+});
+
+router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        const applications = await Application.find({ enrolledLead: enrolledId });
+        const displayApplication = await Application.findById(req.params.applicationId);
+        res.render("enrolled/individual/applicationApplied" , {displayApplication, applications, enrolledId, enrolledLead});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+});
+
+router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        const applications = await Application.find({ enrolledLead: enrolledId });
+        const status = req.body.status;
+        const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId);
+        res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+})
+
+router.get("/profile/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        res.render("enrolled/individual/profile" , {enrolledId, enrolledLead});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // Respective Document page route for each Enrolled Lead
@@ -95,6 +175,7 @@ router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {
         res.render("enrolled/individual/document", { enrolledLead, tenth, twelfth, bachelors, provisionalFinal, applicationForm, declaration, passport, statementOfPurpose, letterOfRecommendation, englishLanguageCertificate, portfolio, otherDocuments });
     } catch (error) {
         console.log(error);
+        res.redirect("/500");
     }
 });
 
@@ -103,6 +184,7 @@ router.get("/document/:enrolledId/:fileName", auth, counsAboveAuth, (req, res) =
     gfs.files.findOne({filename: req.params.fileName}, (err, file) => {
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else{
             if(!file || file.length === 0){
@@ -117,8 +199,16 @@ router.get("/document/:enrolledId/:fileName", auth, counsAboveAuth, (req, res) =
     });
 });
 
-router.get("/payment/:enrolledId", auth, counsAboveAuth, (req, res) => {
-    res.render("enrolled/individual/payment", {enrolledId: req.params.enrolledId});
+router.get("/payment/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const enrolledLead = await EnrolledLead.findById(enrolledId);
+        res.render("enrolled/individual/payment" , {enrolledId, enrolledLead});
+    }
+    catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // Toggle valid document or not
@@ -131,6 +221,7 @@ router.post("/checkbox/:enrolledId/:name", auth, counsAboveAuth, (req, res) => {
     Document.findOneAndUpdate({enrolledLead: req.params.enrolledId, documentName: req.params.name}, {isValid: valid}, function(err, document){
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else
         if(document){
@@ -149,12 +240,14 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
     const file = {
         fileName: req.file.filename,
         originalFileName: req.file.originalname,
-        fileId: req.file.id
+        fileId: req.file.id,
+        uploadedBy: req.user.id
     }
     console.log(req.file);
     Document.findOne({enrolledLead: req.params.enrolledId, documentName: req.params.name}, (err, doc) => {
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else{
             if(doc){
@@ -162,6 +255,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                 doc.files.push(file);
                 doc.save((err) => {
                     if(err){
+                        res.redirect("/500");
                         console.log(err);
                     }
                     else{
@@ -177,6 +271,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                 newDoc.files.push(file);
                 newDoc.save((err)=>{
                     if(err){
+                        res.redirect("/500");
                         console.log(err);
                     }
                     else{
@@ -196,11 +291,13 @@ router.delete("/file/:enrolledId/:docName/:fileId", auth, counsAboveAuth, (req, 
         if(err){
             console.log("error");
             console.log(err);
+            res.redirect("/500");
         }
         else{
             Document.findOneAndUpdate({enrolledLead: req.params.enrolledId, documentName: req.params.docName}, {$pull: {files: {fileId: req.params.fileId}}}, function(err, document){
                 if(err){
                     console.log(err);
+                    res.redirect("/500");
                 }
                 else
                 if(document){
@@ -220,11 +317,11 @@ router.get("/manageStudents", auth, counsAboveAuth, async (req, res) => {
     try{
         const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const students = await (await EnrolledLead.find({})).populate("lead");
+        const students = await EnrolledLead.find({}).populate("lead assignedTo enrolledBy");
         res.render("enrolled/manageStudents", {students, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
-        res.send(err);
         console.log(err);
+        res.redirect("/500");
     }
 });
 
@@ -235,10 +332,10 @@ router.get("/manageApplications", auth, counsAboveAuth, async (req, res) => {
         const applications = await Application.find({}).populate("enrolledLead appliedBy");
         res.render("enrolled/manageApplications", {applications, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
-        res.send(err);
         console.log(err);
+        res.redirect("/500");
     }
-})
+});
 
 
 

@@ -1,0 +1,91 @@
+<%- include('../partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+</head>
+<body>
+
+<%- include('sidebar',{user, avatarSrc})  -%> 
+
+<div class="flex-grow-1 whole-body">
+
+    <%- include('../partials/topbar',{date, greeting})  -%>
+    
+    <div class="container-fluid main-body mt-0 p-3 h-100">
+        <div class="row">
+            <div class="col-md-6 m-0">
+                <div class="fs-2 breadcrumbForLeads">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/foe" class="text-decoration-none text-dark">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">All Walk-Ins</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6">
+               
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header"><i class="fas fa-table mr-1"></i>  Walk-Ins</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="List" width="100%" cellspacing="0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Lead</th>
+                                        <th>Scheduled Date</th>
+                                        <th>Walk-In Date</th>
+                                        <th>Walk-In Time</th>
+                                        <th>Phone</th>
+                                        <th>Walk-In By</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <% leads.forEach(function(lead) { %>
+                                        <tr>
+                                            <td>
+                                                <a href="/foe/leads/<%= lead._id %>" class="text-decoration-none text-dark">
+                                                <span class="text-muted"><%= lead.name %></span>
+                                                </a>
+                                            </td>
+                                            <td><%= lead.scheduledWalksInDate %></a></td>
+                                            <td>
+                                                <%= lead.walksInDate %>
+                                            </td>
+                                            <td>
+                                                <%= lead.walksInTime %>
+                                            </td>
+                                            <td><%= lead.phone %></td>
+                                            <% if(lead.walksInBy) { %>
+                                            <td><%= lead.walksInBy.name %></td>
+                                            <% } else { %>
+                                              <td><%= lead.walksInBy %></td>
+                                            <% } %>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
+
+</div>
+
+
+<%- include('../partials/footer')  -%>
+
+
+
+</body>
+</html>

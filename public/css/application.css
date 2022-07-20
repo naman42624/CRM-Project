@@ -9,3 +9,11 @@ body {
 .cont {
     min-height: 100vh;
 }
+
+a > .card:hover {
+    background-color: rgba(164, 202, 254, 0.548);
+}
+
+.light {
+    background-color: rgba(164, 202, 254, 0.548);
+}

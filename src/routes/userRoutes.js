@@ -57,6 +57,7 @@ const sendEmail = async (user) => {
         userVerification.save((err)=>{
                 if(err){
                     console.log(err);
+                    res.redirect("/500");
                 }
                 else{
                     console.log("User verification saved")
@@ -83,6 +84,7 @@ const sendEmail = async (user) => {
     transporter.sendMail(mailOptions, function(err, info){
         if(err){
             console.log(err);
+            res.redirect("/500");
         } else {
             console.log("Email sent: " + info.response);
         }
@@ -97,6 +99,7 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
     UserVerification.findOne({userId: id}, (err, userVerification)=>{
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else if(userVerification){
             if(userVerification.expiresAt > Date.now()){
@@ -105,16 +108,41 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
                         User.findById(id, (err, user)=>{
                             if(err){
                                 console.log(err);
+                                res.redirect("/500");
                             }
                             else if(user){
                                 user.isVerified = true;
                                 user.save((err)=>{
                                     if(err){
                                         console.log(err);
+                                        res.redirect("/500");
                                     }
                                     else{
                                         console.log("User logged in");
-                                        res.redirect("/");
+                                        if(user.role === "TelleCaller"){
+                                            res.redirect("/telecaller/");
+                                        }
+                                        else if(user.role === "Counsellor"){
+                                            res.redirect("/counsellor/");
+                                        }
+                                        else if(user.role === "FOE"){
+                                            res.redirect("/foe/");
+                                        }
+                                        else if(user.role === "Branch Manager"){
+                                            res.redirect("/branchManager/");
+                                        }
+                                        else if(user.role === "SOP Team"){
+                                            res.redirect("/sopTeam/");
+                                        }
+                                        else if(user.role === "Filing Team"){
+                                            res.redirect("/filingTeam/");
+                                        }
+                                        else if(user.role === "Application Team"){
+                                            res.redirect("/applicationTeam/");
+                                        }
+                                        else if(user.role === "Interview Team"){
+                                            res.redirect("/interviewTeam/");
+                                        }
                                     }
                                 });
                             }
@@ -142,6 +170,7 @@ router.get("/resend/:id/:email", (req, res) => {
     UserVerification.findOneAndDelete({userId: req.params.id}, (err)=>{
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else{
             console.log("User verification deleted");
@@ -150,6 +179,7 @@ router.get("/resend/:id/:email", (req, res) => {
     User.findById(req.params.id, (err, user)=>{
         if(err){
             console.log(err);
+            res.redirect("/500");
         }
         else{
             sendEmail(user);
@@ -186,7 +216,7 @@ router.post("/register" , function(req, res){
         isVerified: false
     });
 
-    user.avatar = sharp(Buffer.from("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp")).resize({width: 250, height: 250}).png().toBuffer();
+    // user.avatar = sharp(Buffer.from("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp")).resize({width: 250, height: 250}).png().toBuffer();
     // user.avatar.contentType = "image/webp";
     console.log(user);
     
@@ -250,10 +280,35 @@ router.post("/login", function(req, res){
     req.login(user, function(err){
         if(err){
             console.log(err);
+            res.redirect("/500");
         }else{
             console.log("User logged in");
             passport.authenticate("local")(req, res, function(){ // this middleware invokes req.login() to login the newly registered automatically and also creates the cookie with the session
-                res.redirect("/"); //creates the cookie for the session to allow user to access all pages that requires authentication
+                 //creates the cookie for the session to allow user to access all pages that requires authentication
+                if(req.user.role === "TelleCaller"){
+                    res.redirect("/tellecaller");
+                }
+                else if(req.user.role === "Counsellor"){
+                    res.redirect("/counsellor");
+                }
+                else if(req.user.role === "FOE"){
+                    res.redirect("/foe");
+                }
+                else if(req.user.role === "Branch Manager"){
+                    res.redirect("/branchManager");
+                }
+                else if(req.user.role === "SOP Team"){
+                    res.redirect("/sopTeam");
+                }
+                else if(req.user.role === "Filing Team"){
+                    res.redirect("/filingTeam");
+                }
+                else if(req.user.role === "Application Team"){
+                    res.redirect("/applicationTeam");
+                }
+                else if(req.user.role === "Interview Team"){
+                    res.redirect("/interviewTeam");
+                }
             });
         }
     });
@@ -264,6 +319,7 @@ router.get('/logout', function(req, res){
     req.logout(function(err) {
         if (err) {
             console.log(err); 
+            res.redirect("/500");
         }else{
             res.redirect('/user/login');
         }

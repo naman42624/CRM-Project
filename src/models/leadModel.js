@@ -45,15 +45,30 @@ const leadsSchema = new mongoose.Schema({
         type: String
       },
       walksIn: Boolean,
-      scheduledWalksInDate: Date,
-      walksInDate: Date,
+      scheduledWalksInDate: String,
+      walksInDate: String,
       walksInTime: String,
+      walksInBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
       counsellor:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
       },
+      counsellorFollowUps: {
+        type: Number,
+        default: 0
+      },
+      counsellorFollowUpDate: {
+        type: String
+      },
+      washot:{
+        type: Boolean,
+        default: false
+      },
       city: String,
-      visaType: String,
+      visaType: String, 
       latestQualification: String,
       english: {
         IELTS: String,

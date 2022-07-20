@@ -183,41 +183,6 @@ module.exports.test_post = async (req, res) => {
     }
 }
 
-// module.exports.submit_post = async (req, res) => {
-//     const id = req.params.id;
-//     try {
-// const personalInfo = await personal.find({ user: id });
-// const academicInfo = await academic.find({ user: id });
-// const workInfo = await work.find({ user: id });
-// const testInfo = await test.find({ user: id });
-//         // const user = await enrolledUser.findById(req.params.id);
-//         // const name = user.name
-//         // const username = user.username
-//         // const phone = user.phone
-//         // const enrollmentDate = user.enrollmentDate
-//         // const enrolledBy = user.enrolledBy
-//         const enrolledUser = await enrolledUser.findByIdAndUpdate(req.params.id, {
-//             // name: name,
-//             // username: username,
-//             // phone: phone,
-//             // enrollmentDate: enrollmentDate,
-//             // enrolledBy: enrolledBy,
-//             personalInfo: personalInfo,
-//             academicInfo: academicInfo,
-//             workInfo: workInfo,
-//             testInfo: testInfo,
-//             status: "submitted",
-//         });
-//         res.redirect('/enrolledUser/enroll/get/' + id);
-//         // await user.save();
-//         // res.redirect('/enrolledUser/enroll/get/'+ user.id);
-//         // res.render('enroll', { user });
-//     } catch (err) {
-//         res.send(err);
-//     }
-// }
-
-
 module.exports.enroll_get = async (req, res) => {
     const id = req.params.id;
     // console.log("hi");
@@ -233,58 +198,6 @@ module.exports.enroll_get = async (req, res) => {
         res.send(err);
     }
 }
-
-// module.exports.save_post = async (req, res) => {
-//     console.log("hi");
-//     try {
-//         const user = await enrolledUser.findByIdAndUpdate(req.params.id, req.body, { new: true });
-//         res.redirect('/enrolledUser/enroll/get/' + user.id);
-//     } catch (err) {
-//         res.send(err);
-//     }
-// }
-
-// module.exports.enroll_post = async (req, res) => {
-//     try {
-//         const lead = await Lead.findById(req.params.id);
-//         const user = await enrolledUser.create({
-//             name: lead.name,
-//             username: lead.email,
-//             phone: lead.phone,
-//             enrollmentDate: new Date(),
-//             enrolledBy: req.user.id,
-//         });
-//         console.log(user);
-//         await user.save();
-//         res.redirect('/enrolledUser/enroll/get/'+ user.id);
-//         // res.render('enroll', { user });
-//     } catch (err) {
-//         res.send(err);
-//     }
-// }
-
-
-// module.exports.enroll_get = async (req, res) => {
-//     const id = req.params.id;
-//     console.log("hi");
-//     try {
-//         const user = await enrolledUser.findById(req.params.id);
-//         console.log(user);
-//         res.render('enroll', { user });
-//     } catch (err) {
-//         res.send(err);
-//     }
-// }
-
-// module.exports.save_post = async (req, res) => {
-//     console.log("hi");
-//     try {
-//         const user = await enrolledUser.findByIdAndUpdate(req.params.id, req.body);
-//         res.redirect('/enrolledUser/enroll/get/' + user.id);
-//     } catch (err) {
-//         res.send(err);
-//     }
-// }
 
 module.exports.profile = async (req, res) => {
     try {

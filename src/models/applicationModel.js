@@ -5,6 +5,7 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    year: String,
     enrolledLead: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'EnrolledLead'
@@ -35,17 +36,27 @@ const applicationSchema = new mongoose.Schema({
         required: true
     },
     status: {
-        type: String,
-        required: true,
-        trim: true
+        name:  {
+            type: String,
+            trim: true,
+            default: 'Enrolled'
+        },
+        value: {
+            type: Number,
+            default: 1
+        }
     },
+    interview: Boolean,
+    sop: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    payment: String,
     comments: [{
         comment: {
             type: String,
-            required: true,
             writtenBy: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
                 ref: 'User'
             }
         }
