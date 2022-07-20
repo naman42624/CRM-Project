@@ -4,61 +4,54 @@
     </head>
 
     <body>
-        <!-- Tab-bar -->
-        <%- include('../partials/navBar') -%> 
-        <%-  include('../partials/tabBar') -%>  
+   <!-- Tab-bar -->
+   <%- include('../partials/navBar') -%> 
+   <%-  include('../partials/tabBar',{lead: enrolledLead}) -%>  
 
-            <div class="p-4">
-                <div class="head">
-                    <h3 class="mb-3">Upload Documents of </h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover" width="100%" cellspacing="0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Student Enrolment Date</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <tr>
-                                    <td>
-                                        <%= user.name %>
-                                    </td>
-                                    <td>
-                                        <%= user.username %>
-                                    </td>
-                                    <td>
-                                        <%= user.phone %>
-                                    </td>
-                                    <td>
-                                        <% const cDate1 = new Date(user.enrollmentDate).toLocaleDateString("en-GB") %>
-                                        <%= cDate1 %>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+   <!-- upload documents -->
+   <div class="p-4">
+       <div class="head">
+           <h3 class="mb-3">Upload Documents of </h3>
+           <div class="table-responsive">
+               <table class="table table-hover" width="100%" cellspacing="0">
+                   <thead class="table-light">
+                       <tr>
+                           <th>Name</th>
+                           <th>Email</th>
+                           <th>Phone</th>
+                           <th>Student Url Link</th>
+                       </tr>
+                   </thead>
+                   <tbody class="table-group-divider">
+                         <tr>
+                           <td><%= enrolledLead.name %> </td>
+                           <td><%= enrolledLead.email %></td>
+                           <td><%= enrolledLead.phone %></td>
+                           <td>  <% const cDate1=new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                             <%= cDate1 %></td>
+                         </tr>
+                   </tbody>
+               </table>
+           </div>
+       </div>
 
                 <ul class="nav nav-tabs nav-fill bg-light">
                     <li class="nav-item active">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= user._id %>">Personal Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= enrolledLead._id %>">Personal Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= user._id %>">Academic Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= enrolledLead._id %>">Academic Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= user._id %>">Work Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= enrolledLead._id %>">Work Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= user._id %>">Test Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= enrolledLead._id %>">Test Information</a>
                     </li>
                 </ul>
 
 <h3>Tests</h3>
-                <form action="/enrolled/save/test/<%= user._id %>" method="POST">
+                <form action="/enrolled/save/test/<%= enrolledLead._id %>" method="POST">
                     <label for="testName">Test Name</label>
                     <input type="text" name="testName" id="testName"><br>
                     <label for="overallScore">Overall Score</label>
@@ -90,7 +83,9 @@
                         document.getElementById('dob').value = datestring;
                     })
                 </script>
-
+                <script>
+                    
+                </script>
 
                 <%- include('../partials/footer') -%>
 

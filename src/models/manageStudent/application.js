@@ -5,6 +5,10 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    enrolledLead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'enrolledUser',
+    },
     program: {
         type: String,
         required: true,
@@ -22,35 +26,34 @@ const applicationSchema = new mongoose.Schema({
     },
     appliedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'User'
-    },
-    enrolledLead:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'enrolledUser'
     },
     appliedAt: {
         type: Date,
         default: Date.now,
-        required: true
+    },
+    paymentStatus: {
+        type: String,
+        default: "Not Paid",
     },
     status: {
         type: String,
-        required: true,
+        trim: true,
+        default: "enrolled",
+    },
+    sentTo:{
+        type: String,
         trim: true
     },
     comments: [{
         comment: {
             type: String,
-            required: true,
             writtenBy: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
                 ref: 'User'
             }
         }
     }]
 },{timestamps: true})
-const application = mongoose.model('application', applicationSchema)
-module.exports = application;
+const Application = mongoose.model('Application', applicationSchema)
+module.exports = Application;

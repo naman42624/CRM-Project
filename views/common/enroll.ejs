@@ -5,15 +5,34 @@
 
     <body>
         <!-- Tab-bar -->
-        <%- include('../partials/navBar') -%> 
-        <%-  include('../partials/tabBar', {lead: user}) -%>  
+        <%- include('../partials/navBar') -%>
+            <div class="px-2 my-2">
+                <nav class=" ">
+                    <ul class="nav nav-tabs nav-fill bg-light">
+                        <li class="nav-item active">
+                            <a class="nav-link fs-4 fw-bold" href="/enrolled/profile/<%=enrolledLead._id%>">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold"
+                                href="/enrolled/application/<%=enrolledLead._id%>">Application</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold"
+                                href="/enrolled/document/<%=enrolledLead._id%>">Document</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold" href="/enrolled/payment/<%=enrolledLead._id%>">Payment</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
             <div class="p-4">
-                <div class="head">
-                    <h3 class="mb-3">Upload Documents of </h3>
+                <div class="head border rounded-3 p-2 px-4 mb-3">
+
                     <div class="table-responsive">
-                        <table class="table table-hover" width="100%" cellspacing="0">
-                            <thead class="table-light">
+                        <table class="table table-borderless" width="100%" cellspacing="0">
+                            <thead class="">
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
@@ -21,19 +40,20 @@
                                     <th>Student Enrolment Date</th>
                                 </tr>
                             </thead>
-                            <tbody class="table-group-divider">
+                            <tbody class="">
                                 <tr>
                                     <td>
-                                        <%= user.name %>
+                                        <%= enrolledLead.name %>
                                     </td>
                                     <td>
-                                        <%= user.username %>
+                                        <%= enrolledLead.username %>
                                     </td>
                                     <td>
-                                        <%= user.phone %>
+                                        <%= enrolledLead.phone %>
                                     </td>
                                     <td>
-                                        <% const cDate1=new Date(user.enrollmentDate).toLocaleDateString("en-GB") %>
+                                        <% const cDate1=new
+                                            Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
                                             <%= cDate1 %>
                                     </td>
                                 </tr>
@@ -44,27 +64,31 @@
 
                 <ul class="nav nav-tabs nav-fill bg-light">
                     <li class="nav-item active">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= user._id %>">Personal Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= enrolledLead._id %>">Personal
+                            Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= user._id %>">Academic Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= enrolledLead._id %>">Academic
+                            Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= user._id %>">Work Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= enrolledLead._id %>">Work
+                            Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= user._id %>">Test Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= enrolledLead._id %>">Test
+                            Information</a>
                     </li>
                 </ul>
+                <form action="/enrolled/save/personal/<%= enrolledLead._id %>" method="POST">
 
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>Personal Information</h3>
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>Personal Information</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form action="/enrolled/save/personal/<%= user._id %>" method="POST">
+                        <div class="card-body">
                             <div class="form-group">
                                 <label for="dob">Date Of Birth</label>
                                 <input type="date" name="dob" id="dob" required>
@@ -72,23 +96,27 @@
                             <div class="form-group">
                                 <label for="gender">Gender</label>
                                 <select name="gender" id="gender" required>
-                                    <option value="">
-                                        <%= personalInfo.gender %>
-                                    </option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="other">Other</option>
+                                    <% if(personalInfo){ %>
+                                        <option value="">
+                                            <%= personalInfo.gender %>
+                                        </option>
+                                        <% } %>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
                                 </select>
                             </div><br>
                             <div class="form-group">
                                 <label for="maritalStatus">Marital Status</label>
                                 <select name="maritalStatus" id="maritalStatus" required>
-                                    <option value="">
-                                        <%= personalInfo.maritalStatus %>
-                                    </option>
-                                    <option value="married">Married</option>
-                                    <option value="unmarried">Un-married</option>
-                                    <option value="divorced">Divorced</option>
+                                    <% if(personalInfo){ %>
+                                        <option value="">
+                                            <%= personalInfo.maritalStatus %>
+                                        </option>
+                                        <% } %>
+                                            <option value="married">Married</option>
+                                            <option value="unmarried">Un-married</option>
+                                            <option value="divorced">Divorced</option>
                                 </select>
                             </div><br>
                             <div class="form-group">
@@ -111,157 +139,249 @@
                                 <label for="country">Country</label>
                                 <input type="text" name="country" id="country" value="<%= personalInfo.country %>">
                             </div><br>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>Passport Information</h3>
+                            
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                        <label for="passportNumber">Passport Number</label>
-                        <input type="text" name="passportNumber" id="passportNumber" value="<%= personalInfo.passportNumber %>">
-                        </div><br>
-                        <div class="form-group">
-                            <label for="passportissue">Issue Date</label>
-                            <input type="date" name="passportissue" id="passportissue" value="<%= personalInfo.passportissue %>">
-                        </div><br>
-                        <div class="form-group">
-                            <label for="passportExpiry">Expiry Date</label>
-                            <input type="date" name="passportExpiry" id="passportExpiry" value="<%= personalInfo.passportExpiry %>">
-                        </div><br>
-                        <div class="form-group">
-                            <label for="passportIssueCountry">Issued By Country</label>
-                            <input type="text" name="passportIssueCountry" id="passportIssueCountry" value="<%= personalInfo.passportIssueCountry %>">
-                        </div><br>
-                        <div class="form-group">
-                            <label for="placeOfBirth">Place Of Birth</label>
-                            <input type="text" name="placeOfBirth" id="placeOfBirth" value="<%= personalInfo.placeOfBirth %>">
-                        </div><br>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>Background</h3>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>Passport Information</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="passportNumber">Passport Number</label>
+                                <input type="text" name="passportNumber" id="passportNumber"
+                                    value="<%= personalInfo.passportNumber %>">
+                            </div><br>
+                            <div class="form-group">
+                                <label for="passportissue">Issue Date</label>
+                                <input type="date" name="passportissue" id="passportissue"
+                                    value="<%= personalInfo.passportissue %>">
+                            </div><br>
+                            <div class="form-group">
+                                <label for="passportExpiry">Expiry Date</label>
+                                <input type="date" name="passportExpiry" id="passportExpiry"
+                                    value="<%= personalInfo.passportExpiry %>">
+                            </div><br>
+                            <div class="form-group">
+                                <label for="passportIssueCountry">Issued By Country</label>
+                                <input type="text" name="passportIssueCountry" id="passportIssueCountry"
+                                    value="<%= personalInfo.passportIssueCountry %>">
+                            </div><br>
+                            <div class="form-group">
+                                <label for="placeOfBirth">Place Of Birth</label>
+                                <input type="text" name="placeOfBirth" id="placeOfBirth"
+                                    value="<%= personalInfo.placeOfBirth %>">
+                            </div><br>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                        <label for="citizenOfTwo">Is the applicant a citizen of more than one country?</label>
-                        <select name="citizenOfTwo" id="citizenOfTwo">
-                            <option value="">
-                                <%= personalInfo.citizenOfTwo %>
-                            </option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="liveOrStudyinOtherCountry">Is the applicant living and studying in any other
-                            country?</label>
-                        <select name="liveOrStudyinOtherCountry" id="liveOrStudyinOtherCountry">
-                            <option value="">
-                                <%= personalInfo.liveOrStudyinOtherCountry %>
-                            </option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="countryName">Name(if applicable)</label>
-                        <input type="text" name="countryName" id="countryName" value="<%= personalInfo.countryName %>">
-                        </div><br>
-                        <div class="form-group">
-                        <label for="appliedForImmigrationInAnyCountry">Has applicant applied for any type of immigration
-                            into any
-                            country?</label>
-                        <select name="appliedForImmigrationInAnyCountry" id="appliedForImmigrationInAnyCountry">
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="anySeriousMedicalCondition">Does applicant suffer from a serious medical
-                            condition?</label>
-                        <select name="anySeriousMedicalCondition" id="anySeriousMedicalCondition">
-                            <option value="">
-                                <%= personalInfo.anySeriousMedicalCondition %>
-                            </option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="anyRefusals">Has applicant Visa refusal for any country?</label>
-                        <select name="anyRefusals" id="anyRefusals">
-                            <option value="">
-                                <%= personalInfo.anyRefusals %>
-                            </option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="anyCriminalConvictions">Has applicant ever been convicted of a criminal
-                            offence?</label>
-                        <select name="anyCriminalConvictions" id="anyCriminalConvictions">
-                            <option value="">
-                                <%= personalInfo.anyCriminalConvictions %>
-                            </option>
-                            <option value="yes">Yes</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div> <br>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>Emergency Contact</h3>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>Background</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="citizenOfTwo">Is the applicant a citizen of more than one country?</label>
+                                <select name="citizenOfTwo" id="citizenOfTwo">
+                                    <option value="">
+                                        <%= personalInfo.citizenOfTwo %>
+                                    </option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="liveOrStudyinOtherCountry">Is the applicant living and studying in any other
+                                    country?</label>
+                                <select name="liveOrStudyinOtherCountry" id="liveOrStudyinOtherCountry">
+                                    <option value="">
+                                        <%= personalInfo.liveOrStudyinOtherCountry %>
+                                    </option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="countryName">Name(if applicable)</label>
+                                <input type="text" name="countryName" id="countryName"
+                                    value="<%= personalInfo.countryName %>">
+                            </div><br>
+                            <div class="form-group">
+                                <label for="appliedForImmigrationInAnyCountry">Has applicant applied for any type of
+                                    immigration
+                                    into any
+                                    country?</label>
+                                <select name="appliedForImmigrationInAnyCountry" id="appliedForImmigrationInAnyCountry">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="anySeriousMedicalCondition">Does applicant suffer from a serious medical
+                                    condition?</label>
+                                <select name="anySeriousMedicalCondition" id="anySeriousMedicalCondition">
+                                    <option value="">
+                                        <%= personalInfo.anySeriousMedicalCondition %>
+                                    </option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="anyRefusals">Has applicant Visa refusal for any country?</label>
+                                <select name="anyRefusals" id="anyRefusals">
+                                    <option value="">
+                                        <%= personalInfo.anyRefusals %>
+                                    </option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="anyCriminalConvictions">Has applicant ever been convicted of a criminal
+                                    offence?</label>
+                                <select name="anyCriminalConvictions" id="anyCriminalConvictions">
+                                    <option value="">
+                                        <%= personalInfo.anyCriminalConvictions %>
+                                    </option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div> <br>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                        <label for="emergencyname">Name</label>
-                        <input type="text" name="emergencyname" id="emergencyname"  value="<%= personalInfo.emergencyname %>" required>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="emergencyrelationship">Relationship</label>
-                        <input type="text" name="emergencyrelationship" id="emergencyrelationship" value="<%= personalInfo.emergencyrelationship %>" required>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="emergencyphone">Phone</label>
-                        <input type="text" name="emergencyphone" id="emergencyphone" value="<%= personalInfo.emergencyphone %>" required>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="emergencyemail">Email</label>
-                        <input type="text" name="emergencyemail" id="emergencyemail" value="<%= personalInfo.emergencyemail %>" required>
-                        </div><br>
-                        <div class="form-group">
-                        <label for="anyOtherInformation">Any Other Information</label>
-                        <input type="text" name="anyOtherInformation" id="anyOtherInformation" value="<%= personalInfo.anyOtherInformation %>" >
-                        </div><br>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>Emergency Contact</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="emergencyname">Name</label>
+                                <input type="text" name="emergencyname" id="emergencyname"
+                                    value="<%= personalInfo.emergencyname %>" required>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="emergencyrelationship">Relationship</label>
+                                <input type="text" name="emergencyrelationship" id="emergencyrelationship"
+                                    value="<%= personalInfo.emergencyrelationship %>" required>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="emergencyphone">Phone</label>
+                                <input type="text" name="emergencyphone" id="emergencyphone"
+                                    value="<%= personalInfo.emergencyphone %>" required>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="emergencyemail">Email</label>
+                                <input type="text" name="emergencyemail" id="emergencyemail"
+                                    value="<%= personalInfo.emergencyemail %>" required>
+                            </div><br>
+                            <div class="form-group">
+                                <label for="anyOtherInformation">Any Other Information</label>
+                                <input type="text" name="anyOtherInformation" id="anyOtherInformation"
+                                    value="<%= personalInfo.anyOtherInformation %>">
+                            </div><br>
+                        </div>
                     </div>
-                </div>
-                <div class="submit">
-                    <input type="submit" value="Submit">
-                </div>
+                    <div class="submit">
+                        <input type="submit" value="Submit">
+                    </div>
                 </form>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    let d = document.getElementById('dob').value;
+                    console.log(d);
+                    let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    document.getElementById('dob').value = datestring;
+                })
+            </script>
+            <script>
+                const form = document.getElementById('form');
+const username = document.getElementById('username');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const password2 = document.getElementById('password2');
 
-                <script>
-                    $(document).ready(function () {
-                        let d = document.getElementById('dob').value;
-                        console.log(d);
-                        let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
-                        document.getElementById('dob').value = datestring;
-                    })
-                </script>
+//Show input error messages
+function showError(input, message) {
+    const formControl = input.parentElement;
+    formControl.className = 'form-control error';
+    const small = formControl.querySelector('small');
+    small.innerText = message;
+}
+
+//show success colour
+function showSucces(input) {
+    const formControl = input.parentElement;
+    formControl.className = 'form-control success';
+}
+
+//check email is valid
+function checkEmail(input) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(re.test(input.value.trim())) {
+        showSucces(input)
+    }else {
+        showError(input,'Email is not invalid');
+    }
+}
 
 
-                <%- include('../partials/footer') -%>
+//checkRequired fields
+function checkRequired(inputArr) {
+    inputArr.forEach(function(input){
+        if(input.value.trim() === ''){
+            showError(input,`${getFieldName(input)} is required`)
+        }else {
+            showSucces(input);
+        }
+    });
+}
+
+
+//check input Length
+function checkLength(input, min ,max) {
+    if(input.value.length < min) {
+        showError(input, `${getFieldName(input)} must be at least ${min} characters`);
+    }else if(input.value.length > max) {
+        showError(input, `${getFieldName(input)} must be les than ${max} characters`);
+    }else {
+        showSucces(input);
+    }
+}
+
+//get FieldName
+function getFieldName(input) {
+    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
+
+// check passwords match
+function checkPasswordMatch(input1, input2) {
+    if(input1.value !== input2.value) {
+        showError(input2, 'Passwords do not match');
+    }
+}
+
+
+//Event Listeners
+form.addEventListener('submit',function(e) {
+    e.preventDefault();
+
+    checkRequired([username, email, password, password2]);
+    checkLength(username,3,15);
+    checkLength(password,6,25);
+    checkEmail(email);
+    checkPasswordMatch(password, password2);
+});
+            </script>
+
+            <%- include('../partials/footer') -%>
 
     </body>
 

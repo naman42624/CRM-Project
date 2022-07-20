@@ -24,10 +24,18 @@ const enrolledUserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     status: {
         type: String,
         trim: true,
         default: 'pending'
+    },
+    lead: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'leadModel',
     }
 },{timestamps: true})
 const enrolledUser = mongoose.model('enrolledUser', enrolledUserSchema)

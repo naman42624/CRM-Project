@@ -3,75 +3,99 @@
     <link rel="stylesheet" href="/css/application.css">
     </head>
 
-    <body>
-         <!-- Tab-bar -->
-         <%- include('../partials/navBar') -%> 
-         <%-  include('../partials/tabBar') -%>  
- 
-            <div class="p-4">
-                <div class="head">
-                    <h3 class="mb-3">Upload Documents of </h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover" width="100%" cellspacing="0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Student Enrolment Date</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <tr>
-                                    <td>
-                                        <%= user.name %>
-                                    </td>
-                                    <td>
-                                        <%= user.username %>
-                                    </td>
-                                    <td>
-                                        <%= user.phone %>
-                                    </td>
-                                    <td>
-                                        <% const cDate1=new Date(user.enrollmentDate).toLocaleDateString("en-GB") %>
-                                            <%= cDate1 %>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#highestDegree").change(function () {
+                $(this).find("option:selected")
+                    .each(function () {
+                        var optionValue = $(this).attr("value");
+                        if (optionValue === "Bachelor") {
+                            $(".Bachelor").show();
+                            $(".Master").hide();
+                            $(".twelve").show();
+                        } else if(optionValue === "Master"){
+                            $(".box").show();
+                        }
+                        else if(optionValue === "twelve"){
+                            $(".Bachelor").hide();
+                            $(".Master").hide();
+                            $(".twelve").show();
+                        }
+                        else {
+                            $(".box").hide();
+                        }
+                    });
+            }).change();
+        });
+    </script>
 
+    <body>
+     <!-- Tab-bar -->
+     <%- include('../partials/navBar') -%> 
+     <%-  include('../partials/tabBar',{lead: enrolledLead}) -%>  
+ 
+     <!-- upload documents -->
+     <div class="p-4">
+         <div class="head">
+             <div class="table-responsive">
+                 <table class="table table-hover" width="100%" cellspacing="0">
+                     <thead class="table-light">
+                         <tr>
+                             <th>Name</th>
+                             <th>Email</th>
+                             <th>Phone</th>
+                             <th>Student Url Link</th>
+                         </tr>
+                     </thead>
+                     <tbody class="table-group-divider">
+                           <tr>
+                             <td><%= enrolledLead.name %> </td>
+                             <td><%= enrolledLead.email %></td>
+                             <td><%= enrolledLead.phone %></td>
+                             <td>  <% const cDate1=new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                               <%= cDate1 %></td>
+                           </tr>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
                 <ul class="nav nav-tabs nav-fill bg-light">
                     <li class="nav-item active">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= user._id %>">Personal Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/personal/<%= enrolledLead._id %>">Personal Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= user._id %>">Academic Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= enrolledLead._id %>">Academic Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= user._id %>">Work Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= enrolledLead._id %>">Work Information</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= user._id %>">Test Information</a>
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= enrolledLead._id %>">Test Information</a>
                     </li>
                 </ul>
                 <div>
                     <h3>Educational Information</h3>
-                    <form action="/enrolled/save/academic/<%= user._id %>" method="POST"> <label
-                            for="countryOfStudy"></label>
+                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> 
+                        <label for="countryOfStudy"></label>
                         <input type="text" name="countryOfStudy" id="countryOfStudy" value=""><br>
                         <label for="highestDegree"></label>
-                        <select name="highestDegree" id="highestDegree" onchange="this.form.submit()">
+                        <select name="highestDegree" id="highestDegree">
+                            <% if(enrolledLead.highestDegree){ %>
+                                <option value="<%= enrolledLead.highestDegree %>"><%= enrolledLead.highestDegree %></option>
+                                <% } else{ %>
+                                <option value="">Select Highest Degree</option>
+                                <% } %>
                             <option id="Master" value="Master">Master</option>
                             <option id="Bachelor" value="Bachelor">Bachelor</option>
-                            <option id="twelve" value="12th">12th Or Equivalent</option>
+                            <option id="twelve" value="twelve">12th Or Equivalent</option>
                         </select><br>
                     </form>
                 </div>
-                <div>
+                <div class="Master box">
                     <h4>Post Graduation(if applicable)</h4>
-                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST">
+                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">
                         <label for="masterName">Name</label>
                         <input type="text" name="masterName" id="masterName"><br>
                         <label for="masterUniversity">University</label>
@@ -87,9 +111,9 @@
                         </div>
                     </form>
                 </div>
-                <div>
+                <div class="Bachelor box">
                     <h4>Undergraduate(if applicable)</h4>
-                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <label
+                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <label
                             for="undergraduateName">Name</label>
                         <input type="text" name="undergraduateName" id="undergraduateName"><br>
                         <label for="undergraduateUniversity">University</label>
@@ -105,9 +129,9 @@
                         </div>
                     </form>
                 </div>
-                <div>
+                <div class="twelve box">
                     <h4>Grade 12th or equivalent(if applicable)</h4>
-                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <Label
+                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <Label
                             for="twelveBoard">Board</Label>
                         <input type="text" name="twelveBoard" id="twelveBoard"><br>
                         <Label for="twelveSchool">School</Label>
@@ -123,9 +147,9 @@
                         </div>
                     </form>
                 </div>
-                <div>
+                <div class="twelve box">
                     <h4>Grade 10th(if applicable)</h4>
-                    <form action="/enrolledUser/save/academic/<%= user._id %>" method="POST"> <Label
+                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <Label
                             for="tenthBoard">Board</Label>
                         <input type="text" name="tenthBoard" id="tenthBoard"><br>
                         <Label for="tenthSchool">School</Label>
