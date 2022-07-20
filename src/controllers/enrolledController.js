@@ -422,6 +422,13 @@ module.exports.application = async (req, res) => {
 
 module.exports.applicationSubmit = async (req, res) => {
     try {
+        const id = req.params.id;
+        const application = await Application.findByIdAndUpdate(id, req.body);
+        if(application){
+           console.log("application  updated");
+            res.redirect("/enrolled/application/list/" + id);
+        }
+        else{
         const enrolledId = req.params.id;
         const application = await Application.findOne({ enrolledLead: enrolledId });
             const newApplication = new Application({
@@ -439,6 +446,7 @@ module.exports.applicationSubmit = async (req, res) => {
 
                 }
             });
+        }
     } catch (error) {
         console.log(error);
     }
@@ -458,13 +466,13 @@ module.exports.applicationList = async (req, res) => {
             console.log(selectedApplication.enrolledLead);
             
             const application = await Application.find({ enrolledLead: enrolledId });
-        res.render("common/applicationList", { application, enrolledLead ,selectedApplication});
+        res.render("common/applicationList", { application, enrolledLead ,selectedApplication, user: req.user });
         }
         else{
             const enrolledId = req.params.id;
             const application = await Application.find({ enrolledLead: enrolledId });
             const enrolledLead = await enrolledUser.findById(enrolledId);
-            res.render("common/applicationList", { application, enrolledLead, selectedApplication: application[0] });
+            res.render("common/applicationList", { application, enrolledLead, selectedApplication: application[0], user: req.user });
         }
     } catch (error) {
         console.log(error);

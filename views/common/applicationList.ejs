@@ -9,238 +9,282 @@
 
         $(document).ready(function () {
             $('#currentStatus').each(function () {
+                const role = $("#role").attr('value');
+                const allowed = ["Counsellor", "Branch Manager", "Application Team", "Admin"];
                 const arr = ($(this).attr('value')).split('/');
                 const status = arr[0];
                 const paymentStatus = arr[1];
                 console.log(status);
                 console.log(paymentStatus);
-                if (status === 'enrolled') {
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', false);
-                    $("#applicationApplied").attr('disabled', false);                              
-                    $("#offerLetterReceived").attr('disabled', true);
-                    $("#offerLetterRejected").attr('disabled', true);
-                    $("#documentsRequestedByInstitution").attr('disabled', true); 
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);         
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-                }
-                else if(status === 'applicationSent'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', false);                              
-                    $("#offerLetterReceived").attr('disabled', false);
-                    $("#offerLetterRejected").attr('disabled', false);
-                    $("#documentsRequestedByInstitution").attr('disabled', false);  
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);                                             
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-                }
-                else if(status === 'applicationApplied'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', false);
-                    $("#offerLetterRejected").attr('disabled', false);
-                    $("#documentsRequestedByInstitution").attr('disabled', false);   
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);                                            
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-            }
-                else if(status === 'offerLetterReceived'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', true);
-                    $("#offerLetterRejected").attr('disabled', false);
-                    $("#documentsRequestedByInstitution").attr('disabled', true);    
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);                                           
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-                }
-                else if(status === 'offerLetterRejected'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', true);
-                    $("#offerLetterRejected").attr('disabled', true);
-                    $("#documentsRequestedByInstitution").attr('disabled', true); 
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', true);
-                    $("fullFeePaid").attr('disabled', true);                                              
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', true);
-                    $("#interviewDone").attr('disabled', true);
-                    $("#interviewCleared").attr('disabled', true);
-                    $("#interviewRejected").attr('disabled', true);
-                }
-                else if(status === 'documentsRequestedByInstitution'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', false);
-                    $("#offerLetterRejected").attr('disabled', false);
-                    $("#documentsRequestedByInstitution").attr('disabled', true); 
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);                                              
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', true);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-                }
-                else if(status === 'documentsRequestedByFilingTeam'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', true);
-                    $("#offerLetterRejected").attr('disabled', true);
-                    $("#documentsRequestedByInstitution").attr('disabled', true); 
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', false);
-                    $("fullFeePaid").attr('disabled', false);                                              
-                    $("#fileLodged").attr('disabled', true);
-                    $("#visaFileProcessing").attr('disabled', false);
-                    $("#biometricsDone").attr('disabled', true);
-                    $("#visaApproved").attr('disabled', true);
-                    $("#visaRejected").attr('disabled', true);
-                    $("#interviewScheduled").attr('disabled', false);
-                    $("#interviewDone").attr('disabled', false);
-                    $("#interviewCleared").attr('disabled', false);
-                    $("#interviewRejected").attr('disabled', false);
-                }
-                else if(status === 'partialFeePaid'){
-                    $("#enrolled").attr('disabled', true);                           
-                    $("#applicationSent").attr('disabled', true);
-                    $("#applicationApplied").attr('disabled', true);                              
-                    $("#offerLetterReceived").attr('disabled', false);
-                    $("#offerLetterRejected").attr('disabled', false);
-                    $("#documentsRequestedByInstitution").attr('disabled', true); 
-                    $("#documentsRequestedByFilingTeam").attr('disabled', true); 
-                    $("#partialFeePaid").attr('disabled', true);
-                    $("fullFeePaid").attr('disabled', false);
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
-                else if(status === 'fileLodged'){
-                    
-                }
+                console.log(role);
 
+                if (allowed.includes(role)) {
+                    if (status === 'enrolled') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', false);
+                        $("#applicationApplied").attr('disabled', false);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', false);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'applicationSent') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', false);
+                        $("#offerLetterReceived").attr('disabled', false);
+                        $("#offerLetterRejected").attr('disabled', false);
+                        $("#documentsRequestedByInstitution").attr('disabled', false);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', false);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'applicationApplied') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', false);
+                        $("#offerLetterRejected").attr('disabled', false);
+                        $("#documentsRequestedByInstitution").attr('disabled', false);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', false);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'offerLetterReceived') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', false);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', false);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'offerLetterRejected') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', true);
+                        $("#interviewDone").attr('disabled', true);
+                        $("#interviewCleared").attr('disabled', true);
+                        $("#interviewRejected").attr('disabled', true);
+                    }
+                    else if (status === 'documentsRequestedByInstitution') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', false);
+                        $("#offerLetterRejected").attr('disabled', false);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', false);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'documentsRequestedByFilingTeam') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'partialFeePaid') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', false);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', false);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'fullFeePaid') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', false);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', false);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'visaFileProcessing') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', false);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', false);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'fileLodged') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', false);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'biometricsDone') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', false);
+                        $("#visaRejected").attr('disabled', false);
+                        $("#interviewScheduled").attr('disabled', false);
+                        $("#interviewDone").attr('disabled', false);
+                        $("#interviewCleared").attr('disabled', false);
+                        $("#interviewRejected").attr('disabled', false);
+                    }
+                    else if (status === 'visaApproved') {
+                        $("#enrolled").attr('disabled', true);
+                        $("#applicationSent").attr('disabled', true);
+                        $("#applicationApplied").attr('disabled', true);
+                        $("#offerLetterReceived").attr('disabled', true);
+                        $("#offerLetterRejected").attr('disabled', true);
+                        $("#documentsRequestedByInstitution").attr('disabled', true);
+                        $("#documentsRequestedByFilingTeam").attr('disabled', true);
+                        $("#partialFeePaid").attr('disabled', true);
+                        $("#fullFeePaid").attr('disabled', true);
+                        $("#fileLodged").attr('disabled', true);
+                        $("#visaFileProcessing").attr('disabled', true);
+                        $("#biometricsDone").attr('disabled', true);
+                        $("#visaApproved").attr('disabled', true);
+                        $("#visaRejected").attr('disabled', true);
+                        $("#interviewScheduled").attr('disabled', true);
+                        $("#interviewDone").attr('disabled', true);
+                        $("#interviewCleared").attr('disabled', true);
+                        $("#interviewRejected").attr('disabled', true);
+                    }
+                }
+                else {
+                    $(this).attr('disabled', true);
+                }
             })
         });
-
-            //     $('.enrolled').show();
-                //     $('.notEnrolled').hide();
-                //     $('.paymentStatus').show();
-                //     if (paymentStatus === 'Paid') {
-                //         $('.paid').show();
-                //         $('.notPaid').hide();
-                //     } else {
-                //         $('.paid').hide();
-                //         $('.notPaid').show();
-                //     }
-                // } else {
-                //     $('.enrolled').hide();
-                //     $('.notEnrolled').show();
-                //     $('.paymentStatus').hide();
-                // }
-
-            // $(document).ready(function () {
-            //     $("#highestDegree").change(function () {
-            //         $(this).find("option:selected")
-            //             .each(function () {
-            //                 var optionValue = $(this).attr("value");
-            //                 if (optionValue === "") {
-                              
-            //                 } else if(optionValue === ""){
-                               
-            //                 }
-            //                 else if(optionValue === ""){
-                                
-            //                 }
-            //                 else {
-                             
-            //                 }
-            //             });
-            //     }).change();
-            // });
 
 
         $(document).ready(function () {
@@ -260,17 +304,16 @@
     </script>
 
     <body>
-
         <!-- Tab-bar -->
         <%- include('../partials/navBar') -%>
             <%- include('../partials/tabBar',{lead: enrolledLead}) -%>
 
-
                 <div class="p-4">
-                    <div class="head">
+                    <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+                        <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
                         <div class="table-responsive">
-                            <table class="table table-hover" width="100%" cellspacing="0">
-                                <thead class="table-light">
+                            <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                                <thead class="">
                                     <tr>
                                         <th>Name</th>
                                         <th>Email</th>
@@ -299,7 +342,6 @@
                             </table>
                         </div>
                     </div>
-                </div>
                     <ul class="nav nav-tabs nav-fill bg-light">
                         <li class="nav-item active">
                             <a class="nav-link fs-4 fw-bold" href="/enrolled/application/<%= enrolledLead._id %>">Apply
@@ -311,110 +353,204 @@
                         </li>
                     </ul>
 
-                    <% for(var i=0; i < application.length; i++){ %>
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                              <h5 class="card-title"><a href="/enrolled/application/list/<%= application[i]._id %>"> <%= application[i].name %></a></h5>
-                              <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
-                              <p class="card-text">
-                                <%= application[i].program %> <br>
-                                <%= application[i].institution %> <br>
-                                Status : <%= application[i].status %> 
-                              </p>
-                            </div>
-                          </div>
-                    
-                           
+                    <div class="p-2 d-flex flex-nowrap px-4 bg-light">
+                        <div class="flex-shrink-0" style="width: 38%;">
+                            <% for(var i=0; i < application.length; i++){ %>
+                                <a class="text-decoration-none allApplications text-muted fw-normal p-0"
+                                    href="/enrolled/application/list/<%= application[i]._id %>">
+                                    <div class="d-flex flex-column card me-2 mb-2">
+                                        <div class="card-body pb-0">
+                                            <div class="d-flex mb-0 justify-content-between">
+                                                <p class="fw-bold text-primary">
+                                                    <%= (application[i]._id).toString().slice(-5) %>
+                                                </p>
+                                                <p class="fw-bold text-secondary">
+                                                    <%= (application[i].appliedAt).toLocaleDateString("en-GB") %>
+                                                        <%= (application[i].appliedAt).toLocaleTimeString([],{hour: "numeric"
+                                                            , minute: "numeric" }) %>
+                                                </p>
+                                            </div>
+                                            <p class="mb-0 fs-5">
+                                                <%= application[i].program %>
+                                            </p>
+                                            <p class="mt-0 fs-6 pt-0">
+                                                <%= application[i].institution %>
+                                            </p>
+                                            <p>Status : <%= application[i].status %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
                                 <% } %>
+                        </div>
+                        <input id="role" type="text" value="<%= user.role %>" hidden>
+                        <div class="flex-grow-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex mb-0 justify-content-between">
+                                        <p class="fw-normal text-secondary">
+                                            <%= (selectedApplication.updatedAt).toLocaleDateString("en-GB") %>
+                                                <%= (selectedApplication.appliedAt).toLocaleTimeString([],{hour: "numeric"
+                                                    , minute: "numeric" }) %>
+                                        </p>
+                                        <!-- status select-->
+                                        <form action="/enrolled/application/<%= selectedApplication._id %>" method="post">
+                                            <div class="d-flex flex-column">
+                                                <select class="custom-select border rounded-3 px-2" name="status"
+                                                    id="currentStatus"
+                                                    value="<%= selectedApplication.status %>/<%= selectedApplication.paymentStatus %>">
+                                                    <% if(selectedApplication.status){ %>
+                                                        <option value="">
+                                                            <%= selectedApplication.status %>
+                                                        </option>
+                                                        <% } %>
+                                                            <option id="enrolled" value="enrolled">Enrolled</option>
+                                                            <option id="applicationSent" value="applicationSent">
+                                                                Application Sent</option>
+                                                            ------------|
+                                                            <option id="applicationApplied" value="applicationApplied">
+                                                                Application Applied</option>
+                                                            ------|
+                                                            |-------<option id="offerLetterReceived"
+                                                                value="offerLetterReceived">Offer Letter Received
+                                                            </option>
+                                                            --------------------------------------------------------------|
+                                                            | only Fee after this---|----<option
+                                                                id="offerLetterRejected" value="offerLetterRejected">
+                                                                Offer
+                                                                Letter Rejected</option>
+                                                            --------------------------------------|-e
+                                                            |-----<option id="documentsRequestedByInstitution"
+                                                                value="documentsRequestedByInstitution">Documents
+                                                                Requested By Institution</option>
+                                                            -------------------------------------|
+                                                            documents can be requested after partial fee
+                                                            document request by filing/sop
+                                                            don't move below before full fee paymentß
+                                                            <option id="partialFeePaid" value="partialFeePaid">Partial
+                                                                Fee Paid</option>
+                                                            <option id="fullFeePaid" value="fullFeePaid">Full Fee Paid
+                                                            </option>
+                                                            <option id="documentsRequestedByFilingTeam"
+                                                                value="documentsRequestedByFilingTeam">Documents
+                                                                Requested By Filing Team/SOP Team</option>
+                                                            <option id="visaFileProcessing" value="visaFileProcessing">
+                                                                Visa File Processing</option>
+                                                            <option id="fileLodged" value="fileLodged">File Lodged
+                                                            </option>
+                                                            <option id="biometricsDone" value="biometricsDone">
+                                                                Biometrics Done</option>
+                                                            <option id="visaApproved" value="visaApproved">Visa Approved
+                                                            </option>
+                                                            <option id="visaRejected" value="visaRejected">Visa Rejected
+                                                            </option>
+                                                            <option id="interviewScheduled" value="interviewScheduled">
+                                                                Interview Scheduled</option>
+                                                            <option id="interviewDone" value="interviewDone">Interview
+                                                                Done</option>
+                                                            <option id="interviewCleared" value="interviewCleared">
+                                                                Interview Cleared</option>
+                                                            <option id="interviewRejected" value="interviewRejected">
+                                                                Interview Rejected</option>
+                                                </select>
+                                            </div>
+                                        
+                                    </div>
+                                    <p class="fw-bold text-primary">
+                                        <%= (selectedApplication._id).toString().slice(-5) %>
+                                    </p>
+                                    <h5 class="fs-4 text-muted">
+                                        <%= selectedApplication.program %>
+                                    </h5>
+                                    <p class="fs-5 fw-bold text-secondary">
+                                        <%= selectedApplication.institution %>
+                                    </p>
+                                </div>
+                            </div>
 
-                                    <form action="/">
-                                        <select name="currentStatus" id="currentStatus" value="<%= selectedApplication.status %>/<%= selectedApplication.paymentStatus %>">
-                                            <% if(selectedApplication.status){ %>
-                                                <option value="">
-                                                    <%= selectedApplication.status %>
-                                                </option>
-                                                <% } %>
-                                                    <option id="enrolled" value="enrolled">Enrolled</option>
-                                                    <option id="applicationSent" value="applicationSent">Application Sent</option>
-                                                    ------------|
-                                                    <option id="applicationApplied" value="applicationApplied">Application Applied</option>
-                                                    ------|
-                                                    |-------<option id="offerLetterReceived" value="offerLetterReceived">Offer Letter Received
-                                                    </option>
-                                                    --------------------------------------------------------------|
-                                                    | only Fee after this---|----<option id="offerLetterRejected" value="offerLetterRejected">
-                                                        Offer
-                                                        Letter Rejected</option>
-                                                    --------------------------------------|-e
-                                                    |-----<option id="documentsRequestedByInstitution" value="documentsRequestedByInstitution">Documents
-                                                        Requested By Institution</option>
-                                                    -------------------------------------|
-                                                    documents can be requested after partial fee
-                                                    document request by filing/sop
-                                                    don't move below before full fee paymentß
-                                                    <option id="partialFeePaid" value="partialFeePaid">Partial Fee Paid</option>
-                                                    <option id="fullFeePaid" value="fullFeePaid">Full Fee Paid</option>
-                                                    <option id="documentsRequestedByFilingTeam" value="documentsRequestedByFilingTeam">Documents Requested By Filing Team/SOP Team</option>
-                                                    <option id="visaFileProcessing" value="visaFileProcessing">Visa File Processing</option>
-                                                    <option id="fileLodged" value="fileLodged">File Lodged</option>
-                                                    <option id="biometricsDone" value="biometricsDone">Biometrics Done</option>
-                                                    <option id="visaApproved" value="visaApproved">Visa Approved</option>
-                                                    <option id="visaRejected" value="visaRejected">Visa Rejected</option>
-                                                    <option id="interviewScheduled" value="interviewScheduled">Interview Scheduled</option>
-                                                    <option id="interviewDone" value="interviewDone">Interview Done</option>
-                                                    <option id="interviewCleared" value="interviewCleared">Interview Cleared</option>
-                                                    <option id="interviewRejected" value="interviewRejected">Interview Rejected</option>
-                                        </select>
-                                    </form>
-
+                            <div class="card mt-2">
+                                <div class="card-body">
                                     <div class="enrolld box">
                                         <h1>enrolld</h1>
                                     </div>
                                     <div class="applicationSent box">
                                         <h1>applicationSent</h1>
-
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="applicationApplied box">
                                         <h1>applicationApplied</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="offerLetterReceived box">
                                         <h1>offerLetterReceived</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="offerLetterRejected box">
                                         <h1>offerLetterRejected</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="documentsRequestedByInstitution box">
                                         <h1>documentsRequestedByInstitution</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="visaFileProcessing box">
                                         <h1>visaFileProcessing</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="fileLodged box">
                                         <h1>fileLodged</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="visaApproved box">
                                         <h1>visaApproved</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="visaRejected box">
                                         <h1>visaRejected</h1>
+                                        <button type="submit"> Save</button>
+                                    </div>
+                                    <div class="partialFeePaid box">
+                                        <h1>partialFeePaid</h1>
+                                        <button type="submit"> Save</button>
+                                    </div>
+                                    <div class="fullFeePaid box">
+                                        <h1>fullFeePaid</h1>
+                                        <button type="submit"> Save</button>
+                                    </div>
+                                    <div class="documentsRequestedByFilingTeam box">
+                                        <h1>documentsRequestedByFilingTeam</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="biometricsDone box">
                                         <h1>biometricsDone</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="interviewDone box">
                                         <h1>interviewDone</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="interviewScheduled box">
                                         <h1>interviewScheduled</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="interviewCleared box">
                                         <h1>interviewCleared</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
                                     <div class="interviewRejected box">
                                         <h1>interviewRejected</h1>
+                                        <button type="submit"> Save</button>
                                     </div>
-
-                                    <%- include('../partials/footer') -%>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="footer" class="mt-5 text-center text-secondary">
+                        © 2022 Bells Overseas. All rights reserved.
+                    </div>
+                </div>
+                <%- include('../partials/footer') -%>
 
     </body>
 
