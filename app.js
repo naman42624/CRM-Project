@@ -18,6 +18,8 @@ const userRoutes = require("./src/routes/userRoutes");
 const telleRoutes = require("./src/routes/telleRoutes");
 const enrolledRoutes = require("./src/routes/enrolledRoutes");
 const counsellorRoutes = require("./src/routes/counsellorRoutes")
+const filingTeamRoutes = require("./src/routes/filingTeamRoutes");
+const applicationTeamRoutes = require("./src/routes/applicationTeamRoutes");
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -44,6 +46,8 @@ app.use("/user", userRoutes);
 app.use("/", telleRoutes);
 app.use("/enrolled", enrolledRoutes);
 app.use('/' , counsellorRoutes)
+app.use('/filingTeam', filingTeamRoutes)
+app.use('/applicationTeam', applicationTeamRoutes)
 app.get('/',auth ,(req,res)=>{
     if(req.user.role === "TelleCaller"){
         res.redirect("/telecaller/home");

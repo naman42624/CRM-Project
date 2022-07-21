@@ -425,7 +425,21 @@ module.exports.applicationSubmit = async (req, res) => {
         const id = req.params.id;
         const application = await Application.findByIdAndUpdate(id, req.body);
         if(application){
-           console.log("application  updated");
+            if(req.body.status === "partialFeePaid"){
+                application.paymentStatus = "partialFeePaid";
+                await application.save();
+
+            }
+            else if(req.body.status === "fullFeePaid"){
+                application.paymentStatus = "fullFeePaid";
+                await application.save();
+            }
+            else if(req.body.status === "offerLetterReceived"){
+                application.offerLetterStatus = "offerLetterReceived";
+                await application.save();
+            }
+            console.log("application  updated");
+            console.log(application);
             res.redirect("/enrolled/application/list/" + id);
         }
         else{

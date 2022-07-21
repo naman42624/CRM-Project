@@ -36,6 +36,14 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         default: "Not Paid",
     },
+    offerLetterStatus: {
+        type: String,
+        default: "Not Sent",
+    },
+    interviewRequired: {
+        type: String,
+        default: "No",
+    },
     status: {
         type: String,
         trim: true,
