@@ -47,19 +47,25 @@ const applicationSchema = new mongoose.Schema({
         }
     },
     interview: Boolean,
-    sop: {
+    sop: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    }],
+    offerLetter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Document'
     },
     payment: String,
     comments: [{
-        comment: {
-            type: String,
+            comment: String,
+            timestamp: {
+                type: Date,
+                default: Date.now
+            },
             writtenBy: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User'
             }
-        }
     }]
 },{timestamps: true})
 const Application = mongoose.model('Application', applicationSchema)

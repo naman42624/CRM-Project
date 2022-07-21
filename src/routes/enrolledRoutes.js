@@ -122,7 +122,7 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
         const applications = await Application.find({ enrolledLead: enrolledId });
-        const displayApplication = await Application.findById(req.params.applicationId);
+        const displayApplication = await Application.findById(req.params.applicationId).populate('comments.writtenBy sop');
         res.render("enrolled/individual/applicationApplied" , {displayApplication, applications, enrolledId, enrolledLead});
     } catch (error) {
         console.log(error);
@@ -130,20 +130,44 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
     }
 });
 
-router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+// router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+//     try {
+//         const enrolledId = req.params.enrolledId;
+//         const enrolledLead = await EnrolledLead.findById(enrolledId);
+//         const applications = await Application.find({ enrolledLead: enrolledId });
+//         const status = {
+//             name: req.body.status,
+//             value
+//         };
+//         const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId, req.body);
+//         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+//     } catch (error) {
+//         console.log(error);
+//         res.redirect("/500");
+//     }
+// });
+
+// save comments
+router.post("/application/:enrolledId/applied/:applicationId/comment", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
-        const enrolledLead = await EnrolledLead.findById(enrolledId);
-        const applications = await Application.find({ enrolledLead: enrolledId });
-        const status = req.body.status;
-        const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId);
+        const displayApplication = await Application.findById(req.params.applicationId);
+        const comment = req.body.comment;
+        const newComment = {
+            comment: comment,
+            writtenBy: req.user._id,
+            timestamp: new Date(),
+        };
+        displayApplication.comments.push(newComment);
+        displayApplication.save();
         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
     } catch (error) {
         console.log(error);
         res.redirect("/500");
     }
-})
+});
 
+// Profile Page
 router.get("/profile/:enrolledId", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
@@ -226,7 +250,11 @@ router.post("/checkbox/:enrolledId/:name", auth, counsAboveAuth, (req, res) => {
         else
         if(document){
             console.log(document);
-            res.redirect("/enrolled/document/" + req.params.enrolledId);
+            if(document.documentName.includes("sop")){
+                res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
+            } else {
+                res.redirect("/enrolled/document/" + req.params.enrolledId);
+            }
         }
         else{
             console.log("No document found");
@@ -244,6 +272,11 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
         uploadedBy: req.user.id
     }
     console.log(req.file);
+    let sopName;
+    if(req.params.name === "sop"){
+        req.params.name = "sop"+new Date();
+        sopName = req.params.name;
+    }
     Document.findOne({enrolledLead: req.params.enrolledId, documentName: req.params.name}, (err, doc) => {
         if(err){
             console.log(err);
@@ -251,7 +284,17 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
         }
         else{
             if(doc){
-                
+                if(doc.documentName === "sop"){
+                    Application.findById(req.body.appId, function(err, application){
+                        if(err){
+                            console.log(err);
+                            res.redirect("/500");
+                        } else{
+                            application.sop.push(doc._id);
+                            application.save();
+                        }
+                    });
+                }
                 doc.files.push(file);
                 doc.save((err) => {
                     if(err){
@@ -259,7 +302,11 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                         console.log(err);
                     }
                     else{
-                        res.redirect("/enrolled/document/" + req.params.enrolledId);
+                        if(doc.documentName === "sop"){
+                            res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
+                        } else {
+                            res.redirect("/enrolled/document/" + req.params.enrolledId);
+                        }
                     }
                 });
             }
@@ -268,14 +315,29 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                     documentName: req.params.name,
                     enrolledLead: req.params.enrolledId,
                 });
+                if(newDoc.documentName === sopName){
+                    Application.findById(req.body.appId, function(err, application){
+                        if(err){
+                            console.log(err);
+                            res.redirect("/500");
+                        } else{
+                            application.sop.push(newDoc._id);
+                            application.save();
+                        }
+                    });
+                }
                 newDoc.files.push(file);
                 newDoc.save((err)=>{
                     if(err){
-                        res.redirect("/500");
                         console.log(err);
+                        res.redirect("/500");
                     }
                     else{
-                        res.redirect("/enrolled/document/" + req.params.enrolledId);
+                        if(newDoc.documentName === sopName){
+                            res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
+                        } else {
+                            res.redirect("/enrolled/document/" + req.params.enrolledId);
+                        }
                     }
                 });
             }
@@ -302,6 +364,17 @@ router.delete("/file/:enrolledId/:docName/:fileId", auth, counsAboveAuth, (req, 
                 else
                 if(document){
                     console.log(document);
+                    // if(document.documentName.includes("sop")){
+                    //     Application.findByIdAndUpdate(req.body.appId, {$pull: {sop: document._id}}, function(err, application){
+                    //         if(err){
+                    //             console.log(err);
+                    //             res.redirect("/500");
+                    //         }
+                    //         else{
+                    //             res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
+                    //         }
+                    //     });
+                    // }
                     res.redirect("/enrolled/document/" + req.params.enrolledId);
                 }
                 else{
