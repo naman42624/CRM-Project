@@ -59,7 +59,7 @@ router.get('/manageStudents', auth ,enrolledController.showAllEnrolledUsers);
 router.post('/enroll/:id', auth , enrolledController.enroll_post);
 router.get('/enroll/get/:id', auth , enrolledController.enroll_get);
 router.post('/save/personal/:id', auth , enrolledController.personal_post);
-router.get('/save/personal/:id', auth , enrolledController.personal_get);
+// router.get('/save/personal/:id', auth , enrolledController.personal_get);
 router.post('/save/academic/:id', auth , enrolledController.academic_post);
 router.get('/save/academic/:id', auth , enrolledController.academic_get);
 router.post('/save/work/:id', auth , enrolledController.work_post);

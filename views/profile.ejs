@@ -97,21 +97,21 @@
           
               <ul class="nav nav-pills flex-column mb-auto">
                 <%if(user.role === "TelleCaller"){ %>
-                  <%- include('../partials/Telle-sidebar') -%>
+                  <%- include('./partials/Telle-sidebar') -%>
               <%} else if(user.role === "Counsellor"){ %>
-                  <%- include('../partials/Counsellor-sidebar') -%>
+                  <%- include('./partials/Counsellor-sidebar') -%>
               <%} else if(user.role === "FOE"){ %>
-                  <%- include('../partials/FOE-sidebar') -%>
+                  <%- include('./partials/FOE-sidebar') -%>
               <%} else if(user.role === "Branch Manager"){ %>
-                  <%- include('../partials/Branch-sidebar') -%>
+                  <%- include('./partials/Branch-sidebar') -%>
               <%} else if(user.role === "SOP Team"){ %>
-                  <%- include('../partials/SOP-sidebar') -%>
+                  <%- include('./partials/SOP-sidebar') -%>
               <%} else if(user.role === "Filing Team"){ %>
-                  <%- include('../partials/Filing-sidebar') -%>
+                  <%- include('./partials/Filing-sidebar') -%>
               <%} else if(user.role === "Application Team"){ %>
-                  <%- include('../partials/Application-sidebar') -%>
+                  <%- include('./partials/Application-sidebar') -%>
               <%} else if(user.role === "Interview Team"){ %>
-                  <%- include('../partials/Interview-sidebar') -%>
+                  <%- include('./partials/Interview-sidebar') -%>
               <%} %>
                   <hr>
                   <li class="collapse-head-Contact sidebar-button">

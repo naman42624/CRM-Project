@@ -6,7 +6,19 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js">
     </script>
     <script>
+
         $(document).ready(function () {
+            
+            if($("#degree").attr("value") === "Bachelor"){
+                $("#Bachelor").attr("selected", "selected");
+            }
+            else if($("#degree").attr("value") === "Master"){
+                $("#Master").attr("selected", "selected");
+            }
+            else if($("#degree").attr("value") === "twelve"){
+                $("#twelve").attr("selected", "selected");
+            }
+
             $("#highestDegree").change(function () {
                 $(this).find("option:selected")
                     .each(function () {
@@ -28,6 +40,20 @@
                         }
                     });
             }).change();
+            $("input").each(function () {
+                if($(this).attr("value") !== " " && $(this).attr("value") !== "Save"){
+                    $(this).attr("disabled", true);
+                }
+            });
+                
+            // $("#submit").click(function () {
+            //     $("input").each(function () {
+            //         if($(this).attr("value") === " "){
+            //             $(this).attr("disabled", false);
+            //         }
+            //     });
+            // });
+
         });
     </script>
 
@@ -35,7 +61,7 @@
      <!-- Tab-bar -->
      <%- include('../partials/navBar') -%> 
      <%-  include('../partials/tabBar',{lead: enrolledLead}) -%>  
- 
+        <input id="degree" type="text" hidden value="<%= academicInfo.highestDegree? academicInfo.highestDegree:" " %>">
      <!-- upload documents -->
      <div class="p-4">
          <div class="head">
@@ -78,102 +104,88 @@
                 <div>
                     <h3>Educational Information</h3>
                     <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> 
-                        <label for="countryOfStudy"></label>
-                        <input type="text" name="countryOfStudy" id="countryOfStudy" value=""><br>
-                        <label for="highestDegree"></label>
+                        <label for="countryOfStudy">Country Of Study</label>
+                        <input type="text" name="countryOfStudy" id="countryOfStudy" value="<%=(academicInfo.countryOfStudy)?academicInfo.countryOfStudy:" " %>"><br>
+                        <label for="highestDegree">Select Highest Degree</label>
                         <select name="highestDegree" id="highestDegree">
-                            <% if(enrolledLead.highestDegree){ %>
-                                <option value="<%= enrolledLead.highestDegree %>"><%= enrolledLead.highestDegree %></option>
-                                <% } else{ %>
-                                <option value="">Select Highest Degree</option>
-                                <% } %>
                             <option id="Master" value="Master">Master</option>
                             <option id="Bachelor" value="Bachelor">Bachelor</option>
                             <option id="twelve" value="twelve">12th Or Equivalent</option>
                         </select><br>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="Master box">
                     <h4>Post Graduation(if applicable)</h4>
-                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">
+                    <!-- <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> -->
                         <label for="masterName">Name</label>
-                        <input type="text" name="masterName" id="masterName"><br>
+                        <input type="text" name="masterName" id="masterName" value="<%= academicInfo.masterName? academicInfo.masterName:" " %>"><br>
                         <label for="masterUniversity">University</label>
-                        <input type="text" name="masterUniversity" id="masterUniversity"><br>
+                        <input type="text" name="masterUniversity" id="masterUniversity" value="<%= academicInfo.masterUniversity? academicInfo.masterUniversity:" " %>"><br>
                         <label for="masterLocation">Location</label>
-                        <input type="text" name="masterLocation" id="masterLocation"><br>
+                        <input type="text" name="masterLocation" id="masterLocation" value="<%= academicInfo.masterLocation? academicInfo.masterLocation:" " %>"><br>
                         <label for="masterGrade">Grade</label>
-                        <input type="text" name="masterGrade" id="masterGrade"><br>
+                        <input type="text" name="masterGrade" id="masterGrade" value="<%= academicInfo.masterGrade? academicInfo.masterGrade:" " %>"><br>
                         <label for="masterYearOfPassing">Year Of Passing</label>
-                        <input type="text" name="masterYearOfPassing" id="masterYearOfPassing"><br>
+                        <input type="text" name="masterYearOfPassing" id="masterYearOfPassing" value="<%= academicInfo.masterYearOfPassing? academicInfo.masterYearOfPassing:" " %>"><br>
                         <div class="submit">
                             <input type="submit" value="Save">
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="Bachelor box">
                     <h4>Undergraduate(if applicable)</h4>
-                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <label
-                            for="undergraduateName">Name</label>
-                        <input type="text" name="undergraduateName" id="undergraduateName"><br>
+                    <!-- <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">  -->
+                        <label for="undergraduateName">Name</label>
+                        <input type="text" name="undergraduateName" id="undergraduateName" value="<%= academicInfo.undergraduateName? academicInfo.undergraduateName:" " %>"><br>
                         <label for="undergraduateUniversity">University</label>
-                        <input type="text" name="undergraduateUniversity" id="undergraduateUniversity"><br>
+                        <input type="text" name="undergraduateUniversity" id="undergraduateUniversity" value="<%= academicInfo.undergraduateUniversity? academicInfo.undergraduateUniversity:" " %>"><br>
                         <label for="undergraduateLocation">Location</label>
-                        <input type="text" name="undergraduateLocation" id="undergraduateLocation"><br>
+                        <input type="text" name="undergraduateLocation" id="undergraduateLocation" value="<%= academicInfo.undergraduateLocation? academicInfo.undergraduateLocation:" " %>"><br>
                         <label for="undergraduateGrade">Grade</label>
-                        <input type="text" name="undergraduateGrade" id="undergraduateGrade"><br>
+                        <input type="text" name="undergraduateGrade" id="undergraduateGrade" value="<%= academicInfo.undergraduateGrade? academicInfo.undergraduateGrade:" " %>"><br>
                         <label for="undergraduateYearOfPassing">Year Of Passing</label>
-                        <input type="text" name="undergraduateYearOfPassing" id="undergraduateYearOfPassing"><br>
+                        <input type="text" name="undergraduateYearOfPassing" id="undergraduateYearOfPassing" value="<%= academicInfo.undergraduateYearOfPassing? academicInfo.undergraduateYearOfPassing:" " %>"><br>
                         <div class="submit">
                             <input type="submit" value="Save">
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="twelve box">
                     <h4>Grade 12th or equivalent(if applicable)</h4>
-                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <Label
-                            for="twelveBoard">Board</Label>
-                        <input type="text" name="twelveBoard" id="twelveBoard"><br>
+                    <!-- <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">  -->
+                        <Label for="twelveBoard">Board</Label>
+                        <input type="text" name="twelveBoard" id="twelveBoard" value="<%= academicInfo.twelveBoard? academicInfo.twelveBoard:" " %>"><br>
                         <Label for="twelveSchool">School</Label>
-                        <input type="text" name="twelveSchool" id="twelveSchool"><br>
+                        <input type="text" name="twelveSchool" id="twelveSchool" value="<%= academicInfo.twelveSchool? academicInfo.twelveSchool:" " %>"><br>
                         <Label for="twelveLocation">Location</Label>
-                        <input type="text" name="twelveLocation" id="twelveLocation"><br>
+                        <input type="text" name="twelveLocation" id="twelveLocation" value="<%= academicInfo.twelveLocation? academicInfo.twelveLocation:" " %>"><br>
                         <Label for="twelveGrade">Grade</Label>
-                        <input type="text" name="twelveGrade" id="twelveGrade"><br>
+                        <input type="text" name="twelveGrade" id="twelveGrade" value="<%= academicInfo.twelveGrade? academicInfo.twelveGrade:" " %>"><br>
                         <Label for="twelveYearOfPassing">Year Of Passing</Label>
-                        <input type="text" name="twelveYearOfPassing" id="twelveYearOfPassing"><br>
+                        <input type="text" name="twelveYearOfPassing" id="twelveYearOfPassing" value="<%= academicInfo.twelveYearOfPassing? academicInfo.twelveYearOfPassing:" " %>"><br>
                         <div class="submit">
                             <input type="submit" value="Save">
                         </div>
-                    </form>
+                    <!-- </form> -->
                 </div>
                 <div class="twelve box">
                     <h4>Grade 10th(if applicable)</h4>
-                    <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST"> <Label
-                            for="tenthBoard">Board</Label>
-                        <input type="text" name="tenthBoard" id="tenthBoard"><br>
+                    <!-- <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">  -->
+                        <Label for="tenthBoard">Board</Label>
+                        <input type="text" name="tenthBoard" id="tenthBoard" value="<%= academicInfo.tenthBoard? academicInfo.tenthBoard:" " %>"><br>
                         <Label for="tenthSchool">School</Label>
-                        <input type="text" name="tenthSchool" id="tenthSchool"><br>
+                        <input type="text" name="tenthSchool" id="tenthSchool" value="<%= academicInfo.tenthSchool? academicInfo.tenthSchool:" " %>"><br>
                         <Label for="tenthLocation">Location</Label>
-                        <input type="text" name="tenthLocation" id="tenthLocation"><br>
+                        <input type="text" name="tenthLocation" id="tenthLocation" value="<%= academicInfo.tenthLocation? academicInfo.tenthLocation:" " %>"><br>
                         <Label for="tenthGrade">Grade</Label>
-                        <input type="text" name="tenthGrade" id="tenthGrade"><br>
+                        <input type="text" name="tenthGrade" id="tenthGrade" value="<%= academicInfo.tenthGrade? academicInfo.tenthGrade:" " %>"><br>
                         <Label for="tenthYearOfPassing">Year Of Passing</Label>
-                        <input type="text" name="tenthYearOfPassing" id="tenthYearOfPassing"><br>
+                        <input type="text" name="tenthYearOfPassing" id="tenthYearOfPassing" value="<%= academicInfo.tenthYearOfPassing? academicInfo.tenthYearOfPassing:" " %>"><br>
                         <div class="submit">
                             <input type="submit" value="Save">
                         </div>
                     </form>
                 </div>
-
-                <script>
-                    $(document).ready(function () {
-                        let d = document.getElementById('dob').value;
-                        console.log(d);
-                        let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
-                        document.getElementById('dob').value = datestring;
-                    })
-                </script>
 
 
                 <%- include('../partials/footer') -%>

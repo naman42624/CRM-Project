@@ -94,7 +94,7 @@ const academicSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    user:{
+    enrolledLead:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'enrolledUser'

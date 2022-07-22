@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const personalSchema = new mongoose.Schema({
     dob: {
-        type: Date,
-        default: Date.now
+        type: String,
+        required: true,
     },
     gender: {
         type: String,
@@ -36,12 +36,12 @@ const personalSchema = new mongoose.Schema({
         trim: true
     },
     passportissue: {
-        type: Date,
-        default: Date.now
+        type: String,
+        trim: true
     },
     passportExpiry: {
-        type: Date,
-        default: Date.now
+        type: String,
+        trim: true
     },
     passportIssueCountry: {
         type: String,
@@ -52,40 +52,40 @@ const personalSchema = new mongoose.Schema({
         trim: true
     },
     citizenOfTwo: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: "false"
     },
     citizenOfTwoName: {
         type: String,
         trim: true
     },
     liveOrStudyinOtherCountry: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "false",
     },
     liveOrStudyinOtherCountryName: {
         type: String,
         trim: true
     },
     appliedForImmigrationInAnyCountry: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "false",
     },
     appliedForImmigrationInAnyCountryName: {
         type: String,
         trim: true
     },
     anySeriousMedicalCondition: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "false",
     },
     anySeriousMedicalConditionName: {
         type: String,
         trim: true
     },
     anyRefusals: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "false",
     },
     anyRefusalsName: {
         type: String,
@@ -96,8 +96,8 @@ const personalSchema = new mongoose.Schema({
         trim: true
     },
     anyCriminalConvictions: {
-        type: Boolean,
-        default: false,
+        type: String,
+        default: "false",
     },
     anyCriminalConvictionsName: {
         type: String,

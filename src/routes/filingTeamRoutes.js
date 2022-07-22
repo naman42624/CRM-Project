@@ -7,5 +7,6 @@ const filingTeamController = require("../controllers/filingTeamController");
 
 // Dashboard
 router.get("/home", auth, filingTeamController.dashboard);
+router.get("/manageApplications", auth, filingTeamController.manageApplications);
 
 module.exports = router;

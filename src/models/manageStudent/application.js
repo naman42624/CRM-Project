@@ -44,6 +44,10 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         default: "No",
     },
+    documentsRequestedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     status: {
         type: String,
         trim: true,
