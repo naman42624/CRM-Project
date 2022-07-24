@@ -11,12 +11,13 @@ const sopTeamAuth = require("../middlewares/sopTeamAuth");
 
 // Controllers
 const sopTeamController = require("../controllers/sopTeamController");
+const isVerified = require("../middlewares/isVerified");
 
 // Dashboard
-router.get("/", auth, sopTeamAuth, sopTeamController.dashboard);
+router.get("/", auth, sopTeamAuth, isVerified, sopTeamController.dashboard);
 router.get("/manageApplications", auth, sopTeamAuth, sopTeamController.manageApplications);
 
-router.get("/reports", auth, sopTeamAuth, async function(req, res){
+router.get("/reports", auth, sopTeamAuth, isVerified, async function(req, res){
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");

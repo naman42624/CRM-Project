@@ -16,6 +16,17 @@ $(document).ready(function() {
             $(this).children('.card').addClass('light');
         }
     });
+    const allowed = ["Counsellor", "Branch Manager", "Application Team", "Admin"];
+    const role = $('#role').val();
+    console.log(role);
+    if(!allowed.includes(role)){
+        console.log("Not allowed");
+        $('.box > input[type=checkbox]').prop('disabled', true);
+        $('.box > input[type=text]').attr('disabled', true);
+        $('.box > input[type=file]').attr('disabled', true);
+        $('.box > button').attr('disabled', true);
+        $('.box > a').attr('disabled', true);
+    }
 
         $('#currentStatus').each(function () {
             const role = $("#role").attr('value');

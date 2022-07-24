@@ -8,12 +8,13 @@ const getGreeting = require("../config/utilities/greeting");
 // Middlewares
 const auth = require("../middlewares/auth");
 const interviewTeamAuth = require("../middlewares/interviewTeamAuth");
+const isVerified = require("../middlewares/isVerified");
 
 // Controllers
 const interviewTeamController = require("../controllers/interviewTeamController");
 
 // Dashboard
-router.get("/", auth, interviewTeamAuth, interviewTeamController.dashboard);
+router.get("/", auth, interviewTeamAuth,  interviewTeamController.dashboard);
 router.get("/manageApplications", auth, interviewTeamAuth, interviewTeamController.manageApplications);
 
 router.get("/reports", auth, interviewTeamAuth, async function(req, res){

@@ -131,13 +131,13 @@
                     <div class="card-body">
 
                         <div class="applicationSent box" data-status="Application Sent">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.sentTo)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team"&&displayApplication.sentTo)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
                                 <div class="row mt-2">
                                     <div class="col-md-2"><p class="mt-2 text-end">Sent To:</p></div>
-                                    <div class="col-md-8 pt-1"><input type="text" class="form-control" name="sentTo" placeholder="Sent To" value="<%= displayApplication.sentTo %>"></div>
-                                    <div class="col-md-2 d-flex justify-content-between align-items-center"><button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-floppy-disk-circle-arrow-right"></i> Submit</button></div>
+                                    <div class="col-md-8 pt-1"><input type="text" class="form-control" name="sentTo" placeholder="Sent To" value="<%= displayApplication.sentTo %>" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>></div>
+                                    <div class="col-md-2 d-flex justify-content-between align-items-center"><button type="submit" class="btn btn-sm btn-primary <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk-circle-arrow-right"></i> Submit</button></div>
                                     
                                 </div>
                                 
@@ -147,7 +147,7 @@
             <!-- ----------------------------------------------- -->
 
                         <div class="box" data-status="Application Applied">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
@@ -155,15 +155,15 @@
             <!-- ----------------------------------------------- -->
 
                         <div class="offerLetterReceived box" data-status="Offer Letter Received">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.offerLetter)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team"&&displayApplication.offerLetter)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
                                 <span class="fs-semibold">Interview Preparation needed: </span>
-                                <select name="interviewRequired" class="custom-select border rounded-3 px-2">
+                                <select name="interviewRequired" class="custom-select border rounded-3 px-2" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                     <option <%= (displayApplication.interviewRequired==="Yes")?"selected":"" %>>Yes</option>
                                     <option <%= (displayApplication.interviewRequired==="No")?"selected":"" %>>No</option>
                                 </select>
-                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-sm btn-primary" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Submit</button>
                             </form>
                             <p class="fw-semibold text-warning">Upload the Offer Letter received for the current Application here-</p>
                         
@@ -177,7 +177,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.offerLetter.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.offerLetter)?displayApplication.offerLetter.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.offerLetter)?displayApplication.offerLetter.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.offerLetter.files[0].fileName %>"> <%= displayApplication.offerLetter.files[0].originalFileName %></a>
@@ -189,8 +189,8 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/offerLetter" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
@@ -198,7 +198,7 @@
             <!-- ----------------------------------------------- -->
 
                         <div class="box" data-status="Offer Letter Rejected">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
@@ -211,13 +211,13 @@
                                 <div class="row mt-2 mb-2">
                                     <div class="col-md-3">
                                         <div class="form-floating ">
-                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required>
+                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             <label class="form-label text-muted" for="form2">Document Name</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-floating">
-                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required>
+                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             <label class="form-label text-muted" for="form4">New Due Date</label>
                                         </div>
                                     </div>
@@ -228,14 +228,14 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center">
-                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-sm btn-primary" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Submit</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
 
                         <div class="box" data-status="Documents Requested By Institution">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <div id="formList">
                                 <button class="btn btn-sm btn-warning" id="addForm">+ Add Document</button>
@@ -246,25 +246,24 @@
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-3">
                                             <div class="form-floating ">
-                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required>
+                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                                 <label class="form-label text-muted" for="form2">Document Name</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-floating">
-                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required>
+                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                                 <label class="form-label text-muted" for="form4">New Due Date</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-floating">
-                                                <!-- <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required> -->
                                                 <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
                                                 <label class="form-label text-normal fs-6" for="form5"><%= (doc.dueDate).toLocaleDateString("en-GB") %></label>
                                             </div>
                                         </div>
                                         <div class="col-md-2 d-flex align-items-center">
-                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-sm btn-primary" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -280,13 +279,13 @@
                                 <div class="row mt-2 mb-2">
                                     <div class="col-md-3">
                                         <div class="form-floating ">
-                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required>
+                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             <label class="form-label text-muted" for="form2">Document Name</label>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-floating">
-                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required>
+                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             <label class="form-label text-muted" for="form4">New Due Date</label>
                                         </div>
                                     </div>
@@ -297,7 +296,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-center">
-                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-sm btn-primary <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>">Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -306,8 +305,8 @@
 
 
 
-                        <div class="box" data-status="Documents Requested By Filing Team">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="documentsRequestedByFilingTeam box" data-status="Documents Requested By Filing Team">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <div id="formListFiling">
                                 <button class="btn btn-sm btn-warning" id="addFormFiling">+ Add Document</button>
@@ -318,25 +317,24 @@
                                     <div class="row mt-2 mb-2">
                                         <div class="col-md-3">
                                             <div class="form-floating ">
-                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required>
+                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                                 <label class="form-label text-muted" for="form2">Document Name</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-floating">
-                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required>
+                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                                 <label class="form-label text-muted" for="form4">New Due Date</label>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-floating">
-                                                <!-- <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required> -->
                                                 <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
                                                 <label class="form-label text-normal fs-6" for="form5"><%= (doc.dueDate).toLocaleDateString("en-GB") %></label>
                                             </div>
                                         </div>
                                         <div class="col-md-2 d-flex align-items-center">
-                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                            <button type="submit" class="btn btn-sm btn-primary <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>">Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -348,8 +346,8 @@
                 <!-- ----------------------------------------------- -->
 
 
-                        <div class=" box" data-status="Partial Fee Paid">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.partialFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="partialFeePaid box" data-status="Partial Fee Paid">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team"&&displayApplication.partialFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <p class="fw-semibold text-warning">Upload Fee Receipt received for the current Application here-</p>
                         
@@ -363,7 +361,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.partialFeeReceipt.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.partialFeeReceipt)?displayApplication.partialFeeReceipt.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.partialFeeReceipt)?displayApplication.partialFeeReceipt.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.partialFeeReceipt.files[0].fileName %>"> <%= displayApplication.partialFeeReceipt.files[0].originalFileName %></a>
@@ -375,16 +373,16 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/partialFeeReceipt" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
 
                 <!-- ----------------------------------------------- -->
 
-                        <div class=" box" data-status="Full Fee Paid">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.fullFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="fullFeePaid box" data-status="Full Fee Paid">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team"&&displayApplication.fullFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <p class="fw-semibold text-warning">Upload Fee Receipt received for the current Application here-</p>
                         
@@ -398,7 +396,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fullFeeReceipt.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fullFeeReceipt)?displayApplication.fullFeeReceipt.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fullFeeReceipt)?displayApplication.fullFeeReceipt.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.fullFeeReceipt.files[0].fileName %>"> <%= displayApplication.fullFeeReceipt.files[0].originalFileName %></a>
@@ -410,8 +408,8 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/fullFeeReceipt" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
@@ -419,9 +417,9 @@
             <!-- ----------------------------------------------- -->
 
                         <div class="visaFileProcessing box" data-status="Visa File Processing">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.affidavit&&displayApplication.allDocumentsVerified==="checked")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&displayApplication.affidavit&&displayApplication.allDocumentsVerified==="checked")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="allDocsForm" method="post">
-                                <input class="form-check-input" type="checkbox" name="allDocumentsVerified" id="checkAllDocs" <%= (displayApplication.allDocumentsVerified==="checked")?displayApplication.allDocumentsVerified:"unchecked" %>  onchange="this.form.submit()">
+                                <input class="form-check-input" type="checkbox" name="allDocumentsVerified" id="checkAllDocs" <%= (displayApplication.allDocumentsVerified==="checked")?displayApplication.allDocumentsVerified:"unchecked" %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                 <label class="form-check-label" for="checkAllDocs">
                                     All Required Documents Verified
                                 </label>
@@ -438,7 +436,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.affidavit.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.affidavit)?displayApplication.affidavit.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.affidavit)?displayApplication.affidavit.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.affidavit.files[0].fileName %>"> <%= displayApplication.affidavit.files[0].originalFileName %></a>
@@ -450,14 +448,14 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/affidavit" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
             <!-- ----------------------------------------------- -->
                         <div class="fileLodged box" data-status="File Lodged">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.sop&&displayApplication.fileLodgedConfirmation)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&displayApplication.sop&&displayApplication.fileLodgedConfirmation)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <p class="fw-semibold text-warning">Upload the SOP for the current Application here-</p>
                         
@@ -472,15 +470,10 @@
                                     <% displayApplication.sop.forEach(function(document){ %> 
                                         <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= document.documentName %>" method="post">
                                             <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (document)?document.isValid:""; %>  onchange="this.form.submit()">
-                                            <!-- <span class="fw-semibold text-success">Approved</span>  -->
+                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (document)?document.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                         </form>
                                     <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                     <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= document.files[0].fileName %>"> <%= document.files[0].originalFileName %></a>
-                                    <!-- <form action="/enrolled/file/<%= enrolledLead._id %>/<%= document.documentName %>/<%= document.files[0].fileId %>?_method=DELETE"  method="POST"> 
-                                        <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                        <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i class="text-danger fa-solid fa-xmark"></i></button>
-                                        </form> -->
                                     </div> 
                                     <% }) %>
                                     </div>
@@ -490,8 +483,8 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/sop" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="Interview Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
 
@@ -507,7 +500,7 @@
                                     <div class="hstack gap-3">
                                         <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fileLodgedConfirmation.documentName %>" method="post">
                                             <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fileLodgedConfirmation)?displayApplication.fileLodgedConfirmation.isValid:""; %>  onchange="this.form.submit()">
+                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fileLodgedConfirmation)?displayApplication.fileLodgedConfirmation.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                         </form>
                                         <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                             <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.fileLodgedConfirmation.files[0].fileName %>"> <%= displayApplication.fileLodgedConfirmation.files[0].originalFileName %></a>
@@ -519,23 +512,23 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/fileLodgedConfirmation" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
 
             <!-- ----------------------------------------------- -->
 
-                        <div class="box" data-status="Biometrics Done">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role === 'Filing Team')?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="biometricsDone box" data-status="Biometrics Done">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role === 'Filing Team')?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
 
             <!-- ----------------------------------------------- -->
 
-                        <div class=" box" data-status="Visa Approved">
+                        <div class="visaApproved box" data-status="Visa Approved">
                             <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportLetter&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                     
                             <p class="fw-semibold text-warning">Upload the Passport Request Letter for the current Application here-</p>
@@ -550,7 +543,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportLetter)?displayApplication.passportLetter.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportLetter)?displayApplication.passportLetter.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.files[0].fileName %>"> <%= displayApplication.passportLetter.files[0].originalFileName %></a>
@@ -562,15 +555,15 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/passportLetter" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
 
             <!-- ----------------------------------------------- -->
 
-                        <div class=" box" data-status="Visa Rejected">
+                        <div class="visaRejected box" data-status="Visa Rejected">
                             <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportRejection&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                     
                             <p class="fw-semibold text-warning">Upload the Refusal Letter for the current Application here-</p>
@@ -585,7 +578,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportRejection)?displayApplication.passportRejection.isValid:""; %>  onchange="this.form.submit()">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportRejection)?displayApplication.passportRejection.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
                                                 <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.files[0].fileName %>"> <%= displayApplication.passportRejection.files[0].originalFileName %></a>
@@ -597,16 +590,16 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/passportRejection" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file">
-                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
                             </form>
                         </div>
 
             <!-- ----------------------------------------------- -->
 
-                        <div class="box" data-status="Interview Scheduled">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate&&displayApplication.interviewRequired==="Yes")?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="interviewScheduled box" data-status="Interview Scheduled">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate&&displayApplication.interviewRequired==="Yes")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                             <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
                                 <div class="row">
@@ -631,25 +624,25 @@
 
             <!-- ----------------------------------------------- -->
 
-                        <div class="box" data-status="Interview Done">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="interviewDone box" data-status="Interview Done">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
 
-                        <div class="box" data-status="Interview Cleared">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="interviewCleared box" data-status="Interview Cleared">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
 
-                        <div class="box" data-status="Interview Rejected">
-                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                        <div class="interviewRejected box" data-status="Interview Rejected">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 
                         </div>
 
-                        <div class="box" data-status="Student Drop">
+                        <div class="studentDrop box" data-status="Student Drop">
                             <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end  "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
                             
                 

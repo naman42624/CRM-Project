@@ -7,12 +7,13 @@ const getGreeting = require("../config/utilities/greeting");
 // Middlewares
 const auth = require("../middlewares/auth");
 const filingTeamAuth = require("../middlewares/filingTeamAuth");
+const isVerified = require("../middlewares/isVerified");
 
 // Controllers
 const filingTeamController = require("../controllers/filingTeamController");
 
 // Dashboard
-router.get("/", auth, filingTeamAuth, filingTeamController.dashboard);
+router.get("/", auth, filingTeamAuth, isVerified, filingTeamController.dashboard);
 router.get("/manageApplications", auth, filingTeamAuth, filingTeamController.manageApplications);
 
 router.get("/reports", auth, filingTeamAuth, async function(req, res){
