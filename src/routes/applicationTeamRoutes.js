@@ -8,12 +8,13 @@ const getGreeting = require("../config/utilities/greeting");
 // Middlewares
 const auth = require("../middlewares/auth");
 const applicationTeamAuth = require("../middlewares/applicationTeamAuth");
+const isVerified = require("../middlewares/isVerified");
 
 // Controllers
 const applicationTeamController = require("../controllers/applicationTeamController");
 
 // Dashboard
-router.get("/", auth, applicationTeamAuth, applicationTeamController.dashboard);
+router.get("/", auth, applicationTeamAuth, isVerified, applicationTeamController.dashboard);
 router.get("/manageApplications", auth, applicationTeamAuth, applicationTeamController.manageApplications);
 router.get("/manageStudents", auth, applicationTeamAuth, applicationTeamController.manageStudents);
 

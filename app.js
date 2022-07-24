@@ -98,6 +98,10 @@ app.get("/500", (req, res) => {
     res.render("500");
 });
 
+app.get("/mail", (req, res) => {
+    res.render("verifyTemplate");
+});
+
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.listen(3000, function(){

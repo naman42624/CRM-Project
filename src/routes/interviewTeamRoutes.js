@@ -14,7 +14,7 @@ const isVerified = require("../middlewares/isVerified");
 const interviewTeamController = require("../controllers/interviewTeamController");
 
 // Dashboard
-router.get("/", auth, interviewTeamAuth,  interviewTeamController.dashboard);
+router.get("/", auth, interviewTeamAuth, isVerified,  interviewTeamController.dashboard);
 router.get("/manageApplications", auth, interviewTeamAuth, interviewTeamController.manageApplications);
 
 router.get("/reports", auth, interviewTeamAuth, async function(req, res){
