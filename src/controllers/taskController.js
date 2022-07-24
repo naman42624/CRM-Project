@@ -6,10 +6,10 @@ const getGreeting = require("../config/utilities/greeting");
 module.exports.assignedBy = async (req, res)=>{
     try{
             const avatarSrc = "data:image/png;base64," + req.user.avatar.toString("base64");
-            const tasks = await Task.find({assingnedBy: req.user._id}).populate('assingnedTo')
+            const tasks = await Task.find({assingnedBy: req.user._id}).populate('assingnedTo assingnedBy')
             // console.log(tasks)
             const allUsers = await User.find({})
-            res.render('task', {avatarSrc: avatarSrc, date: date.newDateTopBar(), greeting: getGreeting(), tasks, user: req.user, allUsers, person: 'assignedBy'})
+            res.render('task', {avatarSrc, date: date.newDateTopBar(), greeting: getGreeting(), tasks, user: req.user, allUsers, person: 'assignedBy'})
     }catch(err){
         res.send(err);
     }
@@ -18,7 +18,7 @@ module.exports.assignedBy = async (req, res)=>{
 module.exports.assignedTo = async (req, res)=>{
     try{
             const avatarSrc = "data:image/png;base64," + req.user.avatar.toString("base64");
-            const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
+            const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy assingnedTo')
             // console.log(tasks)
             const allUsers = await User.find({})
             res.render('task', {avatarSrc: avatarSrc, date: date.newDateTopBar(), greeting: getGreeting(), tasks, user: req.user, allUsers, person: 'assignedTo'});

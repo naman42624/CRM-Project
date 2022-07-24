@@ -17,11 +17,15 @@
   <% } else if(user.role === "Admin"){ %>
     <%- include('admin/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "Branch Manager"){ %>
-    <%- include('branchmanager/sidebar',{user, avatarSrc})  -%>
+    <%- include('branchManager/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "SOP Team"){ %>
-    <%- include('sopteam/sidebar',{user, avatarSrc})  -%>
+    <%- include('sopTeam/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "Filing Team"){ %>
-    <%- include('filingteam/sidebar',{user, avatarSrc})  -%>
+    <%- include('filingTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Interview Team"){ %>
+      <%- include('interviewTeam/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Application Team"){ %>
+      <%- include('applicationTeam/sidebar',{user, avatarSrc})  -%>
   <% } %>
 
     <div class="flex-grow-1 whole-body">

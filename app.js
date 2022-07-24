@@ -2,24 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const connectDB = require("./src/config/db");
-// const date = require("./src/config/utilities/date");
-// const getGreeting = require("./src/config/utilities/greeting");
 
-// Dates
-// const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");
-// const today = new Date().toLocaleDateString("en-GB");
-  
-// Models
-// const Lead = require("./src/models/leadModel");
-// const {User} = require("./src/models/userModel");
-// const Task = require("./src/models/task");
-// const Tellecaller = require("./src/models/tellecallerModel");
-// const {Followup} = require("./src/models/followupModel");
-// const Foe = require("./src/models/foe");
-
-
-// Library for utility functions for general tasks
-const _ = require('lodash');
 
 // Passport config
 const session = require('express-session');
@@ -32,6 +15,14 @@ const userRoutes = require("./src/routes/userRoutes");
 const telleRoutes = require("./src/routes/telleRoutes");
 const counsellorRoutes = require("./src/routes/counsellorRoutes");
 const foeRoutes = require("./src/routes/foeRoutes");
+const enrolledRoutes = require("./src/routes/enrolledRoutes");
+const filingTeamRoutes = require("./src/routes/filingTeamRoutes.js");
+const applicationTeamRoutes = require("./src/routes/applicationTeamRoutes");
+const sopTeamRoutes = require("./src/routes/sopTeamRoutes");
+const interviewTeamRoutes = require("./src/routes/interviewTeamRoutes");
+
+// middlewares
+const auth = require("./src/middlewares/auth");
 
 const app = express();
 
@@ -49,11 +40,8 @@ app.use(session({
 // TO initialize passport and use session
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(passport.authenticate('local'));
 
 connectDB();
-
-const enrolledRoutes = require("./src/routes/enrolledRoutes");
 
 
 app.use("/user", userRoutes);
@@ -61,6 +49,39 @@ app.use("/tellecaller", telleRoutes);
 app.use("/counsellor", counsellorRoutes);
 app.use("/enrolled", enrolledRoutes);
 app.use("/foe", foeRoutes);
+app.use("/filingTeam", filingTeamRoutes);
+app.use("/applicationTeam", applicationTeamRoutes);
+app.use("/sopTeam", sopTeamRoutes);
+app.use("/interviewTeam", interviewTeamRoutes);
+
+
+// Respective Dashboard Routes
+app.get('/',auth ,(req,res)=>{
+    if(req.user.role === "TelleCaller"){
+        res.redirect("/tellecaller");
+    }
+    else if(req.user.role === "Counsellor"){
+        res.redirect("/counsellor");
+    }
+    else if(req.user.role === "FOE"){
+        res.redirect("/foe");
+    }
+    else if(req.user.role === "Branch Manager"){
+        res.redirect("/branchManager");
+    }
+    else if(req.user.role === "SOP Team"){
+        res.redirect("/sopTeam");
+    }
+    else if(req.user.role === "Filing Team"){
+        res.redirect("/filingTeam");
+    }
+    else if(req.user.role === "Application Team"){
+        res.redirect("/applicationTeam");
+    }
+    else if(req.user.role === "Interview Team"){
+        res.redirect("/interviewTeam");
+    }
+})
 
 // 403 error page - unauthorized access
 app.get("/403", (req, res) => {

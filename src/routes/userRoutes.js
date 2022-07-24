@@ -7,10 +7,10 @@ const sharp = require("sharp");
 const auth = require("../middlewares/auth");
 const upload = require("../middlewares/avatarUpload");
 
-// For email verification
-const nodemailer = require("nodemailer");
+// For email verification 
+require("../config/transporter");
 const bcrypt = require("bcrypt");
-const { v4: uuidv4 } = require('uuid');
+const sendEmail = require("../config/sendEmail");
 
 // models
 const Tellecaller = require("../models/tellecallerModel");
@@ -35,61 +35,6 @@ passport.deserializeUser(function(id, done){
     });
 });
 
-let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD
-    }
-});
-
-const sendEmail = async (user) => {
-    const token = uuidv4() + user.id;
-    const url = "http://localhost:3000/user/verify/" + user.id + "/" + token;
-
-    const hashedToken = await bcrypt.hash(token, 10);
-        const userVerification = new UserVerification({
-            userId: user.id,
-            token: hashedToken,
-            createdAt: new Date(),      
-            expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000)
-        });
-        userVerification.save((err)=>{
-                if(err){
-                    console.log(err);
-                    res.redirect("/500");
-                }
-                else{
-                    console.log("User verification saved")
-                }
-            });
-            const resendUrl = "http://localhost:3000/user/resend/" + user.id + "/" + user.email; 
-
-    let mailOptions = {
-        from: 'Bells Overseas <'+process.env.EMAIL+'>',
-        to: user.email,
-        subject: "Verify your Bells Overseas Email Address",
-        html: `<h1>Verify your email</h1>
-                <h2>Hi ${user.name},</h2>
-                <p>Thanks for signing up to Bells Overseas!</p>
-                <p>Please click on the link below to verify your email and proceed further.</p>
-                <a href=${url}><button style="background-color:green;">Verify</button></a>
-                <br>
-                <p> This link will expire after <b style="color:red;">2 hours</b>. To request another verification link, please click <a href=${resendUrl}>here</a>.</p>
-                <p>If you did not sign up to <b>Bells Overseas</b>, please ignore this email.</p>
-                <p>Regards,</p>
-                <p>Bells Overseas.</p>
-                `
-    };
-    transporter.sendMail(mailOptions, function(err, info){
-        if(err){
-            console.log(err);
-            res.redirect("/500");
-        } else {
-            console.log("Email sent: " + info.response);
-        }
-    });
-}
 
 // @route   GET /user/verify/:id/:token
 // @desc    Verify user email and redirect to dashboard
@@ -112,6 +57,12 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
                             }
                             else if(user){
                                 user.isVerified = true;
+                                UserVerification.findOneAndDelete({userId: id}, (err)=>{
+                                    if(err){
+                                        console.log(err);
+                                        res.redirect("/500");
+                                    }
+                                });
                                 user.save((err)=>{
                                     if(err){
                                         console.log(err);
@@ -120,7 +71,7 @@ router.get("/verify/:id/:token", auth, (req, res)=>{
                                     else{
                                         console.log("User logged in");
                                         if(user.role === "TelleCaller"){
-                                            res.redirect("/telecaller/");
+                                            res.redirect("/tellecaller/");
                                         }
                                         else if(user.role === "Counsellor"){
                                             res.redirect("/counsellor/");
@@ -231,6 +182,7 @@ router.post("/register" , function(req, res){
             passport.authenticate("local")(req, res, function(err){
                 if(err){
                     console.log(err);
+                    res.redirect("/500");
                 }
                 else{
                     console.log("User logged in");
@@ -261,13 +213,14 @@ router.post("/uploadAvatar", auth ,upload.single("avatar"), async function(req, 
 // Delete avatar
 router.post("/deleteAvatar", auth, async function(req, res){
     try{
-        req.user.avatar = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp";
+        req.user.avatar = "https://freesvg.org/img/winkboy.png";
         await req.user.save();
         console.log(req.user);
         res.redirect("/user/profile");
     }
     catch(err){
-        res.status(500).send(err);
+        console.log(err);
+        res.redirect("/500");
     }
 });
 
@@ -286,28 +239,28 @@ router.post("/login", function(req, res){
             passport.authenticate("local")(req, res, function(){ // this middleware invokes req.login() to login the newly registered automatically and also creates the cookie with the session
                  //creates the cookie for the session to allow user to access all pages that requires authentication
                 if(req.user.role === "TelleCaller"){
-                    res.redirect("/tellecaller");
+                    res.redirect("/tellecaller/");
                 }
                 else if(req.user.role === "Counsellor"){
-                    res.redirect("/counsellor");
+                    res.redirect("/counsellor/");
                 }
                 else if(req.user.role === "FOE"){
-                    res.redirect("/foe");
+                    res.redirect("/foe/");
                 }
                 else if(req.user.role === "Branch Manager"){
-                    res.redirect("/branchManager");
+                    res.redirect("/branchManager/");
                 }
                 else if(req.user.role === "SOP Team"){
-                    res.redirect("/sopTeam");
+                    res.redirect("/sopTeam/");
                 }
                 else if(req.user.role === "Filing Team"){
-                    res.redirect("/filingTeam");
+                    res.redirect("/filingTeam/");
                 }
                 else if(req.user.role === "Application Team"){
-                    res.redirect("/applicationTeam");
+                    res.redirect("/applicationTeam/");
                 }
                 else if(req.user.role === "Interview Team"){
-                    res.redirect("/interviewTeam");
+                    res.redirect("/interviewTeam/");
                 }
             });
         }

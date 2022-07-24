@@ -13,43 +13,41 @@ const {User} = require("../models/userModel");
 const Task = require("../models/taskModel");
 const {Followup} = require("../models/followupModel");
 
+// Middlewares
 const auth = require("../middlewares/auth");
+const telleAuth = require("../middlewares/telleAuth");
+const isVerified = require("../middlewares/isVerified");
 
 // Controllers
 
 // Library for utility functions for general tasks
 const _ = require('lodash');
 
+
 // Dashboard
-router.get("/", auth , async function(req, res){
+router.get("/", auth, telleAuth, isVerified, async function(req, res){
     // console.log(req.user);
     // console.log(req.session);
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
-    const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
-        Lead.find({telleFollowUpDate: today}, function(err, leads){
-            if(err){
-                console.log(err);
-                res.redirect("/500");
-            } else {
-                const leadsToday = leads.length;
-                 Lead.countDocuments({status: "Hot"}, function(err, hotLeads){
-                    if(err){
-                        console.log(err);
-                        res.redirect("/500");
-                    } else {
-                        res.render("tellecaller/Telle-dashboard", {avatarSrc: avatarSrc, taskCount, tasks, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
-                    }
-                });
-            }
-        })
+    try {
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
+        const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
+        const leads = await Lead.find({telleFollowUpDate: today})
+        const leadsToday = leads.length;
+        const hotLeads = await Lead.countDocuments({status: "Hot"});
+        res.render("tellecaller/Telle-dashboard", {avatarSrc: avatarSrc, taskCount, tasks, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting()});
+                     
+    } catch (error) {
+        console.log(error);
+        res.status(500).redirect("/500");
+    }
 });
 
 
 
 // Leads section
-router.get("/Telle-leads", auth, async function(req, res){
+router.get("/Telle-leads", auth, telleAuth, async function(req, res){
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -64,95 +62,83 @@ router.get("/Telle-leads", auth, async function(req, res){
 });
 
 // All Followups
-router.get("/allFollowups", auth, function(req, res){
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    Followup.find({followupBy: user._id}, function(err, followups){
-        if(err){
-            console.log(err);
-            res.redirect("/500");
-        } else {
-            res.render("allFollowups", {avatarSrc: avatarSrc, user: user, followups: followups, date: date.newDateTopBar(), greeting: getGreeting()});
-        }
-    }).populate("lead followupBy");
+router.get("/allFollowups", auth, async function(req, res){
+    try {
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const followups = await Followup.find({followupBy: user._id}).populate("lead followupBy");
+        res.render("allFollowups", {avatarSrc, user, followups, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // Hot leads and cold leads list for Telle-leads
-router.get("/Telle-leads/:status", auth, function(req, res){
-    const status = _.capitalize(req.params.status);
-    // console.log(status);
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    if(status === "All"){
-        Lead.find({}, function(err, leads){
-            if(err){
-                console.log(err);
-                res.redirect("/500");
-            } else {
-                const count = leads.length;
-                res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
-            }
-        });
-    }
-    else {
-        Lead.find({status: status}, function(err, leads){
-            if(err){
-                console.log(err);
-                res.redirect("/500");
-            } else
-            if(leads) {
-                const count = leads.length;
-                res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
-            }
-        });
+router.get("/Telle-leads/:status", auth, telleAuth, async function(req, res){
+    try {
+        const status = _.capitalize(req.params.status);
+        // console.log(status);
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        if(status === "All"){
+            const leads = await  Lead.find({});
+            const count = leads.length;
+            res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
+        }
+        else {
+            const leads = await  Lead.find({status: status});
+            const count = leads.length;
+            res.render("tellecaller/Telle-leadsList", {count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting()});
+        }
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
     }
 });
 
 // Individual lead page for Telle-leads
-router.get("/leads/:id", auth, async function(req, res){ 
+router.get("/leads/:id", auth, telleAuth, async function(req, res){ 
     try {
         const id = req.params.id;
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
         const counsellors = await User.find({role: "Counsellor"});
-        Lead.findById(id, function(err, lead){
-            if(err){
-                console.log(err);
-            } else
-            if(lead) {
-                res.render("tellecaller/Telle-lead", {avatarSrc: avatarSrc, user: user, counsellors, lead: lead, date: date.newDateTopBar(), greeting: getGreeting()});
-            }
-        }).populate("counsellor");
+        const lead = await Lead.findById(id).populate("counsellor");
+        res.render("tellecaller/Telle-lead", {avatarSrc, user, counsellors, lead, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch (error) {
         console.log(error);
         res.redirect("/500");
     }
-    
 });
 
-router.get("/Telle-reports", auth, function(req, res){
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    res.render("tellecaller/Telle-reports", {avatarSrc, user, date: date.newDateTopBar(), greeting: getGreeting()});
+router.get("/Telle-reports", auth, telleAuth, async function(req, res){
+    try {
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        res.render("tellecaller/Telle-reports", {avatarSrc, user, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // Followups for a lead
-router.get("/leads/:id/followups", auth, function(req, res){
-    const id = req.params.id;
-    const user = req.user;
-    const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-    Followup.find({lead: id}, function(err, followups){
-        if(err){
-            console.log(err);
-            res.redirect("/500");
-        } else {
-            res.render("tellecaller/Telle-followup", {avatarSrc: avatarSrc, user: user, followups: followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()});
-        }
-    }).populate("lead followupBy");
+router.get("/leads/:id/followups", auth, async function(req, res){
+    try {
+        const id = req.params.id;
+        const user = req.user;
+        const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const followups = await Followup.find({lead: id}).populate("lead followupBy");
+        res.render("tellecaller/Telle-followup", {avatarSrc, user, followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting()});
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
 // Update details of a lead from individual lead page and leads list page
-router.post("/:Frompage/leads/:id", auth, function(req, res){
+router.post("/:Frompage/leads/:id", auth, telleAuth, function(req, res){
     // console.log(req.body);
     const id = req.params.id;
     console.log(id);
@@ -168,6 +154,7 @@ router.post("/:Frompage/leads/:id", auth, function(req, res){
                 newfollowup.save();
             } else {
                 followup.comments = req.body.comments;
+                followup.followupBy = req.user._id;
                 followup.save();
             }
         });
@@ -195,14 +182,19 @@ router.post("/:Frompage/leads/:id", auth, function(req, res){
 })
 
 // Adding a new lead from telle-leads list page
-router.post("/Telle-leadsList", auth, function(req, res){
-    console.log(req.body);
-    const lead = new Lead(req.body);
-    lead.save();
-    res.redirect("/Telle-leads/" + req.body.status);
+router.post("/Telle-leadsList", auth, telleAuth, async function(req, res){
+    try {
+        console.log(req.body);
+        const lead = new Lead(req.body);
+        await lead.save();
+        res.redirect("/Telle-leads/" + req.body.status);
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
 });
 
-router.post("/callResponse/:id", auth, function(req, res){
+router.post("/callResponse/:id", auth, telleAuth, function(req, res){
     console.log(req.body);
     const id = req.params.id;
     const callResponse = req.body.callResponse;
@@ -224,6 +216,7 @@ router.post("/callResponse/:id", auth, function(req, res){
             newfollowup.save();
         } else {
             followup.call = callResponse;
+            followup.followupBy = req.user.id;
             followup.save();
         }
     });
@@ -247,8 +240,6 @@ router.post("/callResponse/:id", auth, function(req, res){
         }
     });
 });
-
-// Task routes
 
 
 module.exports = router;

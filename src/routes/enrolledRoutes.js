@@ -17,27 +17,6 @@ const Application = require("../models/applicationModel");
 const EnrolledLead = require("../models/enrolledLeadModel");
 
 // Status Array
-const statusArray = new Map(
-    [   ["Enrolled", 1],
-        ["Application Sent", 2],
-        ["Application Applied", 3],
-        ["Offer Letter Recieved", 4],
-        ["Offer Letter Rejected", 5],
-        ["Document Requested By Institution", 6],
-        ["Partial Fee Paid", 7],
-        ["Full Fee Paid", 7],
-        ["Document Requested for Filing", 8],
-        ["Visa File Processing", 9],
-        ["Visa Approved", 10],
-        ["Visa Rejected", 10],
-        ["Biometrics Done", 11],
-        ["Withdrawn", 12],
-        ["Completed", 13],
-        ["Cancelled", 14],
-        ["Pending", 15]
-    ]
-);
-
 
 // Dates
 const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");
@@ -49,6 +28,7 @@ const getGreeting = require("../config/utilities/greeting");
 // middlewares
 const auth = require("../middlewares/auth");
 const counsAboveAuth = require("../middlewares/counsAboveAuth");
+const { log } = require("console");
 
 router.use(methodOverride("_method")); // for put and delete requests of files in forms (to update and delete) 
 
@@ -88,6 +68,8 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 // Routes
+
+// Apply for applications
 router.get("/application/:enrolledId/applyTo", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
@@ -100,6 +82,7 @@ router.get("/application/:enrolledId/applyTo", auth, counsAboveAuth, async (req,
     }
 });
 
+// Submit application
 router.post('/application/:enrolledId/applyTo', auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
@@ -117,35 +100,91 @@ router.post('/application/:enrolledId/applyTo', auth, counsAboveAuth, async (req
     }
 });
 
+// Applied Application List
 router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
         const applications = await Application.find({ enrolledLead: enrolledId });
-        const displayApplication = await Application.findById(req.params.applicationId).populate('comments.writtenBy sop');
-        res.render("enrolled/individual/applicationApplied" , {displayApplication, applications, enrolledId, enrolledLead});
+        const displayApplication = await Application.findById(req.params.applicationId).populate('comments.writtenBy sop affidavit offerLetter partialFeeReceipt fullFeeReceipt fileLodgedConfirmation passportLetter passportRejection');
+        res.render("enrolled/individual/applicationApplied" , {displayApplication, applications, enrolledId, enrolledLead, user: req.user});
+    }
+     catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+});
+
+// Update any field of application
+router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        console.log(req.body);
+        if(Object.keys(req.body).length) {
+            if(req.body.allDocumentsVerified)
+            req.body.allDocumentsVerified="checked";
+        }else{
+            console.log("no body");
+            req.body.allDocumentsVerified="unchecked";
+        }
+        if(req.body.status.includes("Offer Letter")){
+            req.body.offerLetterStatus = req.body.status;
+        }
+        if(req.body.status.includes("Fee")){
+            req.body.paymentStatus = req.body.status;
+        }
+        const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId, req.body);
+        res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
     } catch (error) {
         console.log(error);
         res.redirect("/500");
     }
 });
 
-// router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
-//     try {
-//         const enrolledId = req.params.enrolledId;
-//         const enrolledLead = await EnrolledLead.findById(enrolledId);
-//         const applications = await Application.find({ enrolledLead: enrolledId });
-//         const status = {
-//             name: req.body.status,
-//             value
-//         };
-//         const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId, req.body);
-//         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
-//     } catch (error) {
-//         console.log(error);
-//         res.redirect("/500");
-//     }
-// });
+// Add documents requested by institution
+router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        if(req.params.requestedBy === "documentsRequestedByInstitution"){
+            const oldApplication = await Application.findById(req.params.applicationId);
+            const application = await Application.findOne({_id: req.params.applicationId}).select({documentsRequestedByInstitution: {$elemMatch: {id: req.body.id} } });
+            console.log(application);
+            console.log(application.documentsRequestedByInstitution);
+            if(application.documentsRequestedByInstitution.length){
+                oldApplication.documentsRequestedByInstitution[req.body.id-1] = req.body;
+                application.documentsRequestedByInstitution = oldApplication.documentsRequestedByInstitution;
+                }
+                else {
+                    oldApplication.documentsRequestedByInstitution.push(req.body);
+                    application.documentsRequestedByInstitution = oldApplication.documentsRequestedByInstitution;
+                }
+            await Application.findByIdAndUpdate(req.params.applicationId, application);
+            console.log(application);
+            res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+        }
+        if(req.params.requestedBy === "documentsRequestedForFiling"){
+            const oldApplication = await Application.findById(req.params.applicationId);
+            const application = await Application.findOne({_id: req.params.applicationId}).select({documentsRequestedForFiling: {$elemMatch: {id: req.body.id} } });
+            console.log(application);
+            console.log(application.documentsRequestedForFiling);
+            if(application.documentsRequestedForFiling.length){
+                oldApplication.documentsRequestedForFiling[req.body.id-1] = req.body;
+                application.documentsRequestedForFiling = oldApplication.documentsRequestedForFiling;
+                }
+                else {
+                    oldApplication.documentsRequestedForFiling.push(req.body);
+                    application.documentsRequestedForFiling = oldApplication.documentsRequestedForFiling;
+                }
+            await Application.findByIdAndUpdate(req.params.applicationId, application);
+            console.log(application);
+            res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+        }
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+
+})
 
 // save comments
 router.post("/application/:enrolledId/applied/:applicationId/comment", auth, counsAboveAuth, async (req, res) => {
@@ -166,6 +205,30 @@ router.post("/application/:enrolledId/applied/:applicationId/comment", auth, cou
         res.redirect("/500");
     }
 });
+
+// toggle checkbox of show student comments
+router.post("/application/:enrolledId/applied/:applicationId/comment/:commentId", auth, counsAboveAuth, async (req, res) => {
+    try {
+        const enrolledId = req.params.enrolledId;
+        const displayApplication = await Application.findById(req.params.applicationId);
+        const comment = displayApplication.comments.id(req.params.commentId);
+        if(req.body.showToStudent === "on"){
+            comment.showToStudent = "checked";
+        }
+        else{
+            comment.showToStudent = "unchecked";
+        }
+        displayApplication.save();
+        res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+});
+
+
+
+
 
 // Profile Page
 router.get("/profile/:enrolledId", auth, counsAboveAuth, async (req, res) => {
@@ -250,7 +313,7 @@ router.post("/checkbox/:enrolledId/:name", auth, counsAboveAuth, (req, res) => {
         else
         if(document){
             console.log(document);
-            if(document.documentName.includes("sop")){
+            if(document.documentName.includes("sop")||document.documentName.includes("offerLetter")||document.documentName.includes("feeReceipt")||document.documentName.includes("affidavit")||document.documentName.includes("fileLodgedConfirmation")||document.documentName.includes("passportLetter")||document.documentName.includes("passportRejection")){
                 res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
             } else {
                 res.redirect("/enrolled/document/" + req.params.enrolledId);
@@ -272,10 +335,10 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
         uploadedBy: req.user.id
     }
     console.log(req.file);
-    let sopName;
-    if(req.params.name === "sop"){
-        req.params.name = "sop"+new Date();
-        sopName = req.params.name;
+    let appDoc;
+    if(req.params.name === "sop"||req.params.name === "offerLetter"||req.params.name === "fullFeeReceipt"||req.params.name === "partialFeeReceipt"||req.params.name === "affidavit"||req.params.name === "fileLodgedConfirmation"||req.params.name === "passportLetter"||req.params.name === "passportRejection"){
+        appDoc = req.params.name;
+        req.params.name = req.params.name+new Date();
     }
     Document.findOne({enrolledLead: req.params.enrolledId, documentName: req.params.name}, (err, doc) => {
         if(err){
@@ -298,8 +361,8 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                 doc.files.push(file);
                 doc.save((err) => {
                     if(err){
-                        res.redirect("/500");
                         console.log(err);
+                        res.redirect("/500");
                     }
                     else{
                         if(doc.documentName === "sop"){
@@ -315,7 +378,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                     documentName: req.params.name,
                     enrolledLead: req.params.enrolledId,
                 });
-                if(newDoc.documentName === sopName){
+                if(newDoc.documentName.includes("sop")){
                     Application.findById(req.body.appId, function(err, application){
                         if(err){
                             console.log(err);
@@ -326,6 +389,14 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                         }
                     });
                 }
+                else{
+                    Application.findByIdAndUpdate(req.body.appId, {[appDoc]: newDoc._id}, function(err, application){
+                        if(err){
+                            console.log(err);
+                            res.redirect("/500");
+                        }
+                    });
+                }
                 newDoc.files.push(file);
                 newDoc.save((err)=>{
                     if(err){
@@ -333,7 +404,7 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
                         res.redirect("/500");
                     }
                     else{
-                        if(newDoc.documentName === sopName){
+                        if(newDoc.documentName.includes(appDoc)){
                             res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
                         } else {
                             res.redirect("/enrolled/document/" + req.params.enrolledId);
@@ -364,17 +435,6 @@ router.delete("/file/:enrolledId/:docName/:fileId", auth, counsAboveAuth, (req, 
                 else
                 if(document){
                     console.log(document);
-                    // if(document.documentName.includes("sop")){
-                    //     Application.findByIdAndUpdate(req.body.appId, {$pull: {sop: document._id}}, function(err, application){
-                    //         if(err){
-                    //             console.log(err);
-                    //             res.redirect("/500");
-                    //         }
-                    //         else{
-                    //             res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.body.appId);
-                    //         }
-                    //     });
-                    // }
                     res.redirect("/enrolled/document/" + req.params.enrolledId);
                 }
                 else{

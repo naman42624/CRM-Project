@@ -1,0 +1,171 @@
+<%- include('../partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+<link rel="stylesheet" href="/css/Telle-dashboard.css">
+
+</head>
+<body>
+  
+    <%- include('sidebar',{user, avatarSrc})  -%> 
+
+<div class="flex-grow-1 whole-body">
+
+    <%- include('../partials/topbar',{date, greeting})  -%>
+    
+    <div class="container-fluid main-body mt-0 p-3 h-100">
+        <div class="row">
+            <div class="col-md-6 m-0">
+                <div class="fs-2 breadcrumbForLeads">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/sopTeam" class="text-decoration-none text-dark">Dashboard</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-md-6">
+               
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-md-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span class="text-dark dashboard-count fs-3 fw-bold"><%= taskCount %></span>
+                            <span class="text-dark text-center lh-sm fs-5 pt-2">Total Pending Tasks</span>
+                        </div>
+                    </div>
+                    <div class="card-footer border-success bg-success bg-opacity-50">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span class="text-muted"><a href="/user/task" class="text-decoration-none text-muted"> View Detailed Report <i class="fa-solid fa-angles-right"></i></a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-primary">
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <span class="text-dark dashboard-count fs-3 fw-bold"><%= applicationsCount %></span>
+                            <span class="text-dark text-center lh-sm fs-5 pt-2">Pending Applicatons</span>
+                        </div>
+                    </div>
+                    <div class="card-footer border-primary bg-primary bg-opacity-50">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span class="text-muted"><a href="/sopTeam/manageApplications" class="text-decoration-none text-muted"> View Detailed Report <i class="fa-solid fa-angles-right"></i></a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-5">
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="card-title fs-5 fw-bold">Tasks</span>
+                        <a href="/user/task" class="text-decoration-none text-dark"><i class="fa-solid fa-angles-right h-100"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Task</th>
+                                        <th>Status</th>
+                                        <th>Assigned By</th>
+                                        <th>Due Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let i = 0; i < tasks.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <a href="#" class="text-decoration-none text-dark">
+                                                    <span class="text-muted"><%= tasks[i].name %></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <span class="badge text-danger fs-6 opacity-50"><%= tasks[i].completed %></span>
+                                            </td>
+                                            <td>
+                                                <span class="text-muted"><%= tasks[i].assingnedBy.name %></span>
+                                            </td>
+                                            <td>
+                                                <% const cDate = new Date(tasks[i].dueDate).toLocaleDateString("en-GB") %>
+                                                <span class="text-muted"><%= cDate %></span>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="card-title fs-5 fw-bold">Applications</span>
+                        <a href="/sopTeam/manageApplications" class="text-decoration-none text-dark"><i class="fa-solid fa-angles-right h-100"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Program</th>
+                                        <th>University</th>
+                                        <th>Intake</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% applications.forEach(function(application) { %> 
+                                    <tr>
+                                        <td>
+                                            <a href="/enrolled/application/<%= application.enrolledLead._id%>/applied/<%= application._id%>" class="text-decoration-none text-dark">
+                                                <span class="text-muted"><%= application.enrolledLead.name %></span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge text-muted fs-6 opacity-50"><%= application.program %></span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted"><%= application.institution  %></span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted"><%= application.intake %></span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted"><%= application.status %></span>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+                        
+
+</div>
+
+
+<%- include('../partials/footer')  -%>
+
+
+
+</body>
+</html>

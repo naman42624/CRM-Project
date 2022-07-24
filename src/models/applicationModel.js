@@ -36,17 +36,11 @@ const applicationSchema = new mongoose.Schema({
         required: true
     },
     status: {
-        name:  {
-            type: String,
-            trim: true,
-            default: 'Enrolled'
-        },
-        value: {
-            type: Number,
-            default: 1
-        }
+        type: String,
+        trim: true
     },
     interview: Boolean,
+    interviewDate: Date,
     sop: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Document'
@@ -55,9 +49,60 @@ const applicationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Document'
     },
-    payment: String,
+    offerLetterStatus: {
+        type: String,
+        trim: true
+    },
+    partialFeeReceipt: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    fullFeeReceipt: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    affidavit: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    fileLodgedConfirmation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    passportLetter: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    passportRejection: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Document'
+    },
+    interviewRequired: {
+        type: String,
+        default: "No",
+    },
+    sentTo: String,
+    paymentStatus: String,
+    allDocumentsVerified: String,
+    documentsRequestedByInstitution: [{
+        id: String,
+        name: String,
+        dueDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
+    documentsRequestedForFiling: [{
+        id: String,
+        name: String,
+        dueDate: {
+            type: Date,
+            default: Date.now,
+        }
+    }],
     comments: [{
             comment: String,
+            showToStudent: String,
             timestamp: {
                 type: Date,
                 default: Date.now

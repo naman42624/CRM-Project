@@ -14,8 +14,10 @@ const Task = require("../models/taskModel");
 
 // Middlewares
 const auth = require("../middlewares/auth");
+const foeAuth = require("../middlewares/foeAuth");
+const isVerified = require("../middlewares/isVerified");
 
-router.get("/", auth, async function(req, res){
+router.get("/", auth, foeAuth, isVerified, async function(req, res){
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -31,7 +33,7 @@ router.get("/", auth, async function(req, res){
     }
 });
 
-router.get("/reports", auth, function(req, res){
+router.get("/reports", auth, foeAuth, function(req, res){
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -42,7 +44,7 @@ router.get("/reports", auth, function(req, res){
         res.redirect("/500");
     }
 });
-router.get("/allWalkIn", auth, async (req, res) => {
+router.get("/allWalkIn", auth, foeAuth, async (req, res) => {
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -54,7 +56,7 @@ router.get("/allWalkIn", auth, async (req, res) => {
     }
 });
 
-router.get("/leads", auth, async (req, res) => {
+router.get("/leads", auth, foeAuth, async (req, res) => {
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -67,7 +69,7 @@ router.get("/leads", auth, async (req, res) => {
     }
 })
 
-router.post("/addLead", auth, async (req, res) => {
+router.post("/addLead", auth, foeAuth, async (req, res) => {
     try {
         const lead = await Lead.findOne({$or: [{phone: req.body.phone}, {email: req.body.email}]});
         const body ={
@@ -91,7 +93,7 @@ router.post("/addLead", auth, async (req, res) => {
     }
 });
 
-router.get("/leads/:id", auth, async (req, res) => {
+router.get("/leads/:id", auth, foeAuth, async (req, res) => {
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
@@ -105,7 +107,7 @@ router.get("/leads/:id", auth, async (req, res) => {
 });
 
 // Update details of a lead from individual lead page and leads list page
-router.post("/:Frompage/leads/:id", auth, function(req, res){
+router.post("/:Frompage/leads/:id", auth, foeAuth, function(req, res){
     // console.log(req.body);
     const id = req.params.id;
     console.log(id);
@@ -118,14 +120,14 @@ router.post("/:Frompage/leads/:id", auth, function(req, res){
         } else
         if(lead) {
             if(req.params.Frompage === "i"){
-            res.redirect("/leads/" + id);
+            res.redirect("/foe/leads/" + id);
             } 
         }
     });
 });
 
 // Mark walk in of a lead
-router.post("/markWalkIn/:id", auth, async (req, res) => {
+router.post("/markWalkIn/:id", auth, foeAuth, async (req, res) => {
     try {
         let body;
         const lead = await Lead.findById(req.params.id);

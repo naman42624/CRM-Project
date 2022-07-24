@@ -17,15 +17,17 @@
   <% } else if(user.role === "Admin"){ %>
     <%- include('admin/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "Branch Manager"){ %>
-    <%- include('branchmanager/sidebar',{user, avatarSrc})  -%>
+    <%- include('branchManager/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "SOP Team"){ %>
-    <%- include('sopteam/sidebar',{user, avatarSrc})  -%>
+    <%- include('sopTeam/sidebar',{user, avatarSrc})  -%>
   <% } else if(user.role === "Filing Team"){ %>
-    <%- include('filingteam/sidebar',{user, avatarSrc})  -%>
-  <% } %>
+    <%- include('filingTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Interview Team"){ %>
+        <%- include('interviewTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Application Team"){ %>
+        <%- include('applicationTeam/sidebar',{user, avatarSrc})  -%>
+    <% } %>
      
-
-  
 
     <div class="flex-grow-1 whole-body">
         
@@ -38,7 +40,7 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/user/task" class="text-decoration-none text-dark">Tasks</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">List of Tasks (<span class="count">4</span>)</li>
+                                <li class="breadcrumb-item active" aria-current="page">List of Tasks</li>
                             </ol>
                         </nav>
                     </div>
@@ -104,21 +106,21 @@
                             <div class="fs-5 breadcrumbForLeads">
                                 <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedTo" class="text-decoration-none text-dark"> Tasks Assigned To Me</a> (<span class="count">4</span>)    </li>
-                                        <li class="breadcrumb-item" aria-current="page"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedBy" class="text-decoration-none text-dark"> Tasks Assigned By Me</a> (<span class="count">4</span>)</li>
+                                        <li class="breadcrumb-item"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedTo" class="text-decoration-none text-dark"> Tasks Assigned To Me</a> </li>
+                                        <li class="breadcrumb-item" aria-current="page"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedBy" class="text-decoration-none text-dark"> Tasks Assigned By Me</a></li>
                                     </ol>
                                 </nav>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <h3>Pending Tasks</h3>
-                                <table class="table table-hover" id="List" width="100%" cellspacing="0">
+                                <p class="fw-semibold fs-4">Pending Tasks</p>
+                                <table class="table table-hover List" width="100%" cellspacing="0">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Name</th>
                                             <th>Description</th>
-                                            <th><%- person %></th>
+                                            <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
                                             <th>Priority</th>
                                             <th>Due Date</th>
                                             <th>Completed</th>
@@ -128,16 +130,12 @@
                                         <% for(var i = 0; i < tasks.length; i++){ %>
                                             <% if(tasks[i].completed === false){ %>
                                             <tr>
-                                                <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
+                                                <a href="/user/task/<%= person %>/<%= tasks[i]._id %>">
                                                 <td><%= tasks[i].name %></td>
-                                                <td><%= tasks[i].description.toString().slice(0,10) %></td>
-                                                <% if(tasks[i].assingnedBy.name === undefined){ %>
-                                                    <td><%= tasks[i].assingnedTo.name %></td>
-                                                <% } else{ %>
-                                                    <td><%= tasks[i].assingnedBy.name %></td>
-                                                <% } %>
+                                                <td><%= tasks[i].description.toString().slice(0,40) %></td>
+                                                <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
                                                 <td><%= tasks[i].priority %></td>
-                                                <td><%= tasks[i].dueDate %></td>
+                                                <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
                                                 <td><%= tasks[i].completed %></td>
                                             </a>
                                             </tr>
@@ -146,17 +144,15 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
                                        
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <h3>Completed Tasks</h3>
-                                <table class="table table-hover" id="List" width="100%" cellspacing="0">
+                            <div class="mt-2 table-responsive">
+                                <p class="fw-semibold fs-4">Completed Tasks</p>
+                                <table class="table table-hover List" width="100%" cellspacing="0">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Name</th>
                                             <th>Description</th>
-                                            <th><%- person %></th>
+                                            <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
                                             <th>Priority</th>
                                             <th>Due Date</th>
                                             <th>Completed</th>
@@ -168,14 +164,10 @@
                                             <tr>
                                                 <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
                                                 <td><%= tasks[i].name %></td> </a>
-                                                <td><%= tasks[i].description.toString().slice(0,10) %></td>
-                                                <% if(tasks[i].assingnedBy.name === undefined){ %>
-                                                    <td><%= tasks[i].assingnedTo.name %></td>
-                                                <% } else{ %>
-                                                    <td><%= tasks[i].assingnedBy.name %></td>
-                                                <% } %>
+                                                <td><%= tasks[i].description.toString().slice(0,40) %></td>
+                                                <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
                                                 <td><%= tasks[i].priority %></td>
-                                                <td><%= tasks[i].dueDate %></td>
+                                                <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
                                                 <td><%= tasks[i].completed %></td>
                                             </tr>
                                             <% } %> 
@@ -187,10 +179,11 @@
                     </div>
                 </div>
             </div>
-        </div>
                             
 
+        </div>
     </div>
+
 
 <%- include('partials/footer')  -%>
 

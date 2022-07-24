@@ -49,36 +49,78 @@
                 </a>
                 <% }) %>
             </div>
+
+            <!----------------------------- For Role ----------------------------------------- -->
+            <input id="role" type="text" value="<%= user.role %>" hidden>
+            <!-- -------------------------------------------------- ------------------------ -->
+
             <div class="flex-grow-1">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex mb-0 justify-content-between">
-                            <p class="fw-normal text-secondary"><%= (displayApplication.updatedAt).toLocaleDateString("en-GB") %>  <%= (displayApplication.appliedAt).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
+                            <p class="fw-normal text-secondary"><%= (displayApplication.updatedAt).toLocaleDateString("en-GB") %>  <%= (displayApplication.updatedAt).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
                             <!-- status select-->
-                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
+                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="updateStatus" method="post">
                             <div class="d-flex flex-column">
-                                <select class="custom-select border rounded-3 px-2" id="status" name="status" onchange="this.form.submit()">
-                                    <option class="<%= displayApplication.status.value %>" selected><%= displayApplication.status.name %></option>
-                                    <option class="1">Enrolled</option>
-                                    <option class="2">Application Sent</option>
-                                    <option class="3">Application Applied</option>
-                                    <option class="4">Offer Letter Recieved</option>
-                                    <option class="5">Offer Letter Rejected</option>
-                                    <option class="6">Document Requested By Institution</option>
-                                    <option class="7">Partial Fee Paid</option>
-                                    <option class="7">Full Fee Paid</option>
-                                    <option class="8">Document Requested for Filing</option>
-                                    <option class="9">Visa File Processing</option>
-                                    <option class="10">Visa Approved</option>
-                                    <option class="10">Visa Rejected</option>
-                                    <option class="11">Biometrics Done</option>
-                                    <option class="12">Interview Done</option>
-                                    <option class="13">Interview Cleared</option>
-                                    <option class="14">Interview Rejected</option>
-                                    <option class="15">Interview Scheduled</option>
-                                </select>
+                                <select class="custom-select border rounded-3 px-2" name="status" id="currentStatus" value="<%= displayApplication.status %>/<%= displayApplication.paymentStatus %>">
+                                                    <% if(displayApplication.status){ %>
+                                                        <option id="" >
+                                                            <%= displayApplication.status %>
+                                                        </option>
+                                                        <% } %>
+                                                            <option id="enrolled" >Enrolled</option>
+                                                            <option id="applicationSent">
+                                                                Application Sent</option>
+                                                            ------------|
+                                                            <option id="applicationApplied" >
+                                                                Application Applied</option>
+                                                            ------|
+                                                            |-------<option id="offerLetterReceived">Offer Letter Received
+                                                            </option>
+                                                            --------------------------------------------------------------|
+                                                            | only Fee after this---|----<option
+                                                                id="offerLetterRejected" >
+                                                                Offer
+                                                                Letter Rejected</option>
+                                                            --------------------------------------|-e
+                                                            |-----<option id="documentsRequestedByInstitution"
+                                                                >Documents
+                                                                Requested By Institution</option>
+                                                            -------------------------------------|
+                                                            documents can be requested after partial fee
+                                                            document request by filing/sop
+                                                            don't move below before full fee paymentß
+                                                            <option id="partialFeePaid">Partial
+                                                                Fee Paid</option>
+                                                            <option id="fullFeePaid">Full Fee Paid
+                                                            </option>
+                                                            <option id="documentsRequestedByFilingTeam"
+                                                                >Documents
+                                                                Requested By Filing Team</option>
+                                                            <option id="visaFileProcessing" >
+                                                                Visa File Processing</option>
+                                                            <option id="fileLodged">File Lodged
+                                                            </option>
+                                                            <option id="biometricsDone">
+                                                                Biometrics Done</option>
+                                                            <option id="visaApproved">Visa Approved
+                                                            </option>
+                                                            <option id="visaRejected">Visa Rejected
+                                                            </option>
+                                                            <option id="interviewScheduled">
+                                                                Interview Scheduled</option>
+                                                            <option id="interviewDone">Interview
+                                                                Done</option>
+                                                            <option id="interviewCleared">
+                                                                Interview Cleared</option>
+                                                            <option id="interviewRejected">
+                                                                Interview Rejected</option>
+                                                            <option id="studentDrop">
+                                                                Student Drop</option>
+                                                </select>
                             </div>
                             </form>
+                            
                         </div>
                         <p class="fw-bold text-primary"><%= (displayApplication._id).toString().slice(-5) %></p>
                         <h5 class="fs-4 text-muted"><%= displayApplication.program %> </h5>
@@ -87,41 +129,532 @@
                 </div>
                 <div class="card mt-2">
                     <div class="card-body">
-                        <p class="fw-semibold text-warning">Upload the SOP for the current Application here-</p>
-                        
-                        <% if(displayApplication.sop){ %> 
-                            <div class="row mb-3">
-                              <div class="col-md-2 d-flex align-items-center">
-                                <i class="fa-solid fa-paperclip me-2"></i>
-                                <span class="fw-semibold"> Uploaded SOPs:</span>
-                              </div>
-                              <div class="col-md-10">
-                                <div class="hstack gap-3">
-                                  <% displayApplication.sop.forEach(function(document){ %> 
-                                    <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= document.documentName %>" method="post">
-                                        <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                        <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (document)?document.isValid:""; %>  onchange="this.form.submit()">
-                                        <!-- <span class="fw-semibold text-success">Approved</span>  -->
-                                    </form>
-                                  <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
-                                   <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= document.files[0].fileName %>"> <%= document.files[0].originalFileName %></a>
-                                   <!-- <form action="/enrolled/file/<%= enrolledLead._id %>/<%= document.documentName %>/<%= document.files[0].fileId %>?_method=DELETE"  method="POST"> 
-                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i class="text-danger fa-solid fa-xmark"></i></button>
-                                    </form> -->
-                                  </div> 
-                                  <% }) %>
+
+                        <div class="applicationSent box" data-status="Application Sent">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.sentTo)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
+                                <div class="row mt-2">
+                                    <div class="col-md-2"><p class="mt-2 text-end">Sent To:</p></div>
+                                    <div class="col-md-8 pt-1"><input type="text" class="form-control" name="sentTo" placeholder="Sent To" value="<%= displayApplication.sentTo %>"></div>
+                                    <div class="col-md-2 d-flex justify-content-between align-items-center"><button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-floppy-disk-circle-arrow-right"></i> Submit</button></div>
+                                    
                                 </div>
-                              </div>
+                                
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" data-status="Application Applied">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="offerLetterReceived box" data-status="Offer Letter Received">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.offerLetter)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
+                                <span class="fs-semibold">Interview Preparation needed: </span>
+                                <select name="interviewRequired" class="custom-select border rounded-3 px-2">
+                                    <option <%= (displayApplication.interviewRequired==="Yes")?"selected":"" %>>Yes</option>
+                                    <option <%= (displayApplication.interviewRequired==="No")?"selected":"" %>>No</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                            </form>
+                            <p class="fw-semibold text-warning">Upload the Offer Letter received for the current Application here-</p>
+                        
+                            <% if(displayApplication.offerLetter){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Offer Letter:</span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.offerLetter.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.offerLetter)?displayApplication.offerLetter.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.offerLetter.files[0].fileName %>"> <%= displayApplication.offerLetter.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/offerLetter" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" data-status="Offer Letter Rejected">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" id="formTemplate">
+                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/documentsRequestedByInstitution" method="post">
+                                <input type="hidden" name="id" value="">
+                                <div class="row mt-2 mb-2">
+                                    <div class="col-md-3">
+                                        <div class="form-floating ">
+                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required>
+                                            <label class="form-label text-muted" for="form2">Document Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required>
+                                            <label class="form-label text-muted" for="form4">New Due Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
+                                            <label class="form-label text-normal fs-6" for="form5"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="box" data-status="Documents Requested By Institution">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <div id="formList">
+                                <button class="btn btn-sm btn-warning" id="addForm">+ Add Document</button>
+                                <input type="hidden" name="docsLength" id="docsLength" value="<%= displayApplication.documentsRequestedByInstitution.length %>">
+                                <% displayApplication.documentsRequestedByInstitution.forEach(function(doc){ %> 
+                                <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/documentsRequestedByInstitution" id="formTemplate0" method="post">
+                                    <input type="hidden" name="id" value="<%= doc.id %>">
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-3">
+                                            <div class="form-floating ">
+                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required>
+                                                <label class="form-label text-muted" for="form2">Document Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required>
+                                                <label class="form-label text-muted" for="form4">New Due Date</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <!-- <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required> -->
+                                                <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
+                                                <label class="form-label text-normal fs-6" for="form5"><%= (doc.dueDate).toLocaleDateString("en-GB") %></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <% }); %>
                             </div>
-                        <% } %>
-                        <form action="/enrolled/document/<%= enrolledLead._id %>/sop" method="post" enctype="multipart/form-data">
-                            <div class="input-group mb-3">
-                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                <input type="file" class="form-control" id="file" name="file">
-                                <button type="submit" class="input-group-text" for="file">Upload</button>
+                
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+                        <div class="box" id="formTemplateFiling">
+                            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/documentsRequestedForFiling" method="post">
+                                <input type="hidden" name="id" value="">
+                                <div class="row mt-2 mb-2">
+                                    <div class="col-md-3">
+                                        <div class="form-floating ">
+                                            <input type="text" id="form2" name="name" value="" class="form-control" placeholder="Name" required>
+                                            <label class="form-label text-muted" for="form2">Document Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <input type="date" id="form4" name="dueDate" value="" class="form-control" placeholder="Name" required>
+                                            <label class="form-label text-muted" for="form4">New Due Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
+                                            <label class="form-label text-normal fs-6" for="form5"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+            
+
+
+
+                        <div class="box" data-status="Documents Requested By Filing Team">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <div id="formListFiling">
+                                <button class="btn btn-sm btn-warning" id="addFormFiling">+ Add Document</button>
+                                <input type="hidden" name="docsLengthFiling" id="docsLengthFiling" value="<%= displayApplication.documentsRequestedForFiling.length %>">
+                                <% displayApplication.documentsRequestedForFiling.forEach(function(doc){ %> 
+                                <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/documentsRequestedForFiling" id="formTemplateFiling0" method="post">
+                                    <input type="hidden" name="id" value="<%= doc.id %>">
+                                    <div class="row mt-2 mb-2">
+                                        <div class="col-md-3">
+                                            <div class="form-floating ">
+                                                <input type="text" id="form2" name="name" value="<%= doc.name %>" class="form-control" placeholder="Name" required>
+                                                <label class="form-label text-muted" for="form2">Document Name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required>
+                                                <label class="form-label text-muted" for="form4">New Due Date</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <!-- <input type="date" id="form4" name="dueDate" value="<%= doc.dueDate %>" class="form-control" placeholder="Name" required> -->
+                                                <span class="text-muted fs-6 ms-4 pb-2">Due Date</span>
+                                                <label class="form-label text-normal fs-6" for="form5"><%= (doc.dueDate).toLocaleDateString("en-GB") %></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <% }); %>
                             </div>
-                        </form>
+                
+                        </div>
+
+                <!-- ----------------------------------------------- -->
+
+
+                        <div class=" box" data-status="Partial Fee Paid">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.partialFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <p class="fw-semibold text-warning">Upload Fee Receipt received for the current Application here-</p>
+                        
+                            <% if(displayApplication.partialFeeReceipt){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Fee Receipt:</span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.partialFeeReceipt.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.partialFeeReceipt)?displayApplication.partialFeeReceipt.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.partialFeeReceipt.files[0].fileName %>"> <%= displayApplication.partialFeeReceipt.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/partialFeeReceipt" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+                <!-- ----------------------------------------------- -->
+
+                        <div class=" box" data-status="Full Fee Paid">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.fullFeeReceipt)?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <p class="fw-semibold text-warning">Upload Fee Receipt received for the current Application here-</p>
+                        
+                            <% if(displayApplication.fullFeeReceipt){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Fee Receipt:</span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fullFeeReceipt.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fullFeeReceipt)?displayApplication.fullFeeReceipt.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.fullFeeReceipt.files[0].fileName %>"> <%= displayApplication.fullFeeReceipt.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/fullFeeReceipt" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="visaFileProcessing box" data-status="Visa File Processing">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.affidavit&&displayApplication.allDocumentsVerified==="checked")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="allDocsForm" method="post">
+                                <input class="form-check-input" type="checkbox" name="allDocumentsVerified" id="checkAllDocs" <%= (displayApplication.allDocumentsVerified==="checked")?displayApplication.allDocumentsVerified:"unchecked" %>  onchange="this.form.submit()">
+                                <label class="form-check-label" for="checkAllDocs">
+                                    All Required Documents Verified
+                                </label>
+                            </form>
+                            <p class="fw-semibold text-warning">Upload the Affidavit for the current Application here-</p>
+                        
+                            <% if(displayApplication.affidavit){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Affidavit:</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.affidavit.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.affidavit)?displayApplication.affidavit.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.affidavit.files[0].fileName %>"> <%= displayApplication.affidavit.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/affidavit" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+            <!-- ----------------------------------------------- -->
+                        <div class="fileLodged box" data-status="File Lodged">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.sop&&displayApplication.fileLodgedConfirmation)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <p class="fw-semibold text-warning">Upload the SOP for the current Application here-</p>
+                        
+                            <% if(displayApplication.sop){ %> 
+                                <div class="row mb-3">
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <i class="fa-solid fa-paperclip me-2"></i>
+                                    <span class="fw-semibold"> Uploaded SOPs:</span>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="hstack gap-3">
+                                    <% displayApplication.sop.forEach(function(document){ %> 
+                                        <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= document.documentName %>" method="post">
+                                            <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (document)?document.isValid:""; %>  onchange="this.form.submit()">
+                                            <!-- <span class="fw-semibold text-success">Approved</span>  -->
+                                        </form>
+                                    <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= document.files[0].fileName %>"> <%= document.files[0].originalFileName %></a>
+                                    <!-- <form action="/enrolled/file/<%= enrolledLead._id %>/<%= document.documentName %>/<%= document.files[0].fileId %>?_method=DELETE"  method="POST"> 
+                                        <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                        <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i class="text-danger fa-solid fa-xmark"></i></button>
+                                        </form> -->
+                                    </div> 
+                                    <% }) %>
+                                    </div>
+                                </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/sop" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+
+                            <p class="fw-semibold text-warning">Upload the File Lodged Confirmation for the current Application here-</p>
+                        
+                            <% if(displayApplication.fileLodgedConfirmation){ %> 
+                                <div class="row mb-3">
+                                <div class="col-md-2 d-flex align-items-center">
+                                    <i class="fa-solid fa-paperclip me-2"></i>
+                                    <span class="fw-semibold"> Uploaded Confirmation:</span>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="hstack gap-3">
+                                        <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fileLodgedConfirmation.documentName %>" method="post">
+                                            <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                            <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fileLodgedConfirmation)?displayApplication.fileLodgedConfirmation.isValid:""; %>  onchange="this.form.submit()">
+                                        </form>
+                                        <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                            <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.fileLodgedConfirmation.files[0].fileName %>"> <%= displayApplication.fileLodgedConfirmation.files[0].originalFileName %></a>
+                                        </div> 
+                                    </div>
+                                </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/fileLodgedConfirmation" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" data-status="Biometrics Done">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (user.role === 'Filing Team')?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class=" box" data-status="Visa Approved">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportLetter&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                    
+                            <p class="fw-semibold text-warning">Upload the Passport Request Letter for the current Application here-</p>
+                        
+                            <% if(displayApplication.passportLetter){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Passport Letter:</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportLetter)?displayApplication.passportLetter.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.files[0].fileName %>"> <%= displayApplication.passportLetter.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/passportLetter" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class=" box" data-status="Visa Rejected">
+                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportRejection&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                    
+                            <p class="fw-semibold text-warning">Upload the Refusal Letter for the current Application here-</p>
+                        
+                            <% if(displayApplication.passportRejection){ %> 
+                                <div class="row mb-3">
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Refusal Letter:</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="hstack gap-3">
+                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.documentName %>" method="post">
+                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportRejection)?displayApplication.passportRejection.isValid:""; %>  onchange="this.form.submit()">
+                                            </form>
+                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.files[0].fileName %>"> <%= displayApplication.passportRejection.files[0].originalFileName %></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            <form action="/enrolled/document/<%= enrolledLead._id %>/passportRejection" method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="file" class="form-control" id="file" name="file">
+                                    <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" data-status="Interview Scheduled">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate&&displayApplication.interviewRequired==="Yes")?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                            <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" method="post">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input type="date" id="form4" name="interviewDate" value="" class="form-control" placeholder="Name" required>
+                                            <label class="form-label text-muted" for="form4">Interview Scheduled Date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <span class="text-muted fs-6 ms-4 pb-2">Schedule</span>
+                                            <label class="form-label text-normal fs-6" for="form5"><%= (displayApplication.interviewDate)?(displayApplication.interviewDate).toLocaleDateString("en-GB"):"" %></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 d-flex align-items-center">
+                                        <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+            <!-- ----------------------------------------------- -->
+
+                        <div class="box" data-status="Interview Done">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+                        <div class="box" data-status="Interview Cleared">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+                        <div class="box" data-status="Interview Rejected">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end <%= (displayApplication.interviewDate)?"":"disabled" %> "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
+                        <div class="box" data-status="Student Drop">
+                            <div class="d-flex justify-content-end"><button type="submit" class="saveStatus btn btn-sm btn-info text-end  "><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+                            
+                
+                        </div>
+
                     </div>
                 </div>
                 <p class="fs-4 mb-1 mt-3 fw-bold text-secondary">Comments</p>
@@ -136,17 +669,25 @@
                     </form>
                 </div>
                 <% displayApplication.comments.reverse().forEach(function(comment){ %> 
-                <div class="mt-3">
-                    <div class="d-flex mb-0 justify-content-between">
-                        <p class="fw-bold mb-2 text-primary"><%= (comment.writtenBy.name) %></p>
-                        <p class="fw-normal mb-2 text-secondary"><%= (comment.timestamp).toLocaleDateString("en-GB") %>  <%= (comment.timestamp).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
-                    </div>
-                    <div class="card mt-0 bg-secondary">
-                        <div class="card-body">
-                            <p class="fw-normal text-white" style="white-space: pre-line"><%= comment.comment %></p>
+                    <% if ((user.role !== "Student") || (user.role==="Student" && comment.showToStudent === "checked")) { %>
+                        <div class="mt-3">
+                            <div class="d-flex mb-0 justify-content-between">
+                                <p class="fw-bold mb-2 text-primary"><%= (comment.writtenBy.name) %></p>
+                                <form class="mb-2" action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/comment/<%= comment._id %>"  method="post">
+                                    <input class="form-check-input" type="checkbox" name="showToStudent" <%= (comment.showToStudent==="checked")?comment.showToStudent:"unchecked" %>  onchange="this.form.submit()">
+                                    <label class="form-check-label text-muted" for="checkAllDocs">
+                                        Show to Student
+                                    </label>
+                                </form>
+                                <p class="fw-normal mb-2 text-secondary"><%= (comment.timestamp).toLocaleDateString("en-GB") %>  <%= (comment.timestamp).toLocaleTimeString([],{hour: "numeric", minute: "numeric"}) %></p>
+                            </div>
+                            <div class="card mt-0 bg-secondary">
+                                <div class="card-body">
+                                    <p class="fw-normal text-white" style="white-space: pre-line"><%= comment.comment %></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    <% } %>
                 <% }) %>
             </div>
         </div>
