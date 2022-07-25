@@ -66,8 +66,24 @@ const storage = new GridFsStorage({
     }
 });
 const upload = multer({ storage });
-
+const enrolledController = require("../controllers/enrolledController");
 // Routes
+
+// router.get('/manageStudents', auth ,enrolledController.showAllEnrolledUsers);
+router.post('/:id', auth , enrolledController.enroll_post);
+router.get('/get/:id', auth , enrolledController.enroll_get);
+router.post('/save/personal/:id', auth , enrolledController.personal_post);
+router.post('/save/academic/:id', auth , enrolledController.academic_post);
+router.get('/save/academic/:id', auth , enrolledController.academic_get);
+router.post('/save/work/:id', auth , enrolledController.work_post);
+router.get('/save/work/:id', auth , enrolledController.work_get);
+router.post('/save/test/:id', auth , enrolledController.test_post);
+router.get('/save/test/:id', auth , enrolledController.test_get);
+// router.get('/profile/:id', auth , enrolledController.profile);
+// router.get('/document/:enrolledId', auth , enrolledController.document);
+// router.get('/application/:id', auth , enrolledController.application);
+// router.post('/application/:id', auth , enrolledController.applicationSubmit);
+// router.get('/application/list/:id', auth , enrolledController.applicationList);
 
 // Apply for applications
 router.get("/application/:enrolledId/applyTo", auth, counsAboveAuth, async (req, res) => {
@@ -119,7 +135,10 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
 router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
+        const applicationId = req.params.applicationId
+        const application = await Application.findByIdAndUpdate(applicationId, req.body);
         console.log(req.body);
+        if(application){
         if(Object.keys(req.body).length) {
             if(req.body.allDocumentsVerified)
             req.body.allDocumentsVerified="checked";
@@ -127,12 +146,13 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
             console.log("no body");
             req.body.allDocumentsVerified="unchecked";
         }
-        if(req.body.status.includes("Offer Letter")){
+        if(req.body.status === "Offer Letter"){
             req.body.offerLetterStatus = req.body.status;
         }
-        if(req.body.status.includes("Fee")){
+        if(req.body.status === "Fee"){
             req.body.paymentStatus = req.body.status;
         }
+    }
         const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId, req.body);
         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
     } catch (error) {
@@ -230,17 +250,17 @@ router.post("/application/:enrolledId/applied/:applicationId/comment/:commentId"
 
 
 
-// Profile Page
-router.get("/profile/:enrolledId", auth, counsAboveAuth, async (req, res) => {
-    try {
-        const enrolledId = req.params.enrolledId;
-        const enrolledLead = await EnrolledLead.findById(enrolledId);
-        res.render("enrolled/individual/profile" , {enrolledId, enrolledLead});
-    } catch (error) {
-        console.log(error);
-        res.redirect("/500");
-    }
-});
+// // Profile Page
+// router.get("/profile/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+//     try {
+//         const enrolledId = req.params.enrolledId;
+//         const enrolledLead = await EnrolledLead.findById(enrolledId);
+//         res.render("enrolled/individual/profile" , {enrolledId, enrolledLead});
+//     } catch (error) {
+//         console.log(error);
+//         res.redirect("/500");
+//     }
+// });
 
 // Respective Document page route for each Enrolled Lead
 router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {

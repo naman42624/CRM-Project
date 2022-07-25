@@ -21,7 +21,7 @@
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/counsellor/leads" class="text-decoration-none text-dark">Leads</a></li>
-                                <li class="breadcrumb-item"><a href="/counsellor/lead/<%= leadId %>" class="text-decoration-none text-dark"><%= followups[0].lead.name %></a></li>
+                                <li class="breadcrumb-item"><a href="/counsellor/lead/<%= leadId %>" class="text-decoration-none text-dark"><%= lead.name %></a></li>
                                 <li class="breadcrumb-item active" aria-current="page">FollowUps</li>
                             </ol>
                         </nav>
@@ -56,7 +56,7 @@
                                                     <%= followup.time %>
                                                 </td>
                                                 <td><%= followup.call %></td>
-                                                <td><%= (followup.followupBy)?followup.followupBy.name:"" %></td>
+                                                <td><%= (followup.followupBy)?followup.followupBy.name:" " %></td>
                                                 <td><%= followup.comments %></td>
                                             </tr>
                                         <% }); %>

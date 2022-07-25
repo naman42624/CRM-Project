@@ -1,0 +1,155 @@
+<%- include('../../partials/header.ejs') -%>
+
+    <link rel="stylesheet" href="/css/application.css">
+    </head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <script>
+        // $(document).ready(function () {
+        //     $('button').click(function () {
+        //             var $div = $("<div>", { id: "workExp" });
+        //             $('#main').append($div);       
+        //     });
+
+        // });
+        $(document).ready(function () {
+            $(".workExp").hide();
+            var click = 0;
+            $('button').click(function () {
+                click++;
+                if(click>=2){
+                $('#main').append($('.workExp').html())
+                }
+                else{
+                    $('.workExp').show();
+                }
+            })
+
+        })
+    </script>
+
+    <body>
+        <!-- Tab-bar -->
+        <%- include('navBar') -%> 
+        <%- include('tabBar',{enrolledId : enrolledLead._id})  -%>
+                <!-- upload documents -->
+                <div class="p-4">
+                    <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+                        <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                                <thead class="">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Student Url Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <td>
+                                            <%= enrolledLead.name %>
+                                        </td>
+                                        <td>
+                                            <%= enrolledLead.email %>
+                                        </td>
+                                        <td>
+                                            <%= enrolledLead.phone %>
+                                        </td>
+                                        <td>
+                                            <% const cDate1=new
+                                                Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                                <%= cDate1 %>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs nav-fill bg-light">
+                        <li class="nav-item active">
+                            <a class="nav-link fs-4 fw-bold"
+                                href="/enrolled/get/<%= enrolledLead._id %>">Personal Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold"
+                                href="/enrolled/save/academic/<%= enrolledLead._id %>">Academic Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= enrolledLead._id %>">Work
+                                Information</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= enrolledLead._id %>">Test
+                                Information</a>
+                        </li>
+                    </ul>
+                    <div>
+                        <div class="card mb-3 mt-3">
+                            <div class="card-header">
+                                <div class="card-title">
+                        <h3>Work Experience</h3>
+                    </div>
+                </div>
+                        <div id="main" class="card-body">
+                            <div class="workExp">
+                                <form action="/enrolled/save/work/<%= enrolledLead._id %>" method="POST">
+                                    <div class="form-group">
+                                    <label for="companyName">Company Name</label>
+                                    <input type="text" name="companyName" id="companyName"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="jobTitle">Job Title</label>
+                                    <input type="text" name="jobTitle" id="jobTitle"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" name="startDate" id="startDate"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="date" name="endDate" id="endDate"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="workLocation">Location</label>
+                                    <input type="text" name="workLocation" id="workLocation"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="reasonForLeaving">Reason For Leaving</label>
+                                    <input type="text" name="reasonForLeaving" id="reasonForLeaving"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="workanyOtherInformation">Any Other Information</label>
+                                    <input type="text" name="workanyOtherInformation" id="workanyOtherInformation"><br>
+                                    </div><br>
+                                    <div class="submit">
+                                        <input type="submit" value="Save">
+                                    </div>
+                                    <div>
+                                        <button>Edit</button>
+                                    </div><br>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <button>
+                        + Add Work Experience
+                    </button>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            let d = document.getElementById('dob').value;
+                            console.log(d);
+                            let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                            document.getElementById('dob').value = datestring;
+                        })
+                    </script>
+
+
+                    <%- include('../../partials/footer') -%>
+
+    </body>
+
+    </html>

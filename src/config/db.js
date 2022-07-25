@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
     try {
-        await mongoose.connect("mongodb://localhost:27017/DummyCRM");
+        await mongoose.connect("mongodb://localhost:27017/DummyCRM2");
         console.log("Database connected...");
     }   
     catch (err) {

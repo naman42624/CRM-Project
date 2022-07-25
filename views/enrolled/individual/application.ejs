@@ -17,7 +17,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Student Url Link</th>
+                            <th>Student Enrolment Date</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -25,7 +25,11 @@
                             <td><%= enrolledLead.name %> </td>
                             <td><%= enrolledLead.email %></td>
                             <td><%= enrolledLead.phone %></td>
-                            <td><a href="#" class="text-decoration-none text-white">Some link</a></td>
+                            <td>
+                                <% const cDate1=new
+                                    Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                    <%= cDate1 %>
+                            </td>
                           </tr>
                     </tbody>
                 </table>

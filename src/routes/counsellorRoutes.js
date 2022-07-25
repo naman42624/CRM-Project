@@ -35,7 +35,7 @@ router.post("/:Frompage/counsellor/update/:id", auth, counsAboveAuth, counsellor
 router.post("/counsellor-leadsList", auth, counsAboveAuth, counsellorAuth, counsellorController.createLead);
 
 //updating call response
-router.post("/counsellor/callResponse/:id", auth, counsAboveAuth, counsellorAuth, counsellorController.updateCallResponse);
+router.post("/callResponse/:id", auth, counsAboveAuth, counsellorAuth, counsellorController.updateCallResponse);
 
 
 module.exports = router;

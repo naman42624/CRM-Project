@@ -37,7 +37,8 @@ const applicationSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        trim: true
+        trim: true,
+        default: "Enrolled",
     },
     interview: Boolean,
     interviewDate: Date,
@@ -51,7 +52,8 @@ const applicationSchema = new mongoose.Schema({
     },
     offerLetterStatus: {
         type: String,
-        trim: true
+        trim: true,
+        default: "Not Sent",
     },
     partialFeeReceipt: {
         type: mongoose.Schema.Types.ObjectId,

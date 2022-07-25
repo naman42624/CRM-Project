@@ -1,0 +1,120 @@
+<%- include('../../partials/header.ejs') -%>
+
+    <link rel="stylesheet" href="/css/application.css">
+    </head>
+
+    <body>
+   <!-- Tab-bar -->
+   <%- include('navBar') -%> 
+   <%- include('tabBar',{enrolledId : enrolledLead._id})  -%>
+
+   <!-- upload documents -->
+   <div class="p-4">
+    <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+        <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+        <div class="table-responsive">
+            <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                <thead class="">
+                       <tr>
+                           <th>Name</th>
+                           <th>Email</th>
+                           <th>Phone</th>
+                           <th>Student Url Link</th>
+                       </tr>
+                   </thead>
+                   <tbody class="table-group-divider">
+                         <tr>
+                           <td><%= enrolledLead.name %> </td>
+                           <td><%= enrolledLead.email %></td>
+                           <td><%= enrolledLead.phone %></td>
+                           <td>  <% const cDate1=new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                             <%= cDate1 %></td>
+                         </tr>
+                   </tbody>
+               </table>
+           </div>
+       </div>
+
+                <ul class="nav nav-tabs nav-fill bg-light">
+                    <li class="nav-item active">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/get/<%= enrolledLead._id %>">Personal Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/academic/<%= enrolledLead._id %>">Academic Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/work/<%= enrolledLead._id %>">Work Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-4 fw-bold" href="/enrolled/save/test/<%= enrolledLead._id %>">Test Information</a>
+                    </li>
+                </ul>
+                <div class="card mb-3 mt-3">
+                    <div class="card-header">
+                        <div class="card-title">
+<h3>Tests</h3>
+</div>
+</div>
+<div class="card-body">
+                <form action="/enrolled/save/test/<%= enrolledLead._id %>" method="POST">
+                    <div class="form-group">
+                    <label for="testName">Test Name</label>
+                    <input type="text" name="testName" id="testName"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="overallScore">Overall Score</label>
+                    <input type="text" name="overallScore" id="overallScore"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="testDate">Test Date</label>
+                    <input type="date" name="testDate" id="testDate"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="testLocation">Location</label>
+                    <input type="text" name="testLocation" id="testLocation"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="readingScore">Reading Score</label>
+                    <input type="text" name="readingScore" id="readingScore"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="writingScore">Writing Score</label>
+                    <input type="text" name="writingScore" id="writingScore"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="listeningScore">Listening Score</label>
+                    <input type="text" name="listeningScore" id="listeningScore"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="speakingScore">Speaking Score</label>
+                    <input type="text" name="speakingScore" id="speakingScore"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <label for="trfNo">TRF No.</label>
+                    <input type="text" name="trfNo" id="trfNo"><br>
+                    </div><br>
+                    <div class="form-group">
+                    <div class="submit">
+                        <input type="submit" value="Save">
+                    </div><br>
+                    </div>
+                </form>
+                </div>
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        let d = document.getElementById('dob').value;
+                        console.log(d);
+                        let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                        document.getElementById('dob').value = datestring;
+                    })
+                </script>
+                <script>
+                    
+                </script>
+
+                <%- include('../../partials/footer') -%>
+
+    </body>
+
+    </html>

@@ -92,8 +92,9 @@ module.exports.leadFollowUp = async function (req, res) {
         const id = req.params.id;
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
+        const lead = await Lead.findById(id).populate("counsellor");
         const followups = await Followup.find({ lead: id }).populate("lead followupBy");
-        res.render("counsellor/followup", { avatarSrc, user, followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting() });
+        res.render("counsellor/followup", { avatarSrc, user, followups, lead, leadId: id, date: date.newDateTopBar(), greeting: getGreeting() });
 
     } catch (err) {
         console.log(err);
@@ -132,11 +133,11 @@ module.exports.updateLead = async function (req, res) {
         const followup = await Followup.findOne({ lead: id})
         // const nLead = new Lead(req.body)
         const oLead = await Lead.findById(id)
-        if(oLead.status !== req.body.status){
-            req.body.counsellorFollowUps = 0
-        }
         if(req.body.status === "Hot" && req.body.counsellorFollowUps >=1){
             req.body.washot = true
+        }
+        if(oLead.status !== req.body.status){
+            req.body.counsellorFollowUps = 0
         }
         // const  nLead.toJSON()
         const newLead = await Lead.findByIdAndUpdate(id, req.body)
