@@ -27,8 +27,10 @@
                            <td><%= enrolledLead.name %> </td>
                            <td><%= enrolledLead.email %></td>
                            <td><%= enrolledLead.phone %></td>
-                           <td>  <% const cDate1=new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
-                             <%= cDate1 %></td>
+                           <td>
+                                <% const cDate1=new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                <%= cDate1 %>
+                            </td>
                          </tr>
                    </tbody>
                </table>

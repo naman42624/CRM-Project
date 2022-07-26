@@ -24,6 +24,11 @@
                     $('.workExp').show();
                 }
             })
+            // $("input").each(function () {
+            //     if ($(this).attr("value") !== " " && $(this).attr("value") !== "Save") {
+            //         $(this).attr("disabled", true);
+            //     }
+            // });
 
         })
     </script>
@@ -93,7 +98,49 @@
                         <h3>Work Experience</h3>
                     </div>
                 </div>
-                        <div id="main" class="card-body">
+                        <div id=" main" class="card-body">
+                            <% if (workInfo.length > 0) { %>
+                                <% workInfo.forEach((work)=>{ %>
+                            <div>
+                                <form action="/enrolled/save/work/<%= enrolledLead._id %>" method="POST">
+                                    <div class="form-group">
+                                    <label for="companyName">Company Name</label>
+                                    <input type="text" name="companyName" value="<% work.companyName?work.companyName:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="jobTitle">Job Title</label>
+                                    <input type="text" name="jobTitle"  value="<% work.jobTitle?work.jobTitle:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="date" name="startDate" value="<% work.startDate?work.startDate:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="endDate">End Date</label>
+                                    <input type="date" name="endDate" value="<% work.endDate?work.endDate:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="workLocation">Location</label>
+                                    <input type="text" name="workLocation"  value="<% work.workLocation?work.workLocation:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="reasonForLeaving">Reason For Leaving</label>
+                                    <input type="text" name="reasonForLeaving"  value="<% work.reasonForLeaving?work.reasonForLeaving:" " %>"><br>
+                                    </div><br>
+                                    <div class="form-group">
+                                    <label for="workanyOtherInformation">Any Other Information</label>
+                                    <input type="text" name="workanyOtherInformation" value="<% work.workanyOtherInformation?work.workanyOtherInformation:" " %>"><br>
+                                    </div><br>
+                                    <div class="submit">
+                                        <input type="submit" value="Save">
+                                    </div>
+                                    <div>
+                                        <button>Edit</button>
+                                    </div><br>
+                                </form>
+                            </div>
+                            <% }) %>
+                            <% } %>
                             <div class="workExp">
                                 <form action="/enrolled/save/work/<%= enrolledLead._id %>" method="POST">
                                     <div class="form-group">

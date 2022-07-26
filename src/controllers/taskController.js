@@ -41,4 +41,16 @@ module.exports.createTask = async (req, res)=>{
         res.send(err);
     }
 }
+
+module.exports.updateTask = async (req, res)=>{
+    try{
+        const task = await Task.findById(req.params.id)
+        // console.log(task)
+        await task.updateOne(req.body)
+        res.redirect('/user/task')
+        // res.send(task)
+    }catch(err){
+        res.send(err);
+    }
+}
  

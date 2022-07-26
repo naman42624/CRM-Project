@@ -141,17 +141,22 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
         if(application){
         if(Object.keys(req.body).length) {
             if(req.body.allDocumentsVerified)
+            req.body.showStatus="Visa File Processing";
             req.body.allDocumentsVerified="checked";
         }else{
             console.log("no body");
+            req.body.showStatus="Visa File Processing";
             req.body.allDocumentsVerified="unchecked";
         }
+        if(req.body.status){
+            req.body.showStatus=req.body.status;
         if(req.body.status === "Offer Letter"){
             req.body.offerLetterStatus = req.body.status;
         }
         if(req.body.status === "Fee"){
             req.body.paymentStatus = req.body.status;
         }
+    }
     }
         const displayApplication = await Application.findByIdAndUpdate(req.params.applicationId, req.body);
         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
@@ -178,6 +183,7 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
                     oldApplication.documentsRequestedByInstitution.push(req.body);
                     application.documentsRequestedByInstitution = oldApplication.documentsRequestedByInstitution;
                 }
+                application.showStatus = "Documents Requested by Institution";
             await Application.findByIdAndUpdate(req.params.applicationId, application);
             console.log(application);
             res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
@@ -195,6 +201,7 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
                     oldApplication.documentsRequestedForFiling.push(req.body);
                     application.documentsRequestedForFiling = oldApplication.documentsRequestedForFiling;
                 }
+                application.showStatus = "Documents Requested By Filing Team";
             await Application.findByIdAndUpdate(req.params.applicationId, application);
             console.log(application);
             res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
@@ -325,6 +332,17 @@ router.post("/checkbox/:enrolledId/:name", auth, counsAboveAuth, (req, res) => {
     if(req.body.isValid=== "on"){
         valid = "checked";
     }
+    if(req.body.showStatus){
+        const body ={
+            showStatus: req.body.showStatus
+        };
+         Application.findByIdAndUpdate(req.body.appId, body, (err, application) => {
+            if(err){
+                console.log(err);
+                res.redirect("/500");
+            }
+        });
+    }
     Document.findOneAndUpdate({enrolledLead: req.params.enrolledId, documentName: req.params.name}, {isValid: valid}, function(err, document){
         if(err){
             console.log(err);
@@ -356,6 +374,17 @@ router.post("/document/:enrolledId/:name", auth, counsAboveAuth, upload.single("
     }
     console.log(req.file);
     let appDoc;
+    if(req.body.showStatus){
+        const body ={
+            showStatus: req.body.showStatus
+        };
+        Application.findByIdAndUpdate(req.body.appId, body, (err, application) => {
+            if(err){
+                console.log(err);
+                res.redirect("/500");
+            }
+        });
+    }
     if(req.params.name === "sop"||req.params.name === "offerLetter"||req.params.name === "fullFeeReceipt"||req.params.name === "partialFeeReceipt"||req.params.name === "affidavit"||req.params.name === "fileLodgedConfirmation"||req.params.name === "passportLetter"||req.params.name === "passportRejection"){
         appDoc = req.params.name;
         req.params.name = req.params.name+new Date();
@@ -470,7 +499,7 @@ router.get("/manageStudents", auth, counsAboveAuth, async (req, res) => {
     try{
         const user = req.user;
     const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const students = await EnrolledLead.find({}).populate("lead assignedTo enrolledBy");
+        const students = await EnrolledLead.find({assignedTo: req.user._id}).populate("lead assignedTo enrolledBy");
         res.render("enrolled/manageStudents", {students, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
         console.log(err);
@@ -482,7 +511,7 @@ router.get("/manageApplications", auth, counsAboveAuth, async (req, res) => {
     try{
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const applications = await Application.find({}).populate("enrolledLead appliedBy");
+        const applications = await Application.find({appliedBy: req.user._id}).populate("enrolledLead appliedBy");
         res.render("enrolled/manageApplications", {applications, user, avatarSrc, date: date.newDateTopBar(), greeting: getGreeting()});
     } catch(err){
         console.log(err);
@@ -493,6 +522,4 @@ router.get("/manageApplications", auth, counsAboveAuth, async (req, res) => {
 
 
 module.exports = router;
-
-
 

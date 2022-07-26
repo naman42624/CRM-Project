@@ -75,7 +75,7 @@
                           
                         <tr>
                           <td><%= new Date(student.enrollmentDate).toLocaleDateString("en-GB") %></td>
-                          <td><a href="/enrolled/profile/<%= student._id %>" class="text-decoration-none text-dark"><%= student.name %></a></td>
+                          <td><a href="/enrolled/get/<%= student._id %>" class="text-decoration-none text-dark"><%= student.name %></a></td>
                           <td><%= student.email %></td>
                           <td><%= student.phone %></td>
                           <td><%= (student.enrolledBy)?student.enrolledBy.name:"" %></td>

@@ -123,12 +123,12 @@
                                             <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
                                             <th>Priority</th>
                                             <th>Due Date</th>
-                                            <th>Completed</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
                                         <% for(var i = 0; i < tasks.length; i++){ %>
-                                            <% if(tasks[i].completed === false){ %>
+                                            <% if(tasks[i].status !== "Completed"){ %>
                                             <tr>
                                                 <a href="/user/task/<%= person %>/<%= tasks[i]._id %>">
                                                 <td><%= tasks[i].name %></td>
@@ -136,7 +136,35 @@
                                                 <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
                                                 <td><%= tasks[i].priority %></td>
                                                 <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
-                                                <td><%= tasks[i].completed %></td>
+                                                <td><a href="#updateStatus<%= tasks[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateStatus<%= tasks[i]._id %>"><%= tasks[i].status %></a>
+                                                    <div class="modal fade" id="updateStatus<%= tasks[i]._id %>" tabindex="-1" aria-labelledby="updateStatusLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <form action="/user/task/<%= tasks[i]._id %>" method="POST">
+                                                                    <div class="modal-header text-center">
+                                                                        <h5 class="modal-title w-100 fw-semibold" id="updateStatusLabel">Update Status</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body mx-4">
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="status" class="mb-1">New Status</label>
+                                                                                <select class="form-select" name="status" required>
+                                                                                    <option value="">Select Status</option>
+                                                                                    <option value="Completed">Completed</option>
+                                                                                    <option value="In Progress">In Progress</option>
+                                                                                    <option value="Pending">Assigned</option>
+                                                                                </select>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </a>
                                             </tr>
                                             <% } %>
@@ -155,12 +183,12 @@
                                             <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
                                             <th>Priority</th>
                                             <th>Due Date</th>
-                                            <th>Completed</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-group-divider">
                                         <% for(var i = 0; i < tasks.length; i++){ %>
-                                            <% if(tasks[i].completed === true){ %>
+                                            <% if(tasks[i].status === "Completed"){ %>
                                             <tr>
                                                 <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
                                                 <td><%= tasks[i].name %></td> </a>
@@ -168,7 +196,7 @@
                                                 <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
                                                 <td><%= tasks[i].priority %></td>
                                                 <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
-                                                <td><%= tasks[i].completed %></td>
+                                                <td><%= tasks[i].status %></td>
                                             </tr>
                                             <% } %> 
                                         <% } %>

@@ -41,6 +41,10 @@ const leadsSchema = new mongoose.Schema({
         type: Number,
         default: 0
       },
+      tellecaller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
       telleFollowUpDate: {
         type: String
       },

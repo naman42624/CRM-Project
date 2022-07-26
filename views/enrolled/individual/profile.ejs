@@ -2,6 +2,19 @@
 
 <link rel="stylesheet" href="/css/application.css">
 </head>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js">
+</script>
+<script>
+
+    $(document).ready(function () {
+        $("input").each(function () {
+            if ($(this).attr("value") !== " " && $(this).attr("value") !== "Save") {
+                $(this).attr("disabled", true);
+            }
+        });
+    });
+</script>
 <body>
     <!-- Tab-bar -->
     <%- include('navBar') -%> 
@@ -62,12 +75,12 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="dob">Date Of Birth</label>
-                                <input type="text" class="dob" name="dob" data-date-format="YYYY-MM-DD">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" class="dob" id="dob" name="dob" value="<%= personalInfo.dob?personalInfo.dob:" " %>">
                             </div><br>
                             <div class="form-group">
                                 <label for="gender">Gender</label>
-                                <select name="gender" id="gender" >
+                                <select name="gender" id="gender">
                                     <% if(personalInfo.gender){ %>
                                         <option value="">
                                             <%= personalInfo.gender %>
@@ -276,7 +289,8 @@
                         </div>
                     </div>
                     <div class="submit">
-                        <input type="submit" value="Submit">
+                        <button type="submit">Submit</button>
+                        <!-- <input type="submit" value="Submit"> -->
                     </div>
                 </form>
             </div>

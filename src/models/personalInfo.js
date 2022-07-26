@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const personalSchema = new mongoose.Schema({
     dob: {
         type: String,
-        required: true,
     },
     gender: {
         type: String,
@@ -127,7 +126,7 @@ const personalSchema = new mongoose.Schema({
     enrolledLead:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'enrolledUser'
+        ref: 'EnrolledLead'
     },
 }, { timestamps: true })
 const personal = mongoose.model('personal', personalSchema)

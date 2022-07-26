@@ -42,6 +42,11 @@ const applicationSchema = new mongoose.Schema({
     },
     interview: Boolean,
     interviewDate: Date,
+    showStatus: {
+        type: String,
+        trim: true,
+        default: 'Enrolled'
+    },
     sop: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Document'

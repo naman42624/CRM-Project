@@ -68,7 +68,7 @@ module.exports.leadsPage = async function (req, res) {
         const id = req.params.id;
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const lead = await Lead.findById(id).populate("counsellor")
+        const lead = await Lead.findById(id).populate("counsellor tellecaller");
         res.render("counsellor/lead", { avatarSrc, user,lead, date: date.newDateTopBar(), greeting: getGreeting() });
     } catch (err) {
         console.log(err);
@@ -158,7 +158,8 @@ module.exports.createLead = async function (req, res) {
     console.log(req.body);
     const lead = new Lead({
         ...req.body,
-        counsellor: req.user._id
+        counsellor: req.user._id,
+        tellecaller: req.user._id
     });
     await lead.save();
     res.redirect("/counsellor/leads/" + req.body.status);

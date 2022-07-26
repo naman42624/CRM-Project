@@ -53,6 +53,9 @@
 
             <!----------------------------- For Role ----------------------------------------- -->
             <input id="role" type="text" value="<%= user.role %>" hidden>
+            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="showStatusForm" method="post">
+                <input type="text" id="showStatus" name="showStatus" hidden>
+            </form>
             <!-- -------------------------------------------------- ------------------------ -->
 
             <div class="flex-grow-1">
@@ -64,11 +67,11 @@
                             <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="updateStatus" method="post">
                             <div class="d-flex flex-column">
                                 <select class="custom-select border rounded-3 px-2" name="status" id="currentStatus" value="<%= displayApplication.status %>/<%= displayApplication.paymentStatus %>">
-                                                    <% if(displayApplication.status){ %>
-                                                        <option id="" >
-                                                            <%= displayApplication.status %>
-                                                        </option>
-                                                        <% } %>
+                                    <% if(displayApplication.showStatus){ %>
+                                        <option id="" >
+                                            <%= displayApplication.showStatus %>
+                                        </option>
+                                        <% } %>
                                                             <option id="enrolled" >Enrolled</option>
                                                             <option id="applicationSent">
                                                                 Application Sent</option>
@@ -139,7 +142,7 @@
                                     <div class="col-md-2"><p class="mt-2 text-end">Sent To:</p></div>
                                     <div class="col-md-8 pt-1"><input type="text" class="form-control" name="sentTo" placeholder="Sent To" value="<%= displayApplication.sentTo %>" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>></div>
                                     <div class="col-md-2 d-flex justify-content-between align-items-center"><button type="submit" class="btn btn-sm btn-primary <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk-circle-arrow-right"></i> Submit</button></div>
-                                    
+                                    <input type="text" id="showStatus" name="showStatus" value="Application Sent" hidden>
                                 </div>
                                 
                             </form>
@@ -164,6 +167,7 @@
                                     <option <%= (displayApplication.interviewRequired==="Yes")?"selected":"" %>>Yes</option>
                                     <option <%= (displayApplication.interviewRequired==="No")?"selected":"" %>>No</option>
                                 </select>
+                                <input type="text" id="showStatus" name="showStatus" value="Offer Letter Received" hidden>
                                 <button type="submit" class="btn btn-sm btn-primary" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Submit</button>
                             </form>
                             <p class="fw-semibold text-warning">Upload the Offer Letter received for the current Application here-</p>
@@ -178,6 +182,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.offerLetter.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input type="text" id="showStatus" name="showStatus" value="Offer Letter Received" hidden>
                                                 <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.offerLetter)?displayApplication.offerLetter.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -190,6 +195,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/offerLetter" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="Offer Letter Received" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -362,6 +368,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.partialFeeReceipt.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input type="text" id="showStatus" name="showStatus" value="Partial Fee Paid" hidden>
                                                 <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.partialFeeReceipt)?displayApplication.partialFeeReceipt.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -374,6 +381,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/partialFeeReceipt" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="Partial Fee Paid" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -397,6 +405,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fullFeeReceipt.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input type="text" id="showStatus" name="showStatus" value="Full Fee Paid" hidden>
                                                 <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fullFeeReceipt)?displayApplication.fullFeeReceipt.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -409,6 +418,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/fullFeeReceipt" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="Full Fee Paid" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team"&&user.role!=="Filing Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -437,6 +447,7 @@
                                         <div class="hstack gap-3">
                                             <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.affidavit.documentName %>" method="post">
                                                 <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                                <input type="text" id="showStatus" name="showStatus" value="Visa File Processing" hidden>
                                                 <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.affidavit)?displayApplication.affidavit.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                             </form>
                                             <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -449,6 +460,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/affidavit" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="Visa File Processing" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -471,6 +483,7 @@
                                     <% displayApplication.sop.forEach(function(document){ %> 
                                         <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= document.documentName %>" method="post">
                                             <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                            <input type="text" id="showStatus" name="showStatus" value="File Lodged" hidden>
                                             <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (document)?document.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                         </form>
                                     <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -484,6 +497,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/sop" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="File Lodged" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="Interview Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -501,6 +515,7 @@
                                     <div class="hstack gap-3">
                                         <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.fileLodgedConfirmation.documentName %>" method="post">
                                             <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                            <input type="text" id="showStatus" name="showStatus" value="File Lodged" hidden>
                                             <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.fileLodgedConfirmation)?displayApplication.fileLodgedConfirmation.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                         </form>
                                         <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
@@ -513,6 +528,7 @@
                             <form action="/enrolled/document/<%= enrolledLead._id %>/fileLodgedConfirmation" method="post" enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="File Lodged" hidden>
                                     <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
                                     <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
                                 </div>
@@ -529,73 +545,77 @@
 
             <!-- ----------------------------------------------- -->
 
-                        <div class="visaApproved box" data-status="Visa Approved">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportLetter&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
-                    
-                            <p class="fw-semibold text-warning">Upload the Passport Request Letter for the current Application here-</p>
-                        
-                            <% if(displayApplication.passportLetter){ %> 
-                                <div class="row mb-3">
-                                    <div class="col-md-2 d-flex align-items-center">
-                                        <i class="fa-solid fa-paperclip me-2"></i>
-                                        <span class="fw-semibold"> Uploaded Passport Letter:</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="hstack gap-3">
-                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.documentName %>" method="post">
-                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportLetter)?displayApplication.passportLetter.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
-                                            </form>
-                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
-                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.files[0].fileName %>"> <%= displayApplication.passportLetter.files[0].originalFileName %></a>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            <% } %>
-                            <form action="/enrolled/document/<%= enrolledLead._id %>/passportLetter" method="post" enctype="multipart/form-data">
-                                <div class="input-group mb-3">
-                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
-                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
-                                </div>
-                            </form>
+            <div class="visaApproved box" data-status="Visa Approved">
+                <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportLetter&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+        
+                <p class="fw-semibold text-warning">Upload the Passport Request Letter for the current Application here-</p>
+            
+                <% if(displayApplication.passportLetter){ %> 
+                    <div class="row mb-3">
+                        <div class="col-md-2 d-flex align-items-center">
+                            <i class="fa-solid fa-paperclip me-2"></i>
+                            <span class="fw-semibold"> Uploaded Passport Letter:</span>
                         </div>
-
-            <!-- ----------------------------------------------- -->
-
-                        <div class="visaRejected box" data-status="Visa Rejected">
-                            <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportRejection&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
-                    
-                            <p class="fw-semibold text-warning">Upload the Refusal Letter for the current Application here-</p>
-                        
-                            <% if(displayApplication.passportRejection){ %> 
-                                <div class="row mb-3">
-                                    <div class="col-md-2 d-flex align-items-center">
-                                        <i class="fa-solid fa-paperclip me-2"></i>
-                                        <span class="fw-semibold"> Uploaded Refusal Letter:</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="hstack gap-3">
-                                            <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.documentName %>" method="post">
-                                                <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                                <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportRejection)?displayApplication.passportRejection.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
-                                            </form>
-                                            <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
-                                                <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.files[0].fileName %>"> <%= displayApplication.passportRejection.files[0].originalFileName %></a>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-                            <% } %>
-                            <form action="/enrolled/document/<%= enrolledLead._id %>/passportRejection" method="post" enctype="multipart/form-data">
-                                <div class="input-group mb-3">
+                        <div class="col-md-10">
+                            <div class="hstack gap-3">
+                                <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.documentName %>" method="post">
                                     <input type="hidden" name="appId" value="<%= displayApplication._id %>">
-                                    <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
-                                    <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
-                                </div>
-                            </form>
+                                    <input type="text" id="showStatus" name="showStatus" value="Visa Approved" hidden>
+                                    <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportLetter)?displayApplication.passportLetter.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                </form>
+                                <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportLetter.files[0].fileName %>"> <%= displayApplication.passportLetter.files[0].originalFileName %></a>
+                                </div> 
+                            </div>
                         </div>
+                    </div>
+                <% } %>
+                <form action="/enrolled/document/<%= enrolledLead._id %>/passportLetter" method="post" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                        <input type="text" id="showStatus" name="showStatus" value="Visa Approved" hidden>
+                        <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                        <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
+                    </div>
+                </form>
+            </div>
+
+<!-- ----------------------------------------------- -->
+
+            <div class="visaRejected box" data-status="Visa Rejected">
+                <div class="d-flex justify-content-end"><button type="submit" class=" saveStatus btn btn-sm btn-info text-end <%= (displayApplication.passportRejection&&user.role==="Filing Team")?"":"disabled" %>"><i class="fa-solid fa-floppy-disk"></i> Save</button></div>
+        
+                <p class="fw-semibold text-warning">Upload the Refusal Letter for the current Application here-</p>
+            
+                <% if(displayApplication.passportRejection){ %> 
+                    <div class="row mb-3">
+                        <div class="col-md-2 d-flex align-items-center">
+                            <i class="fa-solid fa-paperclip me-2"></i>
+                            <span class="fw-semibold"> Uploaded Refusal Letter:</span>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="hstack gap-3">
+                                <form class="p-0 m-0" action="/enrolled/checkbox/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.documentName %>" method="post">
+                                    <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                                    <input type="text" id="showStatus" name="showStatus" value="Visa Rejected" hidden>
+                                    <input class="form-check-input m-0 p-0" type="checkbox" name="isValid" <%= (displayApplication.passportRejection)?displayApplication.passportRejection.isValid:""; %>  onchange="this.form.submit()" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                                </form>
+                                <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank" href="/enrolled/document/<%= enrolledLead._id %>/<%= displayApplication.passportRejection.files[0].fileName %>"> <%= displayApplication.passportRejection.files[0].originalFileName %></a>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <form action="/enrolled/document/<%= enrolledLead._id %>/passportRejection" method="post" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <input type="hidden" name="appId" value="<%= displayApplication._id %>">
+                        <input type="text" id="showStatus" name="showStatus" value="Visa Rejected" hidden>
+                        <input type="file" class="form-control" id="file" name="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>
+                        <button type="submit" class="input-group-text" for="file" <%= (user.role!=="SOP Team"&&user.role!=="Interview Team")?"":"disabled" %>>Upload</button>
+                    </div>
+                </form>
+            </div>
 
             <!-- ----------------------------------------------- -->
 

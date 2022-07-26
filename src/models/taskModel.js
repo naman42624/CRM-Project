@@ -15,9 +15,9 @@ const taskSchema = new mongoose.Schema({
         trim: true,
         maxLenght: 100
     }, 
-    completed: {
-        type: Boolean,
-        default: false,
+    status: {
+        type: String,
+        default: "Assigned",
     },
     assingnedBy: {
         type: mongoose.Schema.Types.ObjectId,

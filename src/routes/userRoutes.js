@@ -17,7 +17,7 @@ const Tellecaller = require("../models/tellecallerModel");
 const Task = require("../models/taskModel");
 
 // Controllers
-const { assignedBy, assignedTo, createTask } = require("../controllers/taskController");
+const { assignedBy, assignedTo, createTask, updateTask } = require("../controllers/taskController");
 
 const passport = require('passport');
 const date = require("../config/utilities/date");
@@ -284,5 +284,6 @@ router.get("/task", auth, assignedTo);
 router.post("/task/create", auth, createTask);
 router.get("/task/assignedBy", auth, assignedBy);
 router.get("/task/assignedTo", auth, assignedTo);
+router.post("/task/:id", auth, updateTask);
 
 module.exports = router;
