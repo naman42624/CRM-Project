@@ -201,7 +201,12 @@
                                                                                 <option>Other</option>
                                                                             </select>
                                                                         </div>
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="comments" class="mb-1">Comments</label>
+                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
+                                                                        </div>
                                                                 </div>
+
                                                                 <div class="modal-footer d-flex justify-content-center text-center">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                                     <button type="submit" class="btn btn-primary">Update</button>
@@ -212,29 +217,8 @@
                                                     </div>
                                                 </div>
                                                 </td>
-                                                <td><a href="#updateComment<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateComment<%= lead._id %>" ><%= lead.comments %></a></td>
-                                                <div class="modal fade" id="updateComment<%= lead._id %>" tabindex="-1" aria-labelledby="updateCommentLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="/tellecaller/<%= status %>/leads/<%= lead._id %>" method="POST">
-                                                                <div class="modal-header text-center">
-                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateCommentLabel">Update Comments</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body mx-4">
-                                                                        <div class="form-group mb-3">
-                                                                            <label for="comments" class="mb-1">Comments</label>
-                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer d-flex justify-content-center text-center">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <td><%= lead.comments %></td>
+                                            
                                             </tr>
                                         <% }); %>
                                     </tbody>

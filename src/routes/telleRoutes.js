@@ -69,37 +69,37 @@ router.get("/", auth, telleAuth, isVerified, async function (req, res) {
 router.post('/uploadfile', upload.single("uploadfile"), (req, res) => {
     // console.log(req.file);
     const filePath = __dirname + '/../../public/uploads/' + req.file.filename;
-        // -> Read Excel File to Json Data
-        const excelData = excelToJson({
-            sourceFile: filePath,
-            sheets: [{
-                // Excel Sheet Name
-                name: 'Sheet1',
-                // Header Row -> be skipped and will not be present at our result object.
-                header: {
-                    rows: 1
-                },
-                // Mapping columns to keys
-                columnToKey: {
-                    A: 'name',
-                    B: 'email',
-                    C: 'phone',
-                }
-            }]
-        });
-        // -> Log Excel Data to Console
-        console.log(excelData);
-        
-        Lead.insertMany(excelData.Sheet1, (err, data) => {
-            if (err) {
-                console.log(err);
-            } else {
-                res.redirect('/tellecaller/Telle-leads/All');
+    // -> Read Excel File to Json Data
+    const excelData = excelToJson({
+        sourceFile: filePath,
+        sheets: [{
+            // Excel Sheet Name
+            name: 'Sheet1',
+            // Header Row -> be skipped and will not be present at our result object.
+            header: {
+                rows: 1
+            },
+            // Mapping columns to keys
+            columnToKey: {
+                A: 'name',
+                B: 'email',
+                C: 'phone',
             }
-        });
-        fs.unlinkSync(filePath);
+        }]
+    });
+    // -> Log Excel Data to Console
+    console.log(excelData);
+
+    Lead.insertMany(excelData.Sheet1, (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.redirect('/tellecaller/Telle-leads/All');
+        }
+    });
+    fs.unlinkSync(filePath);
 });
-    
+
 // Leads section
 router.get("/Telle-leads", auth, telleAuth, async function (req, res) {
     try {
@@ -196,23 +196,6 @@ router.post("/:Frompage/leads/:id", auth, telleAuth, function (req, res) {
     // console.log(req.body);
     const id = req.params.id;
     console.log(id);
-    if (req.body.comments) {
-        Followup.findOne({ lead: id, date: today }, function (err, followup) {
-            if (!followup) {
-                const newfollowup = new Followup({
-                    date: today,
-                    time: new Date().toLocaleTimeString("en-GB"),
-                    comments: req.body.comments,
-                    lead: id,
-                });
-                newfollowup.save();
-            } else {
-                followup.comments = req.body.comments;
-                followup.followupBy = req.user._id;
-                followup.save();
-            }
-        });
-    }
     if (req.body.telleFollowUpDate)
         req.body.telleFollowUpDate = new Date(req.body.telleFollowUpDate).toLocaleDateString("en-GB");
     if (req.body.scheduledWalksInDate)
@@ -258,25 +241,19 @@ router.post("/callResponse/:id", auth, telleAuth, function (req, res) {
 
     console.log(tomorrow);
     const lead = {
-        call: callResponse
+        call: callResponse,
+        comments: req.body.comments,
     };
-    Followup.findOne({ lead: id, date: today }, function (err, followup) {
-        if (!followup) {
-            const newfollowup = new Followup({
-                date: today,
-                time: new Date().toLocaleTimeString("en-GB"),
-                comments: "",
-                lead: id,
-                call: callResponse,
-                followupBy: req.user.id
-            });
-            newfollowup.save();
-        } else {
-            followup.call = callResponse;
-            followup.followupBy = req.user.id;
-            followup.save();
-        }
+
+    const newfollowup = new Followup({
+        date: today,
+        time: new Date().toLocaleTimeString("en-GB"),
+        comments: req.body.comments,
+        lead: id,
+        call: callResponse,
+        followupBy: req.user.id
     });
+    newfollowup.save();
 
     Lead.findByIdAndUpdate(id, lead, function (err, lead) {
         if (err) {
