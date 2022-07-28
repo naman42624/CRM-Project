@@ -211,7 +211,28 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
 })
 
 // save comments
-router.post("/application/:enrolledId/applied/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
+// router.post("/application/:enrolledId/applied/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
+//     try {
+//         console.log(req.body);
+//         const enrolledId = req.params.enrolledId;
+//         const displayApplication = await Application.findById(req.params.applicationId);
+//         const comment = req.body.comment;
+//         const newComment = {
+//             comment: comment,
+//             writtenBy: req.user._id,
+//             timestamp: new Date(),
+//         };
+//         displayApplication.comments.push(newComment);
+//         await displayApplication.save();
+//         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
+//     } catch (error) {
+//         console.log(error);
+//         res.redirect("/500");
+//     }
+// });
+
+router.post("/application/:enrolledId/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
+    // res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.params.applicationId);
     try {
         console.log(req.body);
         const enrolledId = req.params.enrolledId;

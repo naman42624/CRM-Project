@@ -675,7 +675,7 @@
                 </div>
                 <p class="fs-4 mb-1 mt-3 fw-bold text-secondary">Comments</p>
                 <div class="">
-                    <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/commentSend" method="POST">
+                    <form action="/enrolled/application/<%= enrolledId %>/<%= displayApplication._id %>/commentSend" method="POST">
                         <textarea  class="form-control" name="comment" rows="3" placeholder="Write comments..." style="white-space: pre-wrap;"></textarea>
                         <div class="d-flex justify-content-end">
                             <div class="d-grid w-25">
