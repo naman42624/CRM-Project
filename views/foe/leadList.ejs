@@ -1,0 +1,169 @@
+<%- include('../partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+</head>
+<body>
+  
+    <%- include('sidebar',{user, avatarSrc})  -%> 
+
+    <div class="flex-grow-1 whole-body">
+        
+        <%- include('../partials/topbar',{date, greeting})  -%>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-6 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/foe" class="text-decoration-none text-dark">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page"> Leads <span class="text-muted">(<%= leadCount %>)</span></li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- <div class="fs-6 m-0">
+                        List of Cold Leads
+                    </div> -->
+                </div>
+                <div class="col-md-6">
+                   <div class="add-new-item  text-end">
+                        <a href="#addNewLead" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addNewLead"><i class="fa-solid fa-plus"></i> Add New Item</a>
+                   </div>
+                   <!-- Modal -->
+                   <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/foe/addLead" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Lead</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        
+                                            <div class="form-group mb-3">
+                                                <label for="leadName" class="mb-1">Name</label>
+                                                <input type="text" class="form-control" name="name" placeholder="Enter name" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadPhone" class="mb-1">Phone</label>
+                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadEmail" class="mb-1">Email</label>
+                                                <input type="email" class="form-control" name="email" placeholder="Enter Email" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCountry" class="mb-1">Interested Country</label>
+                                                <input type="text" class="form-control" name="interestedCountry" placeholder="Enter Interested Country" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCollege" class="mb-1">College/University</label>
+                                                <input type="text" class="form-control" name="college" placeholder="Enter College/University" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCourse" class="mb-1">Course</label>
+                                                <input type="text" class="form-control" name="course" placeholder="Enter Course">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadComments" class="mb-1">Comments</label>
+                                                <input type="textarea" class="form-control" name="comments" placeholder="Any Comments">
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="leadStatus" class="mb-1">Status</label>
+                                                <select class="form-select" name="status" required>
+                                                    <option>- Select Status -</option>
+                                                    <option>Cold</option>
+                                                    <option>Hot</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+                
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="Search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn " type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-end">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <i class="fa-solid fa-filter fs-3 h-100"></i>
+                            <form action="/filterLeads" method="POST">
+                                <select class="form-select d-inline" onchange="this.form.submit()">
+                                    <option selected>- Select Group -</option>
+                                    <option>Name</option>
+                                    <option>StudentID</option>
+                                    <option>Status</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>All Leads</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Counsellor</th>
+                                            <th>Phone</th>
+                                            <th>Scheduled WalkIn</th>
+                                            <th>WalkIn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% leads.forEach(function(lead) { %>
+                                            <tr>
+                                                <td><a href="/foe/leads/<%= lead._id %>" class="text-decoration-none text-dark"><%= lead.name %></a></td>
+                                                <td>
+                                                    <span><%= (lead.counsellor)?lead.counsellor.name:"" %> </span>
+                                                </td>
+                                                <td><%= lead.phone %></td>
+                                                <td><%= lead.scheduledWalksInDate %></td>
+                                                <td><%= lead.walksInDate %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
+
+    </div>
+
+<%- include('../partials/footer')  -%>
+
+
+</body>
+</html>

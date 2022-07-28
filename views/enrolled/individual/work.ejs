@@ -1,0 +1,236 @@
+<%- include('../../partials/header.ejs') -%>
+
+    <link rel="stylesheet" href="/css/application.css">
+    </head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".workExp").hide();
+            var click = 0;
+            $('button').click(function () {
+                click++;
+                if(click>=2){
+                    console.log("clicked>2");
+                    $('#main').append($('.workExp').html());
+                }
+                else{
+                    $('.workExp').show();
+                }
+            });
+            if(window.location.href.match(/\work/)){
+                $('.profile').addClass('active');
+            }
+            $("input").each(function () {
+                if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
+                    $(this).attr("disabled", true);
+                }
+            });
+            // $('.prevWork > input[type=date]').each(function () {
+            //     let d = new Date($(this).val());
+            //     console.log(d);
+            //     let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+            //     $(this).val(datestring);
+            // });
+        })
+    </script>
+
+    <body>
+        <!-- Tab-bar -->
+        <%- include('navBar') -%> 
+        <%- include('tabBar',{enrolledId : enrolledLead._id})  -%>
+                <!-- upload documents -->
+                <div class="p-4">
+                    <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+                        <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                                <thead class="">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Enrolment Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <td>
+                                            <%= enrolledLead.name %>
+                                        </td>
+                                        <td>
+                                            <%= enrolledLead.email %>
+                                        </td>
+                                        <td>
+                                            <%= enrolledLead.phone %>
+                                        </td>
+                                        <td>
+                                            <% const cDate1=new
+                                                Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                                <%= cDate1 %>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <%- include('profileTabbar',{enrolledId: enrolledLead._id}) -%>
+                    
+                    <div class="p-2 px-4 bg-light">
+                        <div class="card mb-3 mt-3">
+                            <div class="card-header">
+                                <div class="card-title mb-0">
+                                    <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-house-laptop text-primary"></i> Work Experience</p>
+                                </div>
+                            </div>
+                            <div id="main" class="card-body">
+                                <% if (workInfo.length > 0) { %>
+                                    <% workInfo.forEach(function(work){ %>
+                                <div class="prevWork">
+                                    <hr class="border border-dark bg-dark">
+                                    <form action="/enrolled/save/work/<%= enrolledLead._id %>" method="POST">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="companyName">Company Name</label>
+                                                        <input type="text" name="companyName" class="form-control" placeholder="Company Name" value="<%= work.companyName?work.companyName:"" %>">
+                                                    </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="jobTitle">Job Title</label>
+                                                        <input type="text" name="jobTitle" class="form-control" placeholder="Job Title" value="<%= work.jobTitle?work.jobTitle:"" %>">
+                                                    </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="startDate">Start Date</label>
+                                                        <input type="date" name="startDate" class="form-control" placeholder="Start Date" value="<%= (work.startDate)?work.startDate:"" %>">
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="endDate">End Date</label>
+                                                    <input type="date" name="endDate" class="form-control" placeholder="End Date" value="<%= (work.endDate)?work.endDate:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="workLocation">Location</label>
+                                                    <input type="text" name="workLocation" class="form-control" placeholder="Location" value="<%= work.workLocation?work.workLocation:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="reasonForLeaving">Reason For Leaving</label>
+                                                    <input type="text" name="reasonForLeaving" class="form-control" placeholder="Reason For Leaving" value="<%= work.reasonForLeaving?work.reasonForLeaving:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="workanyOtherInformation">Any Other Information</label>
+                                                    <input type="text" name="workanyOtherInformation" class="form-control" placeholder="Any Other Information" value="<%= work.workanyOtherInformation?work.workanyOtherInformation:"" %>" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 submit p-2 px-4 d-flex justify-content-center">
+                                            <input type="submit" class="me-3 btn btn-success w-25" value="Save">
+                                            <button class="ms-3 btn btn-warning w-25">Edit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <% }) %>
+                                <% } %>
+                                <div class="workExp">
+                                    <hr class="border border-dark bg-dark">
+                                    <form action="/enrolled/save/work/<%= enrolledLead._id %>" method="POST">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="companyName">Company Name</label>
+                                                    <input type="text" name="companyName" class="form-control" placeholder="Company Name" value="">
+                                                </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="jobTitle">Job Title</label>
+                                                    <input type="text" name="jobTitle" class="form-control" placeholder="Job Title" value="">
+                                                </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="startDate">Start Date</label>
+                                                    <input type="date" name="startDate" class="form-control" placeholder="Start Date" value="">
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="endDate">End Date</label>
+                                                <input type="date" name="endDate" class="form-control" placeholder="End Date" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="workLocation">Location</label>
+                                                <input type="text" name="workLocation" class="form-control" placeholder="Location" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="reasonForLeaving">Reason For Leaving</label>
+                                                <input type="text" name="reasonForLeaving" class="form-control" placeholder="Reason For Leaving" value="">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="workanyOtherInformation">Any Other Information</label>
+                                                <input type="text" name="workanyOtherInformation" class="form-control" placeholder="Any Other Information" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 submit p-2 px-4 d-flex justify-content-center">
+                                        <input type="submit" class="me-3 btn btn-success w-25" value="Save">
+                                        <button class="ms-3 btn btn-warning w-25">Edit</button>
+                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn w-25 btn-primary">
+                                + Add Work Experience
+                            </button>
+                        </div>
+                        <div id="footer" class="mt-5 text-center text-secondary">
+                            © 2022 Bells Overseas. All rights reserved.
+                        </div>
+                </div>
+                <script>
+                    //  let d = document.getElementById('dob').value;
+                    //     console.log(d);
+                    //     let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    //     document.getElementById('dob').value = datestring;
+                    $('.prevWork').each(function () {
+                        $(this).find('input[type=date]').each(function () {
+                            let d = new Date($(this).val());
+                            console.log("date"+d);
+                            let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                            $(this).val(datestring);
+                        });
+            });
+                </script>
+
+    <%- include('../../partials/footer') -%>
+
+</body>
+
+</html>

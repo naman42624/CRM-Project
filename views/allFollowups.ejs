@@ -1,0 +1,97 @@
+<%- include('partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+</head>
+<body>
+  
+  <% if(user.role === "TelleCaller"){ %>
+    <%- include('tellecaller/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Counsellor"){ %>
+    <%- include('counsellor/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "FOE"){ %>
+    <%- include('foe/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Admin"){ %>
+    <%- include('admin/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Branch Manager"){ %>
+    <%- include('branchmanager/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "SOP Team"){ %>
+    <%- include('sopteam/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Filing Team"){ %>
+    <%- include('filingteam/sidebar',{user, avatarSrc})  -%>
+  <% } %>
+
+
+    <div class="flex-grow-1 whole-body">
+      
+      <%- include('partials/topbar',{date, greeting})  -%>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-12 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-dark">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">FollowUps</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                   
+                </div> -->
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>  FollowUps</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Lead</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Call Response</th>
+                                            <th>FollowUp By</th>
+                                            <th>Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% followups.forEach(function(followup) { %>
+                                            <tr>
+                                                <td><%= followup.lead.name %></td>
+                                                <td><%= followup.date %></a></td>
+                                                <td>
+                                                    <%= followup.time %>
+                                                </td>
+                                                <td><%= followup.call %></td>
+                                                <% if(followup.followupBy) { %>
+                                                <td><%= followup.followupBy.name %></td>
+                                                <% } else { %>
+                                                  <td><%= followup.followupBy %></td>
+                                                <% } %>
+                                                <td><%= followup.comments %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+                            
+    </div>
+
+<%- include('partials/footer')  -%>
+
+</body>
+</html>

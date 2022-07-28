@@ -1,0 +1,364 @@
+<%- include('../../partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/application.css">
+</head>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+        $("input").each(function () {
+            if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
+                $(this).attr("disabled", true);
+            }
+        });
+        if(window.location.href.match(/\personal/)){
+        $('.profile').addClass('active');
+        }
+    });
+</script>
+<body>
+    <!-- Tab-bar -->
+    <%- include('navBar') -%> 
+    <%- include('tabBar',{enrolledId : enrolledLead._id})  -%>
+    <div class="p-4">
+        <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+            <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+            <div class="table-responsive">
+                <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                    <thead class="">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Enrolment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                          <tr>
+                            <td><%= enrolledLead.name %> </td>
+                            <td><%= enrolledLead.email %></td>
+                            <td><%= enrolledLead.phone %></td>
+                            <td>
+                                <% const cDate1=new
+                                    Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                    <%= cDate1 %>
+                            </td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+            <%- include('profileTabbar',{enrolledId: enrolledLead._id}) -%>
+            <div class="p-2 px-4 bg-light">
+                <form action="/enrolled/save/personal/<%= enrolledLead._id %>" method="POST">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header">
+                            <div class="card-title mb-0">
+                                <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-circle-info text-success"></i> Personal Information</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="dob" >Date of Birth</label>
+                                        <input type="date" class="dob form-control" id="dob" name="dob" value="<%= personalInfo.dob?personalInfo.dob:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="gender" >Gender</label>
+                                        <select name="gender" id="gender" class="form-select">
+                                            <% if(personalInfo.gender){ %>
+                                                <option value="">
+                                                    <%= personalInfo.gender %>
+                                                </option>
+                                                <% } %>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                    <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="maritalStatus" >Marital Status</label>
+                                        <select name="maritalStatus" class="form-select" id="maritalStatus" >
+                                            <% if(personalInfo.maritalStatus){ %>
+                                                <option value="">
+                                                    <%= personalInfo.maritalStatus %>
+                                                </option>
+                                                <% } %>
+                                                    <option value="married">Married</option>
+                                                    <option value="unmarried">Un-married</option>
+                                                    <option value="divorced">Divorced</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address" >Address</label>
+                                        <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="<%= personalInfo.address? personalInfo.address:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="pincode" >Pin Code</label>
+                                        <input type="text" placeholder="Pin Code" name="pincode" class="form-control" id="pincode" value="<%= personalInfo.pincode? personalInfo.pincode:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="city" >City</label>
+                                        <input type="text" placeholder="City" name="city" class="form-control" id="city" value="<%= (personalInfo.city)?personalInfo.city:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="state" >State</label>
+                                        <input type="text" placeholder="State" name="state" class="form-control" id="state" value="<%= personalInfo.state? personalInfo.state:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="country" >Country</label>
+                                        <input type="text" placeholder="Country" name="country" class="form-control" id="country" value="<%= personalInfo.country? personalInfo.country:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="card-title mb-0">
+                                <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-book text-primary"></i> Passport Information</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="passportNumber">Passport Number</label>
+                                        <input type="text" name="passportNumber" id="passportNumber" class="form-control" placeholder="Passport Number"
+                                            value="<%= personalInfo.passportNumber?personalInfo.passportNumber:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="passportissue">Issue Date</label>
+                                        <input type="date" name="passportissue" id="passportissue" class="form-control" placeholder="Issue Date"
+                                            value="<%= personalInfo.passportissue?personalInfo.passportissue:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="passportExpiry">Expiry Date</label>
+                                        <input type="date" name="passportExpiry" id="passportExpiry" class="form-control" placeholder="Expiry Date"
+                                            value="<%= personalInfo.passportExpiry?personalInfo.passportExpiry:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="passportIssueCountry">Issued By Country</label>
+                                        <input type="text" name="passportIssueCountry" id="passportIssueCountry" class="form-control" placeholder="Issued By Country"
+                                            value="<%= personalInfo.passportIssueCountry?personalInfo.passportIssueCountry:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="placeOfBirth">Place Of Birth</label>
+                                        <input type="text" name="placeOfBirth" id="placeOfBirth" class="form-control" placeholder="Place Of Birth"
+                                            value="<%= personalInfo.placeOfBirth?personalInfo.placeOfBirth:"" %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="card-title mb-0">
+                                <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-info me-1 text-warning"></i> Background</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="citizenOfTwo">Is the applicant a citizen of more than one country?</label>
+                                            <select name="citizenOfTwo" class="form-select" id="citizenOfTwo">
+                                                <% if(personalInfo.citizenOfTwo){ %>
+                                                <option value="">
+                                                    <%= personalInfo.citizenOfTwo %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="liveOrStudyinOtherCountry">Is the applicant living and studying in any other
+                                                country?</label>
+                                            <select name="liveOrStudyinOtherCountry" class="form-select" id="liveOrStudyinOtherCountry">
+                                                <% if(personalInfo.liveOrStudyinOtherCountry){ %>
+                                                <option value="">
+                                                    <%= personalInfo.liveOrStudyinOtherCountry %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="countryName">Name <span class="text-secondary fst-italic fw-normal">(if applicable)</span> </label>
+                                            <input type="text" name="countryName" id="countryName" class="form-control" placeholder="Country Name"
+                                                value="<%= personalInfo.countryName? personalInfo.countryName:"" %>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="appliedForImmigrationInAnyCountry">Has applicant applied for any type of
+                                                immigration
+                                                into any
+                                                country?</label>
+                                            <select name="appliedForImmigrationInAnyCountry" class="form-select" id="appliedForImmigrationInAnyCountry">
+                                                <% if(personalInfo.appliedForImmigrationInAnyCountry){ %>
+                                                <option value="">
+                                                    <%= personalInfo.appliedForImmigrationInAnyCountry %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col md-6">
+                                        <div class="form-group">
+                                            <label for="anySeriousMedicalCondition">Does applicant suffer from a serious medical
+                                                condition?</label>
+                                            <select name="anySeriousMedicalCondition" class="form-select" id="anySeriousMedicalCondition">
+                                                <% if(personalInfo.anySeriousMedicalCondition){ %>
+                                                <option value="">
+                                                    <%= personalInfo.anySeriousMedicalCondition %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="anyRefusals">Has applicant Visa refusal for any country?</label>
+                                            <select name="anyRefusals" class="form-select"  id="anyRefusals">
+                                                <% if(personalInfo.anyRefusals){ %>
+                                                <option value="">
+                                                    <%= personalInfo.anyRefusals %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col md-6">
+                                        <div class="form-group">
+                                            <label for="anyCriminalConvictions">Has applicant ever been convicted of a criminal
+                                                offence?</label>
+                                            <select name="anyCriminalConvictions" class="form-select" id="anyCriminalConvictions">
+                                                <% if(personalInfo.anyCriminalConvictions){ %>
+                                                <option value="">
+                                                    <%= personalInfo.anyCriminalConvictions %>
+                                                </option>
+                                                <% } %>
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title mb-0">
+                                <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-user-shield text-danger"></i> Emergency Contact</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="emergencyname">Name</label>
+                                        <input type="text" name="emergencyname" id="emergencyname" class="form-control" placeholder="Name"
+                                            value="<%= personalInfo.emergencyname?personalInfo.emergencyname:"" %>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="emergencyrelationship">Relationship</label>
+                                        <input type="text" name="emergencyrelationship" id="emergencyrelationship" class="form-control" placeholder="Relationship"
+                                            value="<%= personalInfo.emergencyrelationship?personalInfo.emergencyrelationship:"" %>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="emergencyphone">Phone</label>
+                                        <input type="text" name="emergencyphone" id="emergencyphone" class="form-control" placeholder="Phone"
+                                            value="<%= personalInfo.emergencyphone?personalInfo.emergencyphone:"" %>" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="emergencyemail">Email</label>
+                                        <input type="text" name="emergencyemail" id="emergencyemail" class="form-control" placeholder="Emergency Email"
+                                            value="<%= personalInfo.emergencyemail?personalInfo.emergencyemail:"" %>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="anyOtherInformation">Any Other Information</label>
+                                        <input type="text" name="anyOtherInformation" id="anyOtherInformation" class="form-control" placeholder="Any Other Information"
+                                            value="<%= personalInfo.anyOtherInformation?personalInfo.anyOtherInformation:"" %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submit p-2 px-4 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-lg btn-info w-25">Save & Next</button>
+                    </div>
+                </form>
+            </div>
+            <div id="footer" class="mt-5 text-center text-secondary">
+                © 2022 Bells Overseas. All rights reserved.
+            </div>
+        </div>
+
+<%- include('../../partials/footer')  -%>
+
+</body>
+</html>

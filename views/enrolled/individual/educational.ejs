@@ -1,0 +1,384 @@
+<%- include('../../partials/header.ejs') -%>
+
+    <link rel="stylesheet" href="/css/application.css">
+    </head>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+    </script>
+    <script>
+
+        $(document).ready(function () {
+
+            if ($("#degree").attr("value") === "Bachelor") {
+                $("#Bachelor").attr("selected", "selected");
+            }
+            else if ($("#degree").attr("value") === "Master") {
+                $("#Master").attr("selected", "selected");
+            }
+            else if ($("#degree").attr("value") === "twelve") {
+                $("#twelve").attr("selected", "selected");
+            }
+
+            $("#highestDegree").change(function () {
+                $(this).find("option:selected")
+                    .each(function () {
+                        var optionValue = $(this).attr("value");
+                        if (optionValue === "Bachelor") {
+                            $(".Bachelor").show();
+                            $(".Master").hide();
+                            $(".twelve").show();
+                        } else if (optionValue === "Master") {
+                            $(".box").show();
+                        }
+                        else if (optionValue === "twelve") {
+                            $(".Bachelor").hide();
+                            $(".Master").hide();
+                            $(".twelve").show();
+                        }
+                        else {
+                            $(".box").hide();
+                        }
+                    });
+            }).change();
+            $("input").each(function () {
+                if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
+                    $(this).attr("disabled", true);
+                }
+            });
+            if(window.location.href.match(/\academic/)){
+                $('.profile').addClass('active');
+            }
+
+            // $("#submit").click(function () {
+            //     $("input").each(function () {
+            //         if($(this).attr("value") === " "){
+            //             $(this).attr("disabled", false);
+            //         }
+            //     });
+            // });
+
+        });
+    </script>
+
+    <body>
+        <!-- Tab-bar -->
+        <%- include('navBar') -%>
+            <%- include('tabBar',{enrolledId: enrolledLead._id}) -%>
+                <% if(academicInfo){ %>
+                    <input id="degree" type="text" hidden
+                        value="<%= academicInfo.highestDegree? academicInfo.highestDegree:" " %>">
+                    <% } %>
+                        <!-- upload documents -->
+                        <div class="p-4">
+                            <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+                                <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                                        <thead class="">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Enrolment Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                            <tr>
+                                                <td>
+                                                    <%= enrolledLead.name %>
+                                                </td>
+                                                <td>
+                                                    <%= enrolledLead.email %>
+                                                </td>
+                                                <td>
+                                                    <%= enrolledLead.phone %>
+                                                </td>
+                                                <td>
+                                                    <% const cDate1=new
+                                                        Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %>
+                                                        <%= cDate1 %>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        
+                            <%- include('profileTabbar',{enrolledId: enrolledLead._id}) -%>
+                        
+                            <div class="p-2 px-4 bg-light">
+                        <form action="/enrolled/save/academic/<%= enrolledLead._id %>" method="POST">
+                            <div>
+                                <div class="card mb-3 mt-3">
+                                    <div class="card-header">
+                                        <div class="card-title mb-0">
+                                            <p class="fs-5 mb-0 fw-bold"><i class="fa-solid text-success me-1 fa-school-flag"></i> Educational Information</p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="countryOfStudy" class="form-label">Country Of Study</label>
+                                                    <input type="text" name="countryOfStudy" id="countryOfStudy" class="form-control" placeholder="Country Of Study"
+                                                        value="<%= academicInfo.countryOfStudy?academicInfo.countryOfStudy:"" %>"><br>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="highestDegree" class="form-label">Select Highest Degree</label>
+                                                    <select name="highestDegree" class="form-select" id="highestDegree">
+                                                        <option id="Master" value="Master">Master</option>
+                                                        <option id="Bachelor" value="Bachelor">Bachelor</option>
+                                                        <option id="twelve" value="twelve">12th Or Equivalent</option>
+                                                    </select><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Master box">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="card-title mb-0">
+                                            <p class="fs-5 mb-0 fw-bold"><i class="fa-solid text-primary me-1 fa-graduation-cap"></i> Post Graduation <span class="text-muted fs-6 fw-normal fst-italic">(if applicable)</span> </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="masterName" class="form-label">Name</label>
+                                                    <input type="text" name="masterName" id="masterName" class="form-control" placeholder="Name"
+                                                        value="<%= academicInfo.masterName? academicInfo.masterName:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="masterUniversity" class="form-label">University</label>
+                                                    <input type="text" name="masterUniversity" id="masterUniversity" class="form-control" placeholder="University"
+                                                        value="<%= academicInfo.masterUniversity? academicInfo.masterUniversity:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="masterLocation" class="form-label">Location</label>
+                                                    <input type="text" name="masterLocation" id="masterLocation" class="form-control" placeholder="Location"
+                                                        value="<%= academicInfo.masterLocation? academicInfo.masterLocation:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="masterGrade" class="form-label">Grade</label>
+                                                    <input type="text" name="masterGrade" id="masterGrade" class="form-control" placeholder="Grade"
+                                                        value="<%= academicInfo.masterGrade? academicInfo.masterGrade:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="masterYearOfPassing" class="form-label">Year Of Passing</label>
+                                                    <input type="text" name="masterYearOfPassing" id="masterYearOfPassing" class="form-control" placeholder="Year Of Passing"
+                                                        value="<%= academicInfo.masterYearOfPassing? academicInfo.masterYearOfPassing:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                        </div>
+                                        <div class="submit p-2 px-4 d-flex justify-content-center">
+                                            <input type="submit" value="Save" class="btn btn-lg btn-primary w-25">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Bachelor box">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="card-title mb-0">
+                                            <p class="fs-5 mb-0 fw-bold"><i class="fa-solid me-1 text-warning fa-user-graduate"></i> Under Graduation <span class="text-muted fs-6 fw-normal fst-italic">(if applicable)</span> </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="undergraduateName" class="form-label">Name</label>
+                                                    <input type="text" name="undergraduateName" id="undergraduateName" class="form-control" placeholder="Name"
+                                                        value="<%= academicInfo.undergraduateName? academicInfo.undergraduateName:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="undergraduateUniversity" class="form-label">University</label>
+                                                    <input type="text" name="undergraduateUniversity"
+                                                        id="undergraduateUniversity" class="form-control" placeholder="University"
+                                                        value="<%= academicInfo.undergraduateUniversity? academicInfo.undergraduateUniversity:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="undergraduateLocation" class="form-label">Location</label>
+                                                    <input type="text" name="undergraduateLocation" id="undergraduateLocation" class="form-control" placeholder="Location"
+                                                        value="<%= academicInfo.undergraduateLocation? academicInfo.undergraduateLocation:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="undergraduateGrade" class="form-label">Grade</label>
+                                                    <input type="text" name="undergraduateGrade" id="undergraduateGrade" class="form-control" placeholder="Grade"
+                                                        value="<%= academicInfo.undergraduateGrade? academicInfo.undergraduateGrade:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="undergraduateYearOfPassing" class="form-label">Year Of
+                                                        Passing</label>
+                                                    <input type="text" name="undergraduateYearOfPassing"
+                                                        id="undergraduateYearOfPassing" class="form-control" placeholder="Year Of Passing"
+                                                        value="<%= academicInfo.undergraduateYearOfPassing? academicInfo.undergraduateYearOfPassing:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6"></div>
+                                        </div>
+                                        <div class="submit p-2 px-4 d-flex justify-content-center">
+                                            <input type="submit" value="Save" class="btn btn-lg btn-warning w-25">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="twelve box">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="card-title mb-0">
+                                            <p class="fs-5 mb-0 fw-bold"><i class="fa-solid me-1 text-danger fa-book-open"></i> Grade 12th or equivalent <span class="text-muted fs-6 fw-normal fst-italic">(if applicable)</span> </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="twelveBoard">Board</label>
+                                                    <input type="text" name="twelveBoard" id="twelveBoard" class="form-control" placeholder="Board"
+                                                        value="<%= academicInfo.twelveBoard? academicInfo.twelveBoard:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="twelveSchool">School</Label>
+                                                    <input type="text" name="twelveSchool" id="twelveSchool" class="form-control" placeholder="School"
+                                                        value="<%= academicInfo.twelveSchool? academicInfo.twelveSchool:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="twelveLocation">Location</Label>
+                                                    <input type="text" name="twelveLocation" id="twelveLocation" class="form-control" placeholder="Location"
+                                                        value="<%= academicInfo.twelveLocation? academicInfo.twelveLocation:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="twelveGrade">Grade</Label>
+                                                    <input type="text" name="twelveGrade" id="twelveGrade" class="form-control" placeholder="Grade"
+                                                        value="<%= academicInfo.twelveGrade? academicInfo.twelveGrade:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="twelveYearOfPassing">Year Of
+                                                        Passing</Label>
+                                                    <input type="text" name="twelveYearOfPassing" id="twelveYearOfPassing" class="form-control" placeholder="Year Of Passing"
+                                                        value="<%= academicInfo.twelveYearOfPassing? academicInfo.twelveYearOfPassing:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6"></div>
+                                        </div>
+                                        <div class="submit p-2 px-4 d-flex justify-content-center">
+                                            <input type="submit" value="Save" class="btn btn-lg btn-danger w-25">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="twelve box">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="card-title mb-0">
+                                            <p class="fs-5 mb-0 fw-bold"><i class="fa-solid me-1 text-info fa-building-columns"></i> Grade 10th <span class="text-muted fs-6 fw-normal fst-italic">(if applicable)</span> </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="tenthBoard" class="form-label">Board</Label>
+                                                    <input type="text" name="tenthBoard" id="tenthBoard" class="form-control" placeholder="Board"
+                                                        value="<%= academicInfo.tenthBoard? academicInfo.tenthBoard:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="tenthSchool" class="form-label">School</Label>
+                                                    <input type="text" name="tenthSchool" id="tenthSchool" class="form-control" placeholder="School"
+                                                        value="<%= academicInfo.tenthSchool? academicInfo.tenthSchool:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="tenthLocation" class="form-label">Location</Label>
+                                                    <input type="text" name="tenthLocation" id="tenthLocation" class="form-control" placeholder="Location"
+                                                        value="<%= academicInfo.tenthLocation? academicInfo.tenthLocation:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="tenthGrade" class="form-label">Grade</Label>
+                                                    <input type="text" name="tenthGrade" id="tenthGrade" class="form-control" placeholder="Grade"
+                                                        value="<%= academicInfo.tenthGrade? academicInfo.tenthGrade:"" %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <Label for="tenthYearOfPassing" class="form-label">Year Of
+                                                        Passing</Label>
+                                                    <input type="text" name="tenthYearOfPassing" id="tenthYearOfPassing" class="form-control" placeholder="Year Of Passing"
+                                                        value="<%= academicInfo.tenthYearOfPassing? academicInfo.tenthYearOfPassing:"" %>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6"></div>
+                                        </div>
+                                        <div class="submit p-2 px-4 d-flex justify-content-center">
+                                            <input type="submit" value="Save" class="btn btn-lg btn-info w-25">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        <div id="footer" class="mt-5 text-center text-secondary">
+                            © 2022 Bells Overseas. All rights reserved.
+                        </div>
+                    </div>
+                        
+
+
+                        <%- include('../../partials/footer') -%>
+
+    </body>
+
+    </html>

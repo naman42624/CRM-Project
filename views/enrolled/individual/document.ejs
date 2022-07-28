@@ -1,0 +1,1039 @@
+<%- include('../../partials/header') -%>
+
+  <link rel="stylesheet" href="/css/application.css">
+  </head>
+
+  <body>
+    <!-- Tab-bar -->
+    <%- include('navBar') -%>
+      <%- include('tabBar',{enrolledId: enrolledLead._id}) -%>
+
+        <!-- upload documents -->
+        <div class="p-4">
+          <div class="head bg-secondary text-light border p-2 px-4 border-primary rounded-3">
+            <p class="mb-2 fs-5 mt-2">Upload Documents of </p>
+            <div class="table-responsive">
+              <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                <thead class="">
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Enrolment Date</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr>
+                    <td>
+                      <%= enrolledLead.name %>
+                    </td>
+                    <td>
+                      <%= enrolledLead.email %>
+                    </td>
+                    <td>
+                      <%= enrolledLead.phone %>
+                    </td>
+                    <td><%= new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="card">
+              <div class="card-header fs-5 fw-semibold"><i class="fa-solid text-danger fa-file-lines"></i> Your Documents</div>
+              <div class="card-body">
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/10th" method="post">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(tenth)?tenth.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Std. 10th Marksheet</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(tenth) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% tenth.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/10th/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/10th" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/12th" method="post">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(twelfth)?twelfth.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Std. 12th Marksheet</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(twelfth) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% twelfth.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/12th/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/12th" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/bachelors" method="post">
+                      <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid" <%
+                            (bachelors)?bachelors.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Bachelors Individual Marksheets*</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(bachelors) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% bachelors.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/bachelors/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/bachelors" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/provisionalFinal" method="post">
+                      <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid" <%
+                            (provisionalFinal)?provisionalFinal.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Provisional/Final Degree Certificate</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(provisionalFinal) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% provisionalFinal.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/provisionalFinal/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/provisionalFinal" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/applicationForm" method="post">
+                      <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(applicationForm)?applicationForm.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Application Form*</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(applicationForm) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% applicationForm.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/applicationForm/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/applicationForm" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/declaration" method="post">
+                      <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(declaration)?declaration.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Declaration*</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(declaration) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% declaration.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/declaration/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/declaration" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/passport" method="post">
+                      <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(passport)?passport.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Copy of Passport</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(passport) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% passport.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/passport/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/passport" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/statementOfPurpose" method="post">
+                      <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(statementOfPurpose)?statementOfPurpose.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Statement of Purpose *</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(statementOfPurpose) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% statementOfPurpose.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/statementOfPurpose/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/statementOfPurpose" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/letterOfRecommendation" method="post">
+                      <h2 class="accordion-header" id="headingNine">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseNine" aria-expanded="true" aria-controls="collapseNine">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(letterOfRecommendation)?letterOfRecommendation.isValid:""; %>
+                          onchange="this.form.submit()">
+                          <span class="fw-semibold">Letter of Recommendation</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(letterOfRecommendation) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% letterOfRecommendation.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/letterOfRecommendation/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/letterOfRecommendation"
+                                method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/englishLanguageCertificate" method="post">
+                      <h2 class="accordion-header" id="headingTen">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(englishLanguageCertificate)?englishLanguageCertificate.isValid:""; %>
+                          onchange="this.form.submit()">
+                          <span class="fw-semibold">English Language Certificate</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(englishLanguageCertificate) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% englishLanguageCertificate.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/englishLanguageCertificate/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/englishLanguageCertificate"
+                                method="post" enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/portfolio" method="post">
+                      <h2 class="accordion-header" id="headingEleven">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(portfolio)?portfolio.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Portfolio </span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(portfolio) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% portfolio.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/portfolio/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/portfolio" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
+                  <div class="accordion-item">
+                    <form action="/enrolled/checkbox/<%= enrolledLead._id %>/otherDocuments" method="post">
+                      <h2 class="accordion-header" id="headingTwelve">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapseTwelve" aria-expanded="true" aria-controls="collapseTwelve">
+                          <input class="form-check-input mt-0 me-2" type="checkbox" name="isValid"
+                            <%=(otherDocuments)?otherDocuments.isValid:""; %> onchange="this.form.submit()">
+                          <span class="fw-semibold">Upload Additional Documents</span>
+                        </button>
+                      </h2>
+                    </form>
+                    <div id="collapseTwelve" class="accordion-collapse collapse" aria-labelledby="headingTwelve"
+                      data-bs-parent="#accordionExample">
+                      <div class="accordion-body bg-light">
+                        <!-- uploaded files -->
+                        <% if(otherDocuments) { %>
+                          <div class="row mb-3">
+                            <div class="col-md-2 d-flex align-items-center">
+                              <i class="fa-solid fa-paperclip me-2"></i>
+                              <span class="fw-semibold"> Uploaded Files:</span>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="hstack gap-3">
+                                <% otherDocuments.files.forEach(function(file){ %>
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= file.fileName %> ">
+                                      <%= file.originalFileName %>
+                                    </a>
+                                    <form
+                                      action="/enrolled/file/<%= enrolledLead._id %>/otherDocuments/<%= file.fileId %>?_method=DELETE"
+                                      method="POST">
+                                      <button class="ms-2 p-0 border-0" style="background: none;" type="submit"><i
+                                          class="text-danger fa-solid fa-xmark"></i></button>
+                                    </form>
+                                  </div>
+                                  <% }) %>
+                              </div>
+                            </div>
+                          </div>
+                          <% } else { %>
+                            <div class="row mb-3">
+                              <div class="col-md-2 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Files:</span>
+                              </div>
+                              <div class="col-md-10">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border d-flex rounded-pill px-3 py-1">
+                                    <span class="text-muted">No files uploaded</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <form action="/enrolled/document/<%= enrolledLead._id %>/otherDocuments" method="post"
+                                enctype="multipart/form-data">
+                                <div class="input-group mb-3">
+                                  <input type="file" class="form-control" id="file" name="file">
+                                  <button type="submit" class="input-group-text" for="file">Upload</button>
+                                </div>
+                              </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <div class="card-header fs-5 fw-semibold"><i class="fa-solid text-success fa-file-circle-check"></i> Your Application's Documents</div>
+            <div class="card-body">
+              <div class="accordion" id="accordionExample2">
+                  <% applications.forEach(function(application){ %>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="heading<%= application._id %>">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#collapse<%= application._id %>" aria-expanded="true"
+                          aria-controls="collapse<%= application._id %>">
+                          <span class="fw-semibold">
+                            <%= application.name %>
+                          </span>
+                        </button>
+                      </h2>
+                      <div id="collapse<%= application._id %>" class="accordion-collapse collapse"
+                        aria-labelledby="heading<%= application._id %>" data-bs-parent="#accordionExample2">
+                        <div class="accordion-body bg-light">
+                          <!-- uploaded files -->
+                          <% if(application.offerLetter){ %>
+                            <div class="row mb-3">
+                              <div class="col-md-3 d-flex align-items-center">
+                                <i class="fa-solid fa-paperclip me-2"></i>
+                                <span class="fw-semibold"> Uploaded Offer Letter:</span>
+                              </div>
+                              <div class="col-md-9">
+                                <div class="hstack gap-3">
+                                  <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                    <a class="text-decoration-none text-dark" target="_blank"
+                                      href="/enrolled/document/<%= enrolledLead._id %>/<%= application.offerLetter.files[0].fileName %>">
+                                      <%= application.offerLetter.files[0].originalFileName %>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <% } %>
+                              <% if(application.partialFeeReceipt){ %>
+                                <div class="row mb-3">
+                                  <div class="col-md-3 d-flex align-items-center">
+                                    <i class="fa-solid fa-paperclip me-2"></i>
+                                    <span class="fw-semibold"> Uploaded Partial Fee Receipt:</span>
+                                  </div>
+                                  <div class="col-md-9">
+                                    <div class="hstack gap-3">
+                                      <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                        <a class="text-decoration-none text-dark" target="_blank"
+                                          href="/enrolled/document/<%= enrolledLead._id %>/<%= application.partialFeeReceipt.files[0].fileName %>">
+                                          <%= application.partialFeeReceipt.files[0].originalFileName %>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <% } %>
+                                  <% if(application.fullFeeReceipt){ %>
+                                    <div class="row mb-3">
+                                      <div class="col-md-3 d-flex align-items-center">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <span class="fw-semibold"> Uploaded Full Fee Receipt:</span>
+                                      </div>
+                                      <div class="col-md-9">
+                                        <div class="hstack gap-3">
+                                          <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                            <a class="text-decoration-none text-dark" target="_blank"
+                                              href="/enrolled/document/<%= enrolledLead._id %>/<%= application.fullFeeReceipt.files[0].fileName %>">
+                                              <%= application.fullFeeReceipt.files[0].originalFileName %>
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <% } %>
+                                      <% if(application.affidavit){ %>
+                                        <div class="row mb-3">
+                                          <div class="col-md-2 d-flex align-items-center">
+                                            <i class="fa-solid fa-paperclip me-2"></i>
+                                            <span class="fw-semibold"> Uploaded Affidavit:</span>
+                                          </div>
+                                          <div class="col-md-10">
+                                            <div class="hstack gap-3">
+                                              <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                <a class="text-decoration-none text-dark" target="_blank"
+                                                  href="/enrolled/document/<%= enrolledLead._id %>/<%= application.affidavit.files[0].fileName %>">
+                                                  <%= application.affidavit.files[0].originalFileName %>
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <% } %>
+                                          <% if(application.sop.length!==0){ %>
+                                            <div class="row mb-3">
+                                              <div class="col-md-2 d-flex align-items-center">
+                                                <i class="fa-solid fa-paperclip me-2"></i>
+                                                <span class="fw-semibold"> Uploaded SOPs:</span>
+                                              </div>
+                                              <div class="col-md-10">
+                                                <div class="hstack gap-3">
+                                                  <% application.sop.forEach(function(document){ %>
+                                                    <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                      <a class="text-decoration-none text-dark" target="_blank"
+                                                        href="/enrolled/document/<%= enrolledLead._id %>/<%= document.files[0].fileName %>">
+                                                        <%= document.files[0].originalFileName %>
+                                                      </a>
+                                                    </div>
+                                                    <% }) %>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <% } %>
+                                              <% if(application.fileLodgedConfirmation){ %>
+                                                <div class="row mb-3">
+                                                  <div class="col-md-2 d-flex align-items-center">
+                                                    <i class="fa-solid fa-paperclip me-2"></i>
+                                                    <span class="fw-semibold"> Uploaded Confirmation:</span>
+                                                  </div>
+                                                  <div class="col-md-10">
+                                                    <div class="hstack gap-3">
+                                                      <div class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                        <a class="text-decoration-none text-dark" target="_blank"
+                                                          href="/enrolled/document/<%= enrolledLead._id %>/<%= application.fileLodgedConfirmation.files[0].fileName %>">
+                                                          <%=
+                                                            application.fileLodgedConfirmation.files[0].originalFileName
+                                                            %>
+                                                        </a>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <% } %>
+                                                  <% if(application.passportLetter){ %>
+                                                    <div class="row mb-3">
+                                                      <div class="col-md-2 d-flex align-items-center">
+                                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                                        <span class="fw-semibold"> Uploaded Passport Letter:</span>
+                                                      </div>
+                                                      <div class="col-md-10">
+                                                        <div class="hstack gap-3">
+                                                          <div
+                                                            class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                            <a class="text-decoration-none text-dark" target="_blank"
+                                                              href="/enrolled/document/<%= enrolledLead._id %>/<%= application.passportLetter.files[0].fileName %>">
+                                                              <%= application.passportLetter.files[0].originalFileName
+                                                                %>
+                                                            </a>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <% } %>
+                                                      <% if(application.passportRejection){ %>
+                                                        <div class="row mb-3">
+                                                          <div class="col-md-2 d-flex align-items-center">
+                                                            <i class="fa-solid fa-paperclip me-2"></i>
+                                                            <span class="fw-semibold"> Uploaded Refusal Letter:</span>
+                                                          </div>
+                                                          <div class="col-md-10">
+                                                            <div class="hstack gap-3">
+                                                              <div
+                                                                class="bg-white border ms-0 d-flex rounded-pill px-3 py-1">
+                                                                <a class="text-decoration-none text-dark"
+                                                                  target="_blank"
+                                                                  href="/enrolled/document/<%= enrolledLead._id %>/<%= application.passportRejection.files[0].fileName %>">
+                                                                  <%=
+                                                                    application.passportRejection.files[0].originalFileName
+                                                                    %>
+                                                                </a>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <% } %>
+
+                        </div>
+                      </div>
+                    </div>
+                    <% }) %>
+                </div>
+              </div>
+            </div>
+          <div id="footer" class="mt-5 text-center text-secondary">
+            © 2022 Bells Overseas. All rights reserved.
+          </div>
+        </div>
+
+
+
+
+
+        <%- include('../../partials/footer') -%>
+          <script src="/js/document.js"></script>
+  </body>
+
+  </html>

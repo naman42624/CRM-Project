@@ -1,0 +1,47 @@
+<%- include('../partials/header') -%>
+  <!-- Sidebar styles for this template -->
+  <link href="/css/sidebar.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/Telle-leadsList.css">
+  <link rel="stylesheet" href="css/Telle-dashboard.css">
+
+  </head>
+
+  <body>
+
+
+    <%- include('sidebar',{user, avatarSrc}) -%>
+
+      <div class="flex-grow-1 whole-body">
+
+        <%- include('../partials/topbar',{date, greeting}) -%>
+
+          <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+              <div class="col-md-6 m-0">
+                <div class="fs-2 breadcrumbForLeads">
+                  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/tellecaller/Telle-reports"
+                          class="text-decoration-none text-dark">Reports</a></li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <div class="col-md-6">
+
+              </div>
+            </div>
+
+            
+          </div>
+
+
+      </div>
+
+
+      <%- include('../partials/footer') -%>
+
+  </body>
+
+  </html>

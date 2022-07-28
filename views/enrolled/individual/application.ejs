@@ -1,0 +1,93 @@
+<%- include('../../partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/application.css">
+</head>
+<body>
+    <!-- Tab-bar -->
+    <%- include('navBar') -%> 
+    <%- include('tabBar',{enrolledId})  -%>
+
+    <div class="p-4">
+        <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
+            <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
+            <div class="table-responsive">
+                <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                    <thead class="">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Enrolment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                          <tr>
+                            <td><%= enrolledLead.name %> </td>
+                            <td><%= enrolledLead.email %></td>
+                            <td><%= enrolledLead.phone %></td>
+                            <td><%= new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %></td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <%- include('applicationTabbar',{enrolledId, applications})  -%>
+        <div class="p-2 px-4 bg-light">
+            <p class="fs-5 fw-bold">Quick Add Program</p>
+            <div class="card mt-3 border">
+                <div class="card-body">
+                    <form action="/enrolled/application/<%= enrolledId %>/applyTo" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <div class="form-floating ">
+                                <input type="text" id="form2" name="name" class="form-control" placeholder="Name" required>
+                                <label class="form-label text-muted" for="form2">Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" id="form4" name="institution" class="form-control" placeholder="Name" required>
+                                <label class="form-label text-muted" for="form4">University Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="text" id="form5" name="intake" class="form-control" placeholder="Name" required>
+                                <label class="form-label text-muted" for="form2">Intake</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" id="form7" name="program" class="form-control" placeholder="Course Name" required>
+                                <label class="form-label text-muted" for="form7">Course Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="text" id="form6" name="year" class="form-control" placeholder="Name" required>
+                                <label class="form-label text-muted" for="form6">Year</label>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating d-grid">
+                               <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="footer" class="mt-5 text-center text-secondary">
+            © 2022 Bells Overseas. All rights reserved.
+        </div>
+    </div>
+
+
+<%- include('../../partials/footer')  -%>
+<script src="/js/application.js"></script>
+</body>
+</html>

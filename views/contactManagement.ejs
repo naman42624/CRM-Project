@@ -1,0 +1,99 @@
+<%- include('partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+</head>
+<body>
+  
+  <% if(user.role === "TelleCaller"){ %>
+    <%- include('tellecaller/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Counsellor"){ %>
+    <%- include('counsellor/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "FOE"){ %>
+    <%- include('foe/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Admin"){ %>
+    <%- include('admin/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Branch Manager"){ %>
+    <%- include('branchManager/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "SOP Team"){ %>
+    <%- include('sopTeam/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Filing Team"){ %>
+    <%- include('filingTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Interview Team"){ %>
+      <%- include('interviewTeam/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Application Team"){ %>
+      <%- include('applicationTeam/sidebar',{user, avatarSrc})  -%>
+  <% } %>
+
+    <div class="flex-grow-1 whole-body">
+        
+        <%- include('partials/topbar',{date, greeting})  -%>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-6 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/user/contactManagement" class="text-decoration-none text-dark">Contact Management</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+
+            <form action="/user/contactManagement" id="contactForm" method="post">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row h-100">
+                              <div class="col-md-6">
+                                <p class="fs-2 fw-semibold">Send Your Message!</p>
+                              </div>
+                              <div class="col-md-6 d-flex justify-content-end">
+                                <img src="https://bellsoverseas.com/wp-content/uploads/2020/11/Bells-Overseas.png" alt="logo" class="w-50 h-75">
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class=" mb-4">
+                                  <select name="sendTo" class="form-select" required>
+                                    <option class="text-muted" selected>Recipient</option>
+                                    <% users.forEach(function(user){ %> 
+                                    <option value="<%= user._id %>"><%= user.name %> [<%= user.role %>]  (<%= user._id.toString().slice(-5) %> )</option>
+                                    <% }) %>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-floating mb-4">
+                                  <textarea id="form2Example19" name="message" rows="5" class="form-control h-100" placeholder="Message" required></textarea>
+                                  <label class="form-label text-muted" for="form2Example19">Message</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" mt-2 d-flex justify-content-end">
+                  <button type="submit" class="btn btn-lg btn-danger w-25">Send</button>
+                </div>
+              </form>
+            </div>
+
+    </div>
+
+<%- include('partials/footer')  -%>
+
+<script src="/js/contactManagement.js"></script>
+</body>
+</html>

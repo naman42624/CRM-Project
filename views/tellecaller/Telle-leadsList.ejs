@@ -1,0 +1,269 @@
+<%- include('../partials/header')  -%> 
+<!-- Sidebar styles for this template -->
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+</head>
+<body>
+  
+    <%- include('sidebar',{user, avatarSrc})  -%> 
+
+    <div class="flex-grow-1 whole-body">
+        
+        <%- include('../partials/topbar',{date, greeting})  -%>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-6 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/tellecaller/Telle-leads" class="text-decoration-none text-dark">Leads</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">List of<span id="status"> <%= status %>  </span>Leads (<span class="count"><%= count %></span>)</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- <div class="fs-6 m-0">
+                        List of Cold Leads
+                    </div> -->
+                </div>
+                <div class="col-md-6">
+                    <!-- <form action="/tellecaller/uploadfile" enctype="multipart/form-data" method="post">
+                        <input type="file" name="uploadfile" accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel' >
+                        <input type="submit" value="Upload Excel">
+                      </form>   -->
+                   <div class="add-new-item  text-end">
+                        <a href="#addNewLead" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addNewLead"><i class="fa-solid fa-plus"></i> Add New Item</a>
+                   </div>
+                   <!-- Modal -->
+                   <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                               
+                                <form action="/tellecaller/Telle-leadsList" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Lead</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        
+                                            <div class="form-group mb-3">
+                                                <label for="leadName" class="mb-1">Name</label>
+                                                <input type="text" class="form-control" name="name" placeholder="Enter name" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadPhone" class="mb-1">Phone</label>
+                                                <input type="text" class="form-control" name="phone" placeholder="Enter Phone" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadEmail" class="mb-1">Email</label>
+                                                <input type="email" class="form-control" name="email" placeholder="Enter Email" >
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCountry" class="mb-1">Interested Country</label>
+                                                <input type="text" class="form-control" name="interestedCountry" placeholder="Enter Interested Country" >
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCollege" class="mb-1">College/University</label>
+                                                <input type="text" class="form-control" name="college" placeholder="Enter College/University" >
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadCourse" class="mb-1">Course</label>
+                                                <input type="text" class="form-control" name="course" placeholder="Enter Course">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="leadComments" class="mb-1">Comments</label>
+                                                <input type="textarea" class="form-control" name="comments" placeholder="Any Comments">
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="leadStatus" class="mb-1">Status</label>
+                                                <select class="form-select" name="status" required>
+                                                    <option>- Select Status -</option>
+                                                    <option>Cold</option>
+                                                    <option>Hot</option>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                                <!-- <form action="/tellecaller/uploadfile" enctype="multipart/form-data" method="post">
+                                    <input type="file" name="uploadfile" accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel' >
+                                    <input type="submit" value="Upload Excel">
+                                  </form>   -->
+                            </div>
+                        </div>
+                  </div>
+                </div>
+                
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="Search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn " type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-end">
+                    <a href="#uploadExcel" data-bs-toggle="modal" data-bs-target="#uploadExcel"  class="btn btn-info">Upload Excel</a>
+                    <div class="modal fade" id="uploadExcel" tabindex="-1" aria-labelledby="uploadExcelLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/tellecaller/uploadfile" method="POST" enctype="multipart/form-data">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-semibold" id="uploadExcelLabel">Upload Excel</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        <div class="form-group d-flex flex-column justify-content-center align-items-center mb-3">
+                                            <!-- choose afile  -->
+                                            <div>
+                                            <!-- delete Excel -->
+                                                <input type="file" name="uploadfile" id="uploadfile" accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel' class="d-none">
+                                                <label for="uploadfile" class="mt-3 btn btn-sm btn-warning">Choose</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-end">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <i class="fa-solid fa-filter fs-3 h-100"></i>
+                            <form action="/filterLeads" method="POST">
+                                <select class="form-select d-inline" onchange="this.form.submit()">
+                                    <option selected>- Select Group -</option>
+                                    <option>Name</option>
+                                    <option>StudentID</option>
+                                    <option>Status</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header"><i class="fas fa-table mr-1"></i><span id="status"> <%= status %>  </span>Leads</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Interested Country</th>
+                                            <th>Phone</th>
+                                            <th>FollowUp Date</th>
+                                            <th>Call</th>
+                                            <th>Comments</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% leads.forEach(function(lead) { %>
+                                            <tr>
+                                                <td><a href="/tellecaller/leads/<%= lead._id %> " class="text-decoration-none text-dark"><%= lead.name %></a></td>
+                                                <td>
+                                                    <%= lead.interestedCountry %>
+                                                </td>
+                                                <td><%= lead.phone %></td>
+
+                                                <td><a href="#updateDate<%= lead._id %>" class="btn text-decoration-none text-dark w-100 editDetails" data-bs-toggle="modal" data-bs-target="#updateDate<%= lead._id %>" value="<%= lead.call %>/<%= lead.telleFollowUps %>"><%= lead.telleFollowUpDate %></a>
+                                                <div class="modal fade" id="updateDate<%= lead._id %>" tabindex="-1" aria-labelledby="updateDateLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form action="/tellecaller/<%= status %>/leads/<%= lead._id %>" method="POST">
+                                                                <div class="modal-header text-center">
+                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateDateLabel">Update Next FollowUp Date</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body mx-4">
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="telleFollowUpDate" class="mb-1">Next FollowUp Date</label>
+                                                                            <input type="date" class="form-control" name="telleFollowUpDate" placeholder="Enter Next FollowUp Date" required>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="modal-footer d-flex justify-content-center text-center">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </td>
+                                                <td><a href="#updateCall<%= lead._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateCall<%= lead._id %>" ><%= lead.call %></a>
+                                                <div class="modal fade" id="updateCall<%= lead._id %>" tabindex="-1" aria-labelledby="updateCallLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form action="/tellecaller/callResponse/<%= lead._id %>" method="POST">
+                                                                <div class="modal-header text-center">
+                                                                    <h5 class="modal-title w-100 fw-semibold" id="updateCallLabel">Report FollowUp</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body mx-4">
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="callResponse" class="mb-1">Call Response</label>
+                                                                            <select class="form-select" name="callResponse" required>
+                                                                                <option selected><%= lead.call %> </option>
+                                                                                <option>Answered</option>
+                                                                                <option>Not Picked</option>
+                                                                                <option>Answered & Cut</option>
+                                                                                <option>Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group mb-3">
+                                                                            <label for="comments" class="mb-1">Comments</label>
+                                                                            <input type="text" class="form-control" name="comments" value="<%= lead.comments %>" placeholder="Enter Comments" required>
+                                                                        </div>
+                                                                </div>
+
+                                                                <div class="modal-footer d-flex justify-content-center text-center">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                   
+                                                    </div>
+                                                </div>
+                                                </td>
+                                                <td><%= lead.comments %></td>
+                                            
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
+
+    </div>
+
+<%- include('../partials/footer')  -%>
+
+
+</body>
+</html>

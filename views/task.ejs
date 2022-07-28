@@ -1,0 +1,220 @@
+<%- include('partials/header')  -%> 
+
+<link href="/css/sidebar.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/Telle-leadsList.css">
+
+<!-- <link rel="stylesheet" href="/css/home.css"> -->
+</head>
+<body>
+  
+  <% if(user.role === "TelleCaller"){ %>
+    <%- include('tellecaller/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Counsellor"){ %>
+    <%- include('counsellor/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "FOE"){ %>
+    <%- include('foe/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Admin"){ %>
+    <%- include('admin/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Branch Manager"){ %>
+    <%- include('branchManager/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "SOP Team"){ %>
+    <%- include('sopTeam/sidebar',{user, avatarSrc})  -%>
+  <% } else if(user.role === "Filing Team"){ %>
+    <%- include('filingTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Interview Team"){ %>
+        <%- include('interviewTeam/sidebar',{user, avatarSrc})  -%>
+    <% } else if(user.role === "Application Team"){ %>
+        <%- include('applicationTeam/sidebar',{user, avatarSrc})  -%>
+    <% } %>
+     
+
+    <div class="flex-grow-1 whole-body">
+        
+      <%- include('partials/topbar',{date, greeting})  -%>
+        
+        <div class="container-fluid main-body mt-0 p-3 h-100">
+            <div class="row">
+                <div class="col-md-6 m-0">
+                    <div class="fs-2 breadcrumbForLeads">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/user/task" class="text-decoration-none text-dark">Tasks</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">List of Tasks</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                   <div class="add-new-item  text-end">
+                        <a href="#addNewLead" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addNewLead"><i class="fa-solid fa-plus"></i> Add New Task</a>
+                   </div>
+                   <!-- Modal -->
+                   <div class="modal fade" id="addNewLead" tabindex="-1" aria-labelledby="addNewLeadLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/user/task/create" method="POST">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 fw-bold" id="addNewLeadLabel">Add New Tasks</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body mx-4">
+                                        
+                                            <div class="form-group mb-3">
+                                                <label for="taskName" class="mb-1">Name</label>
+                                                <input type="text" class="form-control" name="name" placeholder="Enter name" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskDescription" class="mb-1">Description</label>
+                                                <input type="text" class="form-control" name="description" placeholder="Enter Description" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskAssignedTo" class="mb-1">AssignedTo</label>
+                                                <select class="form-select" name="assingnedTo" required>
+                                                    <option value="">Select AssignedTo</option>
+                                                    <% for(var i = 0; i < allUsers.length; i++){ %>
+                                                    <option value="<%= allUsers[i]._id %>"><%- allUsers[i].name %> (<%- allUsers[i]._id.toString().slice(-4) %>)</option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskPriority" class="mb-1">Priority</label>
+                                                <input type="number" class="form-control" name="priority" placeholder="Enter Priority(1-5)">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="taskDueDate" class="mb-1">Due Date</label>
+                                                <input type="date" class="form-control" name="dueDate" placeholder="Enter Due Date">
+                                            </div>
+                                           
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+                
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <div class="fs-5 breadcrumbForLeads">
+                                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                                    <ol class="breadcrumb" id="taskBread">
+                                        <li class="breadcrumb-item" id="assignedTo"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedTo" class="text-decoration-none text-dark"> Tasks Assigned To Me</a> </li>
+                                        <li class="breadcrumb-item" id="assignedBy" aria-current="page"><i class="fas fa-table mr-1"></i><a href="/user/task/assignedBy" class="text-decoration-none text-dark"> Tasks Assigned By Me</a></li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <p class="fw-semibold fs-4">Pending Tasks</p>
+                                <table class="table table-hover List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% for(var i = 0; i < tasks.length; i++){ %>
+                                            <% if(tasks[i].status !== "Completed"){ %>
+                                            <tr>
+                                                <a href="/user/task/<%= person %>/<%= tasks[i]._id %>">
+                                                <td><%= tasks[i].name %></td>
+                                                <td><%= tasks[i].description.toString().slice(0,40) %></td>
+                                                <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
+                                                <td><%= tasks[i].priority %></td>
+                                                <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
+                                                <td><a href="#updateStatus<%= tasks[i]._id %>" class="btn text-decoration-none text-dark w-100" data-bs-toggle="modal" data-bs-target="#updateStatus<%= tasks[i]._id %>"><%= tasks[i].status %></a>
+                                                    <div class="modal fade" id="updateStatus<%= tasks[i]._id %>" tabindex="-1" aria-labelledby="updateStatusLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <form action="/user/task/<%= tasks[i]._id %>" method="POST">
+                                                                    <div class="modal-header text-center">
+                                                                        <h5 class="modal-title w-100 fw-semibold" id="updateStatusLabel">Update Status</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body mx-4">
+                                                                            <div class="form-group mb-3">
+                                                                                <label for="status" class="mb-1">New Status</label>
+                                                                                <select class="form-select" name="status" required>
+                                                                                    <option value="">Select Status</option>
+                                                                                    <option value="Completed">Completed</option>
+                                                                                    <option value="In Progress">In Progress</option>
+                                                                                    <option value="Pending">Assigned</option>
+                                                                                </select>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="modal-footer d-flex justify-content-center text-center">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </a>
+                                            </tr>
+                                            <% } %>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                                       
+                            <div class="mt-2 table-responsive">
+                                <p class="fw-semibold fs-4">Completed Tasks</p>
+                                <table class="table table-hover List" width="100%" cellspacing="0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th><%= (person==="assignedBy")?"Assigned To":"Assigned By" %></th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        <% for(var i = 0; i < tasks.length; i++){ %>
+                                            <% if(tasks[i].status === "Completed"){ %>
+                                            <tr>
+                                                <a href="/user/task/<%- person %>/<%= tasks[i]._id %>">
+                                                <td><%= tasks[i].name %></td> </a>
+                                                <td><%= tasks[i].description.toString().slice(0,40) %></td>
+                                                <td><%= (person==="assignedBy")?tasks[i].assingnedTo.name:tasks[i].assingnedBy.name %></td>
+                                                <td><%= tasks[i].priority %></td>
+                                                <td><%= (tasks[i].dueDate).toLocaleDateString("en-GB") %></td>
+                                                <td><%= tasks[i].status %></td>
+                                            </tr>
+                                            <% } %> 
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                            
+
+        </div>
+    </div>
+
+
+<%- include('partials/footer')  -%>
+<script src="/js/task.js"></script>
+
+</body>
+</html>

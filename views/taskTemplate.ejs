@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Template</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        body{
+            font-family: 'Poppins', sans-serif;
+        }
+        .card {
+            text-align: center;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            margin-bottom: 0;
+            width: 75%;
+            background-color: #ffffff;
+        }
+        .card-body {
+            padding: 4rem;
+        }
+
+        .card-body p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-align: left;
+            line-height: 1.5;
+            margin-bottom: 0;
+            color: #000000;
+        }
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0rem;
+        }
+        .card-title h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0rem;
+        }
+
+        .card-text {
+            /* margin-top: 0; */
+            font-size: 1.125rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-title">
+            <h3 style="margin-bottom: 0; padding-bottom: 0;">Task Update!</h3>
+        </div>
+        <div class="card-body">
+            <p style="margin-bottom: 0; padding-bottom: 0;">Hi <%= to.name %>, </p>
+                <p style="margin-top: 0.3rem; margin-bottom: 0; padding-bottom: 0; padding-top: 0;">You have been assigned a new task due on (<span style="color: rgb(63, 133, 237); "><%= (task.dueDate).toLocaleDateString("en-GB") %></span>) from <span style="color: rgb(237, 63, 118); ">[<%= from.name %>]</span> described as:</span> </p>
+            <div class="card-text">
+                <p style="font-weight: 600; margin-bottom: 0; padding-left: 2rem;">
+                    <%= task.name %>
+                </p>
+                <p style="font-weight: 500; font-style: italic; margin-bottom: 0;padding-left: 3rem;"><%= task.description %></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

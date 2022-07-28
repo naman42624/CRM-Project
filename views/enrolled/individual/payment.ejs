@@ -1,0 +1,45 @@
+<%- include('../../partials/header')  -%> 
+
+<link rel="stylesheet" href="/css/application.css">
+</head>
+<body>
+    <!-- Tab-bar -->
+    <%- include('navBar') -%> 
+    <%- include('tabBar',{enrolledId})  -%>
+    <div class="p-4">
+        <div class="head bg-secondary text-light border p-2 px-4 border-primary rounded-3">
+            <p class="mb-2 fs-5 mt-2">Payment of </p>
+            <div class="table-responsive">
+                <table class="table table-borderless text-white" width="100%" cellspacing="0">
+                    <thead class="">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Enrolment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                          <tr>
+                            <td><%= enrolledLead.name %> </td>
+                            <td><%= enrolledLead.email %></td>
+                            <td><%= enrolledLead.phone %></td>
+                            <td><%= new Date(enrolledLead.enrollmentDate).toLocaleDateString("en-GB") %> </td>
+                          </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+          <div id="footer" class="mt-5 text-center text-secondary">
+            © 2022 Bells Overseas. All rights reserved.
+        </div>
+    </div>
+    
+      
+
+
+
+<%- include('../../partials/footer')  -%>
+
+</body>
+</html>
