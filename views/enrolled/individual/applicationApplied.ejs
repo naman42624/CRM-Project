@@ -55,9 +55,6 @@
 
             <!----------------------------- For Role ----------------------------------------- -->
             <input id="role" type="text" value="<%= user.role %>" hidden>
-            <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>" id="showStatusForm" method="post">
-                <input type="text" id="showStatus" name="showStatus" hidden>
-            </form>
             <!-- -------------------------------------------------- ------------------------ -->
 
             <div class="flex-grow-1">
@@ -630,6 +627,7 @@
                                         <div class="form-floating">
                                             <input type="date" id="form4" name="interviewDate" value="" class="form-control" placeholder="Name" required>
                                             <label class="form-label text-muted" for="form4">Interview Scheduled Date</label>
+                                            <input type="text" id="showStatus" name="showStatus" value="Interview Scheduled" hidden>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -675,7 +673,7 @@
                 </div>
                 <p class="fs-4 mb-1 mt-3 fw-bold text-secondary">Comments</p>
                 <div class="">
-                    <form action="/enrolled/application/<%= enrolledId %>/<%= displayApplication._id %>/commentSend" method="POST">
+                    <form action="/enrolled/application/<%= enrolledId %>/applied/<%= displayApplication._id %>/commentSend" method="POST">
                         <textarea  class="form-control" name="comment" rows="3" placeholder="Write comments..." style="white-space: pre-wrap;"></textarea>
                         <div class="d-flex justify-content-end">
                             <div class="d-grid w-25">

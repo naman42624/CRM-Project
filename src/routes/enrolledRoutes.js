@@ -8,8 +8,12 @@ const crypto = require("crypto");
 const {GridFsStorage} = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
+
+// Make get https request
+const https = require("https");
  
 // Models
+const {User} = require("../models/userModel");
 const Document = require("../models/documentModel");
 const Application = require("../models/applicationModel");
 const EnrolledLead = require("../models/enrolledLeadModel");
@@ -127,13 +131,16 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
     }
 });
 
+
+
 // Update any field of application
 router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
     try {
         const enrolledId = req.params.enrolledId;
         const applicationId = req.params.applicationId
-        const application = await Application.findByIdAndUpdate(applicationId, req.body).populate('enrolledLead');
+        const application = await Application.findByIdAndUpdate(applicationId, req.body).populate('enrolledLead appliedBy');
         console.log(req.body);
+        const branchManager = await User.find({role: "Branch Manager"});
         if(application){
         if(Object.keys(req.body).length) {
             if(req.body.allDocumentsVerified)
@@ -146,11 +153,39 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
         }
         if(req.body.status){
             sendStatusEmail(application, application.enrolledLead, req.body.status);
+            const url = process.env.API+"&numbers=7217453433,9569869456,"+application.enrolledLead.phone+","+ application.appliedBy.phone +","+ branchManager.phone +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ req.body.status +".\nBells Overseas\n6292062929";
+            console.log(url);
+            const options = {
+                method: "GET",
+                rejectUnauthorized: false,
+            };
+            const request = https.request(url, options, (response) => {
+                console.log(response.statusCode);
+                if(response.statusCode == 200){
+                    console.log("Status sms sent");
+                }
+            });
+            request.end();
+            if(req.body.status == "Offer Letter Received"){
+                const url = process.env.API+"&numbers=7217453433,9569869456,"+application.enrolledLead.phone+","+ application.appliedBy.phone +","+ branchManager.phone +"&message=Reminder!!\nPlease pay your tuition fee before the deadline.\nPlease ignore if already paid.\nBells Overseas\n6292062929";
+                console.log(url);
+                const options = {
+                    method: "GET",
+                    rejectUnauthorized: false,
+                };
+                const request = https.request(url, options, (response) => {
+                    console.log(response.statusCode);
+                    if(response.statusCode == 200){
+                        console.log("Fee message sent");
+                    }
+                });
+                request.end();
+            }
             req.body.showStatus=req.body.status;
-            if(req.body.status === "Offer Letter"){
+            if(req.body.status.includes("Offer Letter")){
                 req.body.offerLetterStatus = req.body.status;
             }
-            if(req.body.status === "Fee"){
+            if(req.body.status.includes("Fee")){
                 req.body.paymentStatus = req.body.status;
             }
         }
@@ -232,7 +267,6 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
 // });
 
 router.post("/application/:enrolledId/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
-    // res.redirect("/enrolled/application/" + req.params.enrolledId+ "/applied/" + req.params.applicationId);
     try {
         console.log(req.body);
         const enrolledId = req.params.enrolledId;
