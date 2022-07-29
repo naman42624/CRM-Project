@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 //connect to db  
-mongoose.connect('mongodb://localhost:27017/DummyCRM', { useNewUrlParser: true }).then(() => console.log('connected to db')).catch((err) => console.log(err))
+// mongoose.connect('mongodb://localhost:27017/DummyCRM', { useNewUrlParser: true }).then(() => console.log('connected to db')).catch((err) => console.log(err))
 
 // Dates
 const tomorrow = new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toLocaleDateString("en-GB");

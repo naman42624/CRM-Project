@@ -134,7 +134,7 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
 
 // Scheduling Application
 // Every 2 hours
-nodeCron.schedule("0 */2 * * *", async () => {
+nodeCron.schedule("0 */4 * * *", async () => {
     try {
         const branchManager = await User.findOne({role: "Branch Manager"});
         const applicationTeam = await User.find({role: "Application Team"});
@@ -170,11 +170,11 @@ nodeCron.schedule("0 10 * * *", async () => {
             if(application.status==="Application Sent"){
                 sendStatusSms(application, branchManager, numbers);
             }
-            if(application.status==="Documents Requested by Institution"){
+            if(application.status==="Documents Requested By Institution"){
                 numbers.push(application.enrolledLead.phone);
                 sendStatusSms(application, branchManager, numbers);
             }
-            if(application.status==="Documents Requested by Filing Team"){
+            if(application.status==="Documents Requested By Filing Team"){
                 const filingTeam = await User.find({role: "Filing Team"});
                 filingTeam.forEach(async (teamMember) => {
                     numbers.push(teamMember.phone);
@@ -279,7 +279,7 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
                     oldApplication.documentsRequestedByInstitution.push(req.body);
                     application.documentsRequestedByInstitution = oldApplication.documentsRequestedByInstitution;
                 }
-                application.showStatus = "Documents Requested by Institution";
+                application.showStatus = "Documents Requested By Institution";
             await Application.findByIdAndUpdate(req.params.applicationId, application);
             console.log(application);
             res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
@@ -308,27 +308,7 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
     }
 })
 
-// save comments
-// router.post("/application/:enrolledId/applied/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
-//     try {
-//         console.log(req.body);
-//         const enrolledId = req.params.enrolledId;
-//         const displayApplication = await Application.findById(req.params.applicationId);
-//         const comment = req.body.comment;
-//         const newComment = {
-//             comment: comment,
-//             writtenBy: req.user._id,
-//             timestamp: new Date(),
-//         };
-//         displayApplication.comments.push(newComment);
-//         await displayApplication.save();
-//         res.redirect("/enrolled/application/" + enrolledId+ "/applied/" + req.params.applicationId);
-//     } catch (error) {
-//         console.log(error);
-//         res.redirect("/500");
-//     }
-// });
-
+// save comments for application
 router.post("/application/:enrolledId/:applicationId/commentSend", auth, counsAboveAuth, async (req, res) => {
     try {
         console.log(req.body);
