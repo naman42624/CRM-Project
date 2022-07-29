@@ -8,9 +8,7 @@ const crypto = require("crypto");
 const {GridFsStorage} = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
-
-// Make get https request
-const https = require("https");
+const nodeCron = require("node-cron"); // for scheduling
  
 // Models
 const {User} = require("../models/userModel");
@@ -25,6 +23,9 @@ const getGreeting = require("../config/utilities/greeting");
 
 // Send Status Email
 const {sendStatusEmail} = require("../config/sendEmail");
+
+// Send SMS
+const {sendStatusSms, sendFeeSms} = require("../config/sendSms");
 
 // Middlewares
 const auth = require("../middlewares/auth");
@@ -131,7 +132,94 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
     }
 });
 
+// Scheduling Application
+// Every 2 hours
+nodeCron.schedule("0 */2 * * *", async () => {
+    try {
+        const branchManager = await User.findOne({role: "Branch Manager"});
+        const applicationTeam = await User.find({role: "Application Team"});
+        let numbers = [];
+        applicationTeam.forEach(async (teamMember) => {
+            numbers.push(teamMember.phone);
+        })
+        console.log(numbers);
+        const applications = await Application.find({}).populate('enrolledLead appliedBy');
+        applications.forEach(async (application) => {
+            if(application.status==="Enrolled"){
+                sendStatusSms(application, branchManager, numbers);
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+});
 
+// Every day at 10:00
+nodeCron.schedule("0 10 * * *", async () => {
+    try {
+        const branchManager = await User.findOne({role: "Branch Manager"});
+        const applicationTeam = await User.find({role: "Application Team"});
+        let numbers = [];
+        applicationTeam.forEach(async (teamMember) => {
+            numbers.push(teamMember.phone);
+        })
+        console.log(numbers);
+        const applications = await Application.find({}).populate('enrolledLead appliedBy');
+        applications.forEach(async (application) => {
+            if(application.status==="Application Sent"){
+                sendStatusSms(application, branchManager, numbers);
+            }
+            if(application.status==="Documents Requested by Institution"){
+                numbers.push(application.enrolledLead.phone);
+                sendStatusSms(application, branchManager, numbers);
+            }
+            if(application.status==="Documents Requested by Filing Team"){
+                const filingTeam = await User.find({role: "Filing Team"});
+                filingTeam.forEach(async (teamMember) => {
+                    numbers.push(teamMember.phone);
+                })
+                sendStatusSms(application, branchManager, numbers);
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+})
+
+// Every 2 day at 10:00
+nodeCron.schedule("0 10 */2 * *", async () => {
+    try {
+        const branchManager = await User.findOne({role: "Branch Manager"});
+        const applicationTeam = await User.find({role: "Application Team"});
+        let numbers = [];
+        applicationTeam.forEach(async (teamMember) => {
+            numbers.push(teamMember.phone);
+        })
+        console.log(numbers);
+        const applications = await Application.find({}).populate('enrolledLead appliedBy');
+        applications.forEach(async (application) => {
+            if(application.status==="Application Applied"){
+                sendStatusSms(application, branchManager, numbers);
+            }
+            if(application.status==="Offer Letter Received"){
+                sendStatusSms(application, branchManager, numbers);
+                sendFeeSms(application, branchManager, numbers);
+            }
+            if(application.status==="Partial Fee Paid"||application.status==="Full Fee Paid"){
+                const sopTeam = await User.find({role: "SOP Team"});
+                sopTeam.forEach(async (teamMember) => {
+                    numbers.push(teamMember.phone);
+                })
+                sendStatusSms(application, branchManager, numbers);
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect("/500");
+    }
+})
 
 // Update any field of application
 router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
@@ -153,33 +241,9 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
         }
         if(req.body.status){
             sendStatusEmail(application, application.enrolledLead, req.body.status);
-            const url = process.env.API+"&numbers=7217453433,9569869456,"+application.enrolledLead.phone+","+ application.appliedBy.phone +","+ branchManager.phone +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ req.body.status +".\nBells Overseas\n6292062929";
-            console.log(url);
-            const options = {
-                method: "GET",
-                rejectUnauthorized: false,
-            };
-            const request = https.request(url, options, (response) => {
-                console.log(response.statusCode);
-                if(response.statusCode == 200){
-                    console.log("Status sms sent");
-                }
-            });
-            request.end();
+            sendStatusSms(application, branchManager, []);
             if(req.body.status == "Offer Letter Received"){
-                const url = process.env.API+"&numbers=7217453433,9569869456,"+application.enrolledLead.phone+","+ application.appliedBy.phone +","+ branchManager.phone +"&message=Reminder!!\nPlease pay your tuition fee before the deadline.\nPlease ignore if already paid.\nBells Overseas\n6292062929";
-                console.log(url);
-                const options = {
-                    method: "GET",
-                    rejectUnauthorized: false,
-                };
-                const request = https.request(url, options, (response) => {
-                    console.log(response.statusCode);
-                    if(response.statusCode == 200){
-                        console.log("Fee message sent");
-                    }
-                });
-                request.end();
+               sendFeeSms(application, branchManager, []);
             }
             req.body.showStatus=req.body.status;
             if(req.body.status.includes("Offer Letter")){
@@ -242,7 +306,6 @@ router.post("/application/:enrolledId/applied/:applicationId/:requestedBy", auth
         console.log(error);
         res.redirect("/500");
     }
-
 })
 
 // save comments

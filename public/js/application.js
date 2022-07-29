@@ -366,13 +366,4 @@ $(document).ready(function() {
           console.log(form);
           form.appendTo('#formListFiling');
         })
-
-    //     $("#checkAllDocs").change(function(){
-    //         console.log($(this).is(":checked"));
-    //         $(this).val($(this).is(":checked") ? "checked" : "unchecked");
-    //         console.log($(this).val());
-    //         $("#checkAllDocs").prop("checked") ? ($("#checkAllDocs").val("checked")) :    ($("#checkAllDocs").val("unchecked"));
-    //         console.log($("#checkAllDocs").attr('name'));
-    //         $('#allDocsForm').submit();
-    //    });
 });
