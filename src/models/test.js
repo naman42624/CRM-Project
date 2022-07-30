@@ -28,8 +28,7 @@ const testSchema = new mongoose.Schema({
         trim: true
     },
     testDate: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     testLocation: {
         type: String,

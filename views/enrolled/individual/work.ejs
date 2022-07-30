@@ -22,10 +22,22 @@
                 $('.profile').addClass('active');
             }
             $("input").each(function () {
-                if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
+                if ($(this).attr("value") !== " " && $(this).attr("value") !== "Save" && $(this).attr("value") !== "Edit") {
                     $(this).attr("disabled", true);
                 }
             });
+            $("#edit").click(function (e) {
+                e.preventDefault();
+                $("input").each(function () {
+                        $(this).attr("disabled", false);
+                });
+            });
+            
+            // $("input").each(function () {
+            //     if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
+            //         $(this).attr("disabled", true);
+            //     }
+            // });
             // $('.prevWork > input[type=date]').each(function () {
             //     let d = new Date($(this).val());
             //     console.log(d);
@@ -82,6 +94,7 @@
                             <div class="card-header">
                                 <div class="card-title mb-0">
                                     <p class="fs-5 mb-0 fw-bold"><i class="fa-solid fa-house-laptop text-primary"></i> Work Experience</p>
+                                    <input id="edit" class="ms-3 btn btn-warning w-25" type="submit" value="Edit">
                                 </div>
                             </div>
                             <div id="main" class="card-body">
@@ -140,7 +153,7 @@
                                         </div>
                                         <div class="mt-3 submit p-2 px-4 d-flex justify-content-center">
                                             <input type="submit" class="me-3 btn btn-success w-25" value="Save">
-                                            <button class="ms-3 btn btn-warning w-25">Edit</button>
+                                            
                                         </div>
                                     </form>
                                 </div>
@@ -199,7 +212,7 @@
                                     </div>
                                     <div class="mt-3 submit p-2 px-4 d-flex justify-content-center">
                                         <input type="submit" class="me-3 btn btn-success w-25" value="Save">
-                                        <button class="ms-3 btn btn-warning w-25">Edit</button>
+                                        <!-- <button class="ms-3 btn btn-warning w-25">Edit</button> -->
                                     </div>
                                     </form>
                                 </div>
@@ -214,20 +227,7 @@
                             © 2022 Bells Overseas. All rights reserved.
                         </div>
                 </div>
-                <script>
-                    //  let d = document.getElementById('dob').value;
-                    //     console.log(d);
-                    //     let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
-                    //     document.getElementById('dob').value = datestring;
-                    $('.prevWork').each(function () {
-                        $(this).find('input[type=date]').each(function () {
-                            let d = new Date($(this).val());
-                            console.log("date"+d);
-                            let datestring = d.getFullYear().toString().padStart(4, '0') + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
-                            $(this).val(datestring);
-                        });
-            });
-                </script>
+              
 
     <%- include('../../partials/footer') -%>
 

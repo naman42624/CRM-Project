@@ -9,6 +9,30 @@
             if(window.location.href.match(/\/test/)){
                 $('.profile').addClass('active');
             }
+            $(".testBox").hide();
+            var click = 0;
+            $('#addTask').click(function () {
+                click++;
+                if (click >= 2) {
+                    // let box = $('.testBox').html()
+                    $('#main').append($('.testBox').html())
+                    // box.find('input').attr('class', 'edit'+click)
+                }
+                else {
+                    $('.testBox').show();
+                }
+            })
+            $("input").each(function () {
+                if ($(this).attr("value") !== " " && $(this).attr("value") !== "Save" && $(this).attr("value") !== "Edit") {
+                    $(this).attr("disabled", true);
+                }
+            });
+            $("#edit").click(function (e) {
+                e.preventDefault();
+                $("input").each(function () {
+                    $(this).attr("disabled", false);
+                });
+            });
         });
     </script>
 
@@ -52,9 +76,85 @@
                     <div class="card-header">
                         <div class="card-title mb-0">
                             <p class="fs-5 mb-0 fw-bold"><i class="fa-solid text-info fa-rectangle-list"></i> Tests</p>
+                            <div>
+                                <input id="edit" type="submit" value="Edit">
+                            </div><br>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div id="main" class="card-body">
+                        <% if (testInfo.length> 0) { %>
+                            <% testInfo.forEach((test)=>{ %>
+                        <div class="prevWork">
+                            <hr class="border border-dark bg-dark">
+                        <form action="/enrolled/save/test/edit/<%= enrolledLead._id%>/<%= test._id %>" method="POST">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="testName">Test Name</label>
+                                        <input type="text" name="testName" id="testName" value="<%= test.testName?test.testName:" " %>" class="form-control" placeholder="Test Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="overallScore">Overall Score</label>
+                                        <input type="text" name="overallScore" id="overallScore" value="<%= test.overallScore?test.overallScore:" " %>" class="form-control" placeholder="Overall Score">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="testDate">Test Date</label>
+                                        <input type="date" name="testDate" id="testDate" value="<%= test.testDate?test.testDate:" " %>" class="form-control" placeholder="Test Date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="testLocation">Location</label>
+                                        <input type="text" name="testLocation" id="testLocation" value="<%= test.testLocation?test.testLocation:" " %>" class="form-control" placeholder="Test Location">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="readingScore">Reading Score</label>
+                                        <input type="text" name="readingScore" id="readingScore" value="<%= test.readingScore?test.readingScore:" " %>" class="form-control" placeholder="Reading Score">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="writingScore">Writing Score</label>
+                                        <input type="text" name="writingScore" id="writingScore" value="<%= test.writingScore?test.writingScore:" " %>" class="form-control" placeholder="Writing Score">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="listeningScore">Listening Score</label>
+                                        <input type="text" name="listeningScore" id="listeningScore" value="<%= test.listeningScore?test.listeningScore:" " %>" class="form-control" placeholder="Listening Score">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="speakingScore">Speaking Score</label>
+                                        <input type="text" name="speakingScore" id="speakingScore" value="<%= test.speakingScore?test.speakingScore:" " %>" class="form-control" placeholder="Speaking Score">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="trfNo">TRF No.</label>
+                                        <input type="text" name="trfNo" id="trfNo" value="<%= test.trfNo?test.trfNo:" " %>" class="form-control" placeholder="TRF No.">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3 submit p-2 px-4 d-flex justify-content-center">
+                                <input type="submit" class="me-3 btn btn-info w-25" value="Save">
+                            </div>
+                        </form>
+                        </div>
+                            <% }) %>
+                        <% } %>
+                        <div class="testBox">
                         <form action="/enrolled/save/test/<%= enrolledLead._id %>" method="POST">
                             <div class="row">
                                 <div class="col-md-4">
@@ -120,8 +220,12 @@
                                 <input type="submit" class="me-3 btn btn-info w-25" value="Save">
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
+                <button id="addTask">
+                    + Add Test
+                </button>
                 <div id="footer" class="mt-5 text-center text-secondary">
                     © 2022 Bells Overseas. All rights reserved.
                 </div>

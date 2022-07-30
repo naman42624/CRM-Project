@@ -32,7 +32,10 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false
-    }    
+    } , 
+    branch: {
+        type: String,
+    },   
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -19,6 +19,13 @@ $(document).ready(function() {
     const allowed = ["Counsellor", "Branch Manager", "Application Team", "Admin"];
     const role = $('#role').val();
     console.log(role);
+    if(role === "Student"){
+        $("input").attr("Disabled", "true");
+        $("textarea").attr("Disabled", "true");
+        $("select").attr("Disabled", "true");
+        $("#submit").attr("Disabled", "true");
+        $("button").attr("Disabled", "true");
+    }
     if(!allowed.includes(role)){
         console.log("Not allowed");
         $('.box > input[type=checkbox]').prop('disabled', true);

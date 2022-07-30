@@ -20,6 +20,7 @@ const filingTeamRoutes = require("./src/routes/filingTeamRoutes.js");
 const applicationTeamRoutes = require("./src/routes/applicationTeamRoutes");
 const sopTeamRoutes = require("./src/routes/sopTeamRoutes");
 const interviewTeamRoutes = require("./src/routes/interviewTeamRoutes");
+const branchManagerRoutes = require("./src/routes/branchManagerRoutes");
 
 // middlewares
 const auth = require("./src/middlewares/auth");
@@ -53,7 +54,7 @@ app.use("/filingTeam", filingTeamRoutes);
 app.use("/applicationTeam", applicationTeamRoutes);
 app.use("/sopTeam", sopTeamRoutes);
 app.use("/interviewTeam", interviewTeamRoutes);
-
+app.use("/branchManager", branchManagerRoutes);
 
 // Respective Dashboard Routes
 app.get('/',auth ,(req,res)=>{

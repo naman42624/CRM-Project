@@ -11,12 +11,10 @@ const workSchema = new mongoose.Schema({
         trim: true
     },
     startDate: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     endDate: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     workLocation: {
         type: String,

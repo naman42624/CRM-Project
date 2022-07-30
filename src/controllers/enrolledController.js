@@ -137,6 +137,35 @@ module.exports.work_post = async (req, res) => {
     }
 }
 
+module.exports.work_update = async (req, res) => {
+    try {
+        console.log("hi");
+        const workInfo = await work.findById(req.params.workId);
+        const enrolledLead = await enrolledUser.findById(req.params.enrolledId);
+        console.log(workInfo);
+        await workInfo.updateOne(req.body);
+        res.redirect('/enrolled/save/work/' + req.params.enrolledId);
+        // res.render('enroll', { user });
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+module.exports.test_update = async (req, res) => {
+    try {
+        console.log("hi");
+        const testInfo = await test.findById(req.params.testId);
+        const enrolledLead = await enrolledUser.findById(req.params.enrolledId);
+        console.log(testInfo);
+        await testInfo.updateOne(req.body);
+        res.redirect('/enrolled/save/test/' + req.params.enrolledId);
+        // res.render('enroll', { user });
+    } catch (err) {
+        res.send(err);
+    }
+}
+
+
 module.exports.test_get = async (req, res) => {
     const id = req.params.id;
     console.log("test");

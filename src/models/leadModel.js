@@ -67,6 +67,9 @@ const leadsSchema = new mongoose.Schema({
       counsellorFollowUpDate: {
         type: String
       },
+      branch: {
+        type: String,
+    },
       washot:{
         type: Boolean,
         default: false

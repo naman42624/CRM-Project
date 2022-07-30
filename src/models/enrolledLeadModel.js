@@ -16,8 +16,7 @@ const enrolledLeadSchema = new mongoose.Schema({
         trim: true,
     },
     enrollmentDate: {
-        type: Date,
-        default: Date.now
+        type: String,
     },
     enrolledBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +34,10 @@ const enrolledLeadSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: 'Pending'
-    }
+    },
+    branch: {
+        type: String,
+    },
 },{timestamps: true})
 
 const EnrolledLead = mongoose.model('EnrolledLead', enrolledLeadSchema)

@@ -107,6 +107,9 @@ const applicationSchema = new mongoose.Schema({
             default: Date.now,
         }
     }],
+    branch: {
+        type: String,
+    },
     comments: [{
             comment: String,
             showToStudent: String,

@@ -12,6 +12,7 @@ const nodeCron = require("node-cron"); // for scheduling
  
 // Models
 const {User} = require("../models/userModel");
+const {Lead} = require("../models/leadModel");
 const Document = require("../models/documentModel");
 const Application = require("../models/applicationModel");
 const EnrolledLead = require("../models/enrolledLeadModel");
@@ -81,6 +82,8 @@ router.get('/save/personal/:id', auth , counsAboveAuth, enrolledController.enrol
 router.post('/save/personal/:id', auth , counsAboveAuth, enrolledController.personal_post);
 router.post('/save/academic/:id', auth , counsAboveAuth, enrolledController.academic_post);
 router.get('/save/academic/:id', auth , counsAboveAuth, enrolledController.academic_get);
+router.post('/save/work/edit/:enrolledId/:workId', auth , enrolledController.work_update);
+router.post('/save/test/edit/:enrolledId/:testId', auth , enrolledController.test_update);
 router.post('/save/work/:id', auth , counsAboveAuth, enrolledController.work_post);
 router.get('/save/work/:id', auth , counsAboveAuth, enrolledController.work_get);
 router.post('/save/test/:id', auth , counsAboveAuth, enrolledController.test_post);
