@@ -91,11 +91,12 @@ router.get('/save/test/:id', auth , counsAboveAuth, enrolledController.test_get)
 
 // Apply for applications
 router.get("/application/:enrolledId/applyTo", auth, counsAboveAuth, async (req, res) => {
+    const user =req.user;
     try {
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
         const applications = await Application.find({enrolledLead: enrolledId});
-        res.render("enrolled/individual/application" , {applications, enrolledId, enrolledLead});
+        res.render("enrolled/individual/application" , {applications, enrolledId, enrolledLead, user});
     } catch (error) {
         console.log(error);
         res.redirect("/500");
@@ -122,6 +123,7 @@ router.post('/application/:enrolledId/applyTo', auth, counsAboveAuth, async (req
 
 // Applied Application List
 router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAuth, async (req, res) => {
+    const user =req.user;
     try {
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
@@ -355,6 +357,7 @@ router.post("/application/:enrolledId/applied/:applicationId/comment/:commentId"
 
 // Respective Document page route for each Enrolled Lead
 router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+    const user =req.user;
     try {
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
@@ -371,7 +374,7 @@ router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {
         const portfolio = await Document.findOne({enrolledLead: enrolledId, documentName: "portfolio"});
         const otherDocuments = await Document.findOne({enrolledLead: enrolledId, documentName: "otherDocuments"});
         const applications = await Application.find({enrolledLead: enrolledId}).populate('comments.writtenBy sop affidavit offerLetter partialFeeReceipt fullFeeReceipt fileLodgedConfirmation passportLetter passportRejection');
-        res.render("enrolled/individual/document", {applications, enrolledLead, tenth, twelfth, bachelors, provisionalFinal, applicationForm, declaration, passport, statementOfPurpose, letterOfRecommendation, englishLanguageCertificate, portfolio, otherDocuments });
+        res.render("enrolled/individual/document", {applications, enrolledLead, tenth, twelfth, bachelors, provisionalFinal, applicationForm,user, declaration, passport, statementOfPurpose, letterOfRecommendation, englishLanguageCertificate, portfolio, otherDocuments });
     } catch (error) {
         console.log(error);
         res.redirect("/500");
@@ -380,6 +383,7 @@ router.get("/document/:enrolledId", auth, counsAboveAuth, async (req, res) => {
 
 // Display uploaded files
 router.get("/document/:enrolledId/:fileName", auth, counsAboveAuth, (req, res) => {
+    const user =req.user;
     gfs.files.findOne({filename: req.params.fileName}, (err, file) => {
         if(err){
             console.log(err);
@@ -399,10 +403,11 @@ router.get("/document/:enrolledId/:fileName", auth, counsAboveAuth, (req, res) =
 });
 
 router.get("/payment/:enrolledId", auth, counsAboveAuth, async (req, res) => {
+    const user =req.user;
     try {
         const enrolledId = req.params.enrolledId;
         const enrolledLead = await EnrolledLead.findById(enrolledId);
-        res.render("enrolled/individual/payment" , {enrolledId, enrolledLead});
+        res.render("enrolled/individual/payment" , {enrolledId, enrolledLead, user});
     }
     catch (error) {
         console.log(error);

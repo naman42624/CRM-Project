@@ -1,13 +1,31 @@
 <%- include('../../partials/header') -%>
 
   <link rel="stylesheet" href="/css/application.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js">
+  </script>
+  <script>
+      $(document).ready(function () {
+          
+          const role = $('#role').val();
+          if(role === 'Student'){
+              $("input").attr("disabled", true);
+              $("select").attr("disabled", true);
+              $("#save").attr("disabled", true);
+              $("#edit").attr("disabled", true);
+              $("button").attr("disabled", true);
+          }
+  
+      });
+  </script>
   </head>
 
   <body>
     <!-- Tab-bar -->
     <%- include('navBar') -%>
       <%- include('tabBar',{enrolledId: enrolledLead._id}) -%>
-
+   <!----------------------------- For Role ----------------------------------------- -->
+   <input id="role" type="text" value="<%= user.role %>" hidden>
+   <!-- -------------------------------------------------- ------------------------ -->
         <!-- upload documents -->
         <div class="p-4">
           <div class="head bg-secondary text-light border p-2 px-4 border-primary rounded-3">

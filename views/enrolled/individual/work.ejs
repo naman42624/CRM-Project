@@ -32,6 +32,14 @@
                         $(this).attr("disabled", false);
                 });
             });
+            const role = $('#role').val();
+        if(role === 'Student'){
+            $("input").attr("disabled", true);
+            $("select").attr("disabled", true);
+            $("#save").attr("disabled", true);
+            $("#edit").attr("disabled", true);
+            $("button").attr("disabled", true);
+        }
             
             // $("input").each(function () {
             //     if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
@@ -51,6 +59,9 @@
         <!-- Tab-bar -->
         <%- include('navBar') -%> 
         <%- include('tabBar',{enrolledId : enrolledLead._id})  -%>
+           <!----------------------------- For Role ----------------------------------------- -->
+           <input id="role" type="text" value="<%= user.role %>" hidden>
+           <!-- -------------------------------------------------- ------------------------ -->
                 <!-- upload documents -->
                 <div class="p-4">
                     <div class="head bg-secondary text-light border p-2 px-4 rounded-3">

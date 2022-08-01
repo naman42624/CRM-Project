@@ -3,6 +3,7 @@ const academic = require('../models/academic');
 const work = require('../models/work');
 const test = require('../models/test');
 const personal = require('../models/personalInfo');
+const {User} = require('../models/userModel');
 
 const enrolledUser = require('../models/enrolledLeadModel');
 
@@ -21,10 +22,37 @@ module.exports.enroll_post = async (req, res) => {
                 enrollmentDate: new Date(),
                 enrolledBy: lead.tellecaller,
                 assignedTo: lead.counsellor,
-                lead: lead._id
+                lead: lead._id,
+                branch : lead.branch,
             });
+            
             console.log(user);
             await user.save();
+            
+            const student = new User({
+                name: lead.name,
+                email: lead.email,
+                username: lead.email,
+                phone: lead.phone,
+                enrolledLead: user._id,
+                role: "Student",
+                branch : lead.branch,
+                isVerified: true,
+            })
+        
+            // user.avatar = sharp(Buffer.from("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp")).resize({width: 250, height: 250}).png().toBuffer();
+            // user.avatar.contentType = "image/webp";
+            console.log(student);
+            let password = "Bells@"+lead.name;
+            User.register(student, password, function(err, user,){
+                if(err){
+                    console.log(err);
+                    res.redirect("/user/register");
+                }
+                else{
+                    console.log("User registered");
+                }
+            })
             res.redirect('/enrolled/save/personal/' + user.id);
         }
         else {
@@ -62,18 +90,19 @@ module.exports.personal_post = async (req, res) => {
 
 module.exports.academic_get = async (req, res) => {
     const id = req.params.id;
+    const user =req.user;
     console.log("academic");
     try {
         const academicInfoO = await academic.findOne({ enrolledLead: id });
         if(academicInfoO){
             const academicInfo = await academic.findOne({ enrolledLead: id });
             const enrolledLead = await enrolledUser.findById(req.params.id);
-        res.render('enrolled/individual/educational', { academicInfo, enrolledLead });
+        res.render('enrolled/individual/educational', { academicInfo, enrolledLead, user });
         }
         else{
             const academicInfo = []
             const enrolledLead = await enrolledUser.findById(req.params.id);
-            res.render('enrolled/individual/educational', { academicInfo, enrolledLead });
+            res.render('enrolled/individual/educational', { academicInfo, enrolledLead, user });
         }
     } catch (err) {
         console.log(err);
@@ -109,12 +138,13 @@ module.exports.academic_post = async (req, res) => {
 
 module.exports.work_get = async (req, res) => {
     const id = req.params.id;
+    const user =req.user;
     console.log("work");
     try {
         const workInfo = await work.find({enrolledLead : id });
         const enrolledLead = await enrolledUser.findById(req.params.id);
         console.log(workInfo);
-        res.render('enrolled/individual/work', { enrolledLead, workInfo });
+        res.render('enrolled/individual/work', { enrolledLead, workInfo, user });
     } catch (err) {
         console.log(err);
         res.redirect("/500");
@@ -168,12 +198,13 @@ module.exports.test_update = async (req, res) => {
 
 module.exports.test_get = async (req, res) => {
     const id = req.params.id;
+    const user =req.user;
     console.log("test");
     try {
         const testInfo = await test.find({ enrolledLead: id });
         const enrolledLead = await enrolledUser.findById(req.params.id);
         // console.log(user);
-        res.render('enrolled/individual/test', { enrolledLead, testInfo });
+        res.render('enrolled/individual/test', { enrolledLead, testInfo , user});
     } catch (err) {
         console.log(err);
         res.redirect("/500");
@@ -200,18 +231,19 @@ module.exports.enroll_get = async (req, res) => {
     // console.log("hi");
     try {
         const id = req.params.id;
+        const user =req.user;
         const personalInfoO = await personal.findOne({ enrolledLead: id });
         if(personalInfoO){
             console.log("if")
             const personalInfo = await personal.findOne({ enrolledLead: id });
             const enrolledLead = await enrolledUser.findById(req.params.id);
         // console.log(user);
-            res.render('enrolled/individual/profile', { enrolledLead, personalInfo });
+            res.render('enrolled/individual/profile', { enrolledLead, personalInfo, user });
         } else{
             console.log("else")
             const personalInfo = []
             const enrolledLead = await enrolledUser.findById(req.params.id);
-            res.render('enrolled/individual/profile', { enrolledLead, personalInfo });
+            res.render('enrolled/individual/profile', { enrolledLead, personalInfo, user });
         }
     } catch (err) {
         console.log(err);

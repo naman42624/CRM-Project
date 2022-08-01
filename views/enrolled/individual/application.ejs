@@ -2,11 +2,25 @@
 
 <link rel="stylesheet" href="/css/application.css">
 </head>
+<script>
+$(document).ready(function () {
+const role = $('#role').val();
+        if(role === 'Student'){
+            $("input").attr("disabled", true);
+            $("select").attr("disabled", true);
+            $("#save").attr("disabled", true);
+            $("#edit").attr("disabled", true);
+            $("button").attr("disabled", true);
+        }
+    })
+</script>
 <body>
     <!-- Tab-bar -->
     <%- include('navBar') -%> 
     <%- include('tabBar',{enrolledId})  -%>
-
+                <!----------------------------- For Role ----------------------------------------- -->
+                <input id="role" type="text" value="<%= user.role %>" hidden>
+                <!-- -------------------------------------------------- ------------------------ -->
     <div class="p-4">
         <div class="head bg-secondary text-light border p-2 px-4 rounded-3">
             <p class="mb-2 fs-5 mt-2">Welcome to the application of </p>
