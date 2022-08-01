@@ -23,7 +23,7 @@
                 }
             })
             $("input").each(function () {
-                if ($(this).attr("value") !== " " && $(this).attr("value") !== "Save" && $(this).attr("value") !== "Edit") {
+                if ($(this).attr("value") !== "" && $(this).attr("value") !== "Save") {
                     $(this).attr("disabled", true);
                 }
             });
@@ -74,11 +74,9 @@
             <div class="p-2 px-4 bg-light">
                 <div class="card mb-3 mt-3">
                     <div class="card-header">
-                        <div class="card-title mb-0">
+                        <div class="card-title d-flex justify-content-between mb-0">
                             <p class="fs-5 mb-0 fw-bold"><i class="fa-solid text-info fa-rectangle-list"></i> Tests</p>
-                            <div>
-                                <input id="edit" type="submit" value="Edit">
-                            </div><br>
+                            <button id="edit" class="ms-3 btn btn-sm btn-warning"><i class="fa-solid fa-marker"></i></button>
                         </div>
                     </div>
                     <div id="main" class="card-body">
@@ -91,19 +89,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testName">Test Name</label>
-                                        <input type="text" name="testName" id="testName" value="<%= test.testName?test.testName:" " %>" class="form-control" placeholder="Test Name">
+                                        <input type="text" name="testName" id="testName" value="<%= test.testName?test.testName:"" %>" class="form-control" placeholder="Test Name">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="overallScore">Overall Score</label>
-                                        <input type="text" name="overallScore" id="overallScore" value="<%= test.overallScore?test.overallScore:" " %>" class="form-control" placeholder="Overall Score">
+                                        <input type="text" name="overallScore" id="overallScore" value="<%= test.overallScore?test.overallScore:"" %>" class="form-control" placeholder="Overall Score">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testDate">Test Date</label>
-                                        <input type="date" name="testDate" id="testDate" value="<%= test.testDate?test.testDate:" " %>" class="form-control" placeholder="Test Date">
+                                        <input type="date" name="testDate" id="testDate" value="<%= test.testDate?test.testDate:"" %>" class="form-control" placeholder="Test Date">
                                     </div>
                                 </div>
                             </div>
@@ -111,19 +109,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="testLocation">Location</label>
-                                        <input type="text" name="testLocation" id="testLocation" value="<%= test.testLocation?test.testLocation:" " %>" class="form-control" placeholder="Test Location">
+                                        <input type="text" name="testLocation" id="testLocation" value="<%= test.testLocation?test.testLocation:"" %>" class="form-control" placeholder="Test Location">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="readingScore">Reading Score</label>
-                                        <input type="text" name="readingScore" id="readingScore" value="<%= test.readingScore?test.readingScore:" " %>" class="form-control" placeholder="Reading Score">
+                                        <input type="text" name="readingScore" id="readingScore" value="<%= test.readingScore?test.readingScore:"" %>" class="form-control" placeholder="Reading Score">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="writingScore">Writing Score</label>
-                                        <input type="text" name="writingScore" id="writingScore" value="<%= test.writingScore?test.writingScore:" " %>" class="form-control" placeholder="Writing Score">
+                                        <input type="text" name="writingScore" id="writingScore" value="<%= test.writingScore?test.writingScore:"" %>" class="form-control" placeholder="Writing Score">
                                     </div>
                                 </div>
                             </div>
@@ -131,19 +129,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="listeningScore">Listening Score</label>
-                                        <input type="text" name="listeningScore" id="listeningScore" value="<%= test.listeningScore?test.listeningScore:" " %>" class="form-control" placeholder="Listening Score">
+                                        <input type="text" name="listeningScore" id="listeningScore" value="<%= test.listeningScore?test.listeningScore:"" %>" class="form-control" placeholder="Listening Score">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="speakingScore">Speaking Score</label>
-                                        <input type="text" name="speakingScore" id="speakingScore" value="<%= test.speakingScore?test.speakingScore:" " %>" class="form-control" placeholder="Speaking Score">
+                                        <input type="text" name="speakingScore" id="speakingScore" value="<%= test.speakingScore?test.speakingScore:"" %>" class="form-control" placeholder="Speaking Score">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="trfNo">TRF No.</label>
-                                        <input type="text" name="trfNo" id="trfNo" value="<%= test.trfNo?test.trfNo:" " %>" class="form-control" placeholder="TRF No.">
+                                        <input type="text" name="trfNo" id="trfNo" value="<%= test.trfNo?test.trfNo:"" %>" class="form-control" placeholder="TRF No.">
                                     </div>
                                 </div>
                             </div>
@@ -155,6 +153,7 @@
                             <% }) %>
                         <% } %>
                         <div class="testBox">
+                            <hr class="border border-dark bg-dark">
                         <form action="/enrolled/save/test/<%= enrolledLead._id %>" method="POST">
                             <div class="row">
                                 <div class="col-md-4">
@@ -223,9 +222,11 @@
                         </div>
                     </div>
                 </div>
-                <button id="addTask">
-                    + Add Test
-                </button>
+                <div class="d-flex justify-content-center">
+                    <button id="addTask" class="btn w-25 btn-primary">
+                        + Add Test
+                    </button>
+                </div>
                 <div id="footer" class="mt-5 text-center text-secondary">
                     © 2022 Bells Overseas. All rights reserved.
                 </div>
