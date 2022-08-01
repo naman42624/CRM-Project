@@ -4,7 +4,13 @@
 </head>
 <body>
     <!-- Tab-bar -->
-    <%- include('navBar') -%> 
+    <!-- <%- include('navBar') -%>  -->
+    <% if(user.role === "Student"){ %>
+        <%- include('navbarS') %>
+        <% } else { %>
+        <%- include('navbar') %>
+        <% } %>
+    
     <%- include('tabBar',{enrolledId})  -%>
     <div class="p-4">
         <div class="head bg-secondary text-light border p-2 px-4 border-primary rounded-3">

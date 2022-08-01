@@ -70,7 +70,13 @@
 
     <body>
         <!-- Tab-bar -->
-        <%- include('navBar') -%>
+        <!-- <%- include('navBar') -%> -->
+        <% if(user.role === "Student"){ %>
+            <%- include('navbarS') %>
+            <% } else { %>
+            <%- include('navbar') %>
+            <% } %>
+        
             <%- include('tabBar',{enrolledId: enrolledLead._id}) -%>
                <!----------------------------- For Role ----------------------------------------- -->
                <input id="role" type="text" value="<%= user.role %>" hidden>

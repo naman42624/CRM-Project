@@ -16,7 +16,13 @@ const role = $('#role').val();
 </script>
 <body>
     <!-- Tab-bar -->
-    <%- include('navBar') -%> 
+    <!-- <%- include('navBar') -%>  -->
+    <% if(user.role === "Student"){ %>
+        <%- include('navbarS') %>
+        <% } else { %>
+        <%- include('navbar') %>
+        <% } %>
+    
     <%- include('tabBar',{enrolledId})  -%>
                 <!----------------------------- For Role ----------------------------------------- -->
                 <input id="role" type="text" value="<%= user.role %>" hidden>
