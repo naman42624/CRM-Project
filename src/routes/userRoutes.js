@@ -15,7 +15,7 @@ const {sendEmail, sendMessage} = require("../config/sendEmail");
 // models
 const Tellecaller = require("../models/tellecallerModel");
 const Task = require("../models/taskModel");
-
+const Application = require("../models/applicationModel");
 // Controllers
 const { assignedBy, assignedTo, createTask, updateTask } = require("../controllers/taskController");
 
@@ -257,6 +257,31 @@ router.post("/login", function(req, res){
                 }
                 else if(req.user.role === "Interview Team"){
                     res.redirect("/interviewTeam/");
+                }
+                else if(req.user.role === "Student"){
+                    // const student = User.findById(req.user._id, (err, student)=>{
+                    //     if(err){
+                    //         console.log(err);
+                    //         res.redirect("/500");
+                    //     }
+                    //     else{
+                    //         res.redirect("//"+student.username);
+                    //     }
+                    // });
+                    Application.findOne({enrolledLead: req.user.enrolledLead}, (err, lead)=>{
+                        if(err){
+                            console.log(err);
+                            res.redirect("/500");
+                        }
+                        else{
+                            if(lead){
+                                res.redirect("/enrolled/application/"+req.user.enrolledLead+"/applied/"+lead._id);
+                            }
+                            else{
+                                res.redirect("/enrolled/save/personal/"+req.user.enrolledLead);
+                            }
+                        }
+                    }).populate("enrolledLead");
                 }
             });
         }
