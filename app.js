@@ -103,6 +103,9 @@ app.get("/mail", (req, res) => {
     res.render("verifyTemplate");
 });
 
+app.get("/*", (req, res) => {
+    res.redirect("/404");
+})
 // app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.listen(3000, function(){
