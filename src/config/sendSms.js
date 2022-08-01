@@ -15,7 +15,7 @@ const sendStatusSms = async (application, branchManager, numbers) => {
         number+=","+ application.appliedBy.phone +","+ branchManager.phone;
         console.log(number);
     }
-    const url = process.env.API+"&numbers=7217453433,"+ number +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ application.status +".\nBells Overseas\n6292062929";
+    const url = process.env.API+"&numbers="+ number +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ application.status +".\nBells Overseas\n6292062929";
             console.log(url);
             const options = {
                 method: "GET",
@@ -39,7 +39,7 @@ const sendFeeSms = async (application, branchManager, numbers) => {
         number+=","+ application.appliedBy.phone +","+ branchManager.phone;
         console.log(number);
     }
-    const url = process.env.API+"&numbers=7217453433,9569869456,"+ number +"&message=Reminder!!\nPlease pay your tuition fee before the deadline.\nPlease ignore if already paid.\nBells Overseas\n6292062929";
+    const url = process.env.API+"&numbers="+ number +"&message=Reminder!!\nPlease pay your tuition fee before the deadline.\nPlease ignore if already paid.\nBells Overseas\n6292062929";
                 console.log(url);
                 const options = {
                     method: "GET",
