@@ -52,7 +52,7 @@ conn.once("open", () => {
 
 // multer storage engine
 const storage = new GridFsStorage({
-    url: "mongodb://localhost:27017/DummyCRM",
+    url: process.env.MONGO_URI,
     file: (req, file) => {
         return new Promise((resolve, reject) => {
             crypto.randomBytes(16, (err, buf) => {
@@ -139,15 +139,18 @@ router.get("/application/:enrolledId/applied/:applicationId", auth, counsAboveAu
 // Every 2 hours
 nodeCron.schedule("0 */4 * * *", async () => {
     try {
-        const branchManager = await User.findOne({role: "Branch Manager"});
-        const applicationTeam = await User.find({role: "Application Team"});
+        
         let numbers = [];
-        applicationTeam.forEach(async (teamMember) => {
-            numbers.push(teamMember.phone);
-        })
-        console.log(numbers);
+        
+        // console.log(numbers);
         const applications = await Application.find({}).populate('enrolledLead appliedBy');
         applications.forEach(async (application) => {
+            // console.log(application.enrolledLead.branch);
+            const branchManager = await User.findOne({role: "Branch Manager", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            const applicationTeam = await User.find({role: "Application Team", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            applicationTeam.forEach(async (teamMember) => {
+                numbers.push(teamMember.phone);
+            })
             if(application.status==="Enrolled"){
                 sendStatusSms(application, branchManager, numbers);
             }

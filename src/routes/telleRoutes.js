@@ -224,6 +224,7 @@ router.post("/Telle-leadsList", auth, telleAuth, async function (req, res) {
         const lead = new Lead({
             ...req.body,
             tellecaller: req.user._id,
+            branch: req.user.branch,
         });
         await lead.save();
         res.redirect("/tellecaller/Telle-leads/" + req.body.status);

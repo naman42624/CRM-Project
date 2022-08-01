@@ -21,7 +21,8 @@ module.exports.enroll_post = async (req, res) => {
                 enrollmentDate: new Date(),
                 enrolledBy: lead.tellecaller,
                 assignedTo: lead.counsellor,
-                lead: lead._id
+                lead: lead._id,
+                branch: lead.branch,
             });
             console.log(user);
             await user.save();

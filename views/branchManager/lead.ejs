@@ -227,7 +227,7 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form action="/i/counsellor/update/<%= lead._id %>" method="POST">
+                                        <form action="/counsellor/i/counsellor/update/<%= lead._id %>" method="POST">
                                             <div class="modal-header text-center">
                                                 <h5 class="modal-title w-100 fw-semibold" id="updateLeadLabel">Update
                                                     Details</h5>
@@ -273,7 +273,15 @@
                                                     <input type="textarea" class="form-control" name="comments"
                                                         value="<%= lead.comments %>" placeholder="Any Comments">
                                                 </div>
-
+                                                <div class="form-group mb-3">
+                                                    <label for="leadBranch" class="mb-1">Change Branch</label>
+                                                    <select class="form-select" name="branch" required>
+                                                        <option><%= lead.branch %></option>
+                                                        <option>Jalandhar</option>
+                                                        <option>Ludhiana</option>
+                                                        <option>Bathinda</option>
+                                                    </select>
+                                                </div>
                                                 <div class="form-group mb-3">
                                                     <label for="leadStatus" class="mb-1">Select New Status</label>
                                                     <select class="form-select" name="status" required>

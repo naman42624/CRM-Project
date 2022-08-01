@@ -140,7 +140,8 @@ module.exports.createLead = async function (req, res) {
     const lead = new Lead({
         ...req.body,
         counsellor: req.user._id,
-        tellecaller: req.user._id
+        tellecaller: req.user._id,
+        branch: req.user.branch,
     });
     await lead.save();
     res.redirect("/counsellor/leads/" + req.body.status);

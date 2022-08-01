@@ -13,6 +13,7 @@ const leadsSchema = new mongoose.Schema({
       },
       status: {
           type: String,
+          default: "No Status"
       },
       email: {
           type: String

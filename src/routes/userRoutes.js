@@ -158,12 +158,8 @@ router.get("/profile", auth, function(req, res){
 router.post("/register" , function(req, res){
     console.log(req.body);
     const user = new User({
-        username: req.body.username,
-        name: req.body.name,
+        ...req.body,
         email: req.body.username,
-        address: req.body.address,
-        phone: req.body.phone,
-        role: req.body.role,
         isVerified: false
     });
 
