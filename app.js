@@ -20,7 +20,7 @@ const filingTeamRoutes = require("./src/routes/filingTeamRoutes.js");
 const applicationTeamRoutes = require("./src/routes/applicationTeamRoutes");
 const sopTeamRoutes = require("./src/routes/sopTeamRoutes");
 const interviewTeamRoutes = require("./src/routes/interviewTeamRoutes");
-const branchManagerRoutes = require("./src/routes/branchManagerRoutes");
+const branchManagerRoutes = require("./src/routes/branchmanagerRoutes");
 
 // middlewares
 const auth = require("./src/middlewares/auth");
