@@ -8,7 +8,7 @@ const UserVerification = require("../models/userVerificationModel");
 
 const sendEmail = async (user) => {
     const token = uuidv4() + user.id;
-    const url = "http://localhost:3000/user/verify/" + user.id + "/" + token;
+    const url = "/user/verify/" + user.id + "/" + token;
 
     const hashedToken = await bcrypt.hash(token, 10);
         const userVerification = new UserVerification({
@@ -26,7 +26,7 @@ const sendEmail = async (user) => {
                     console.log("User verification saved")
                 }
             });
-            const resendUrl = "http://localhost:3000/user/resend/" + user.id + "/" + user.email; 
+            const resendUrl = "/user/resend/" + user.id + "/" + user.email; 
 
             const html = await ejs.renderFile(path.join(__dirname +'../../../views/verifyTemplate.ejs'), {
                 name: user.name,
@@ -136,3 +136,4 @@ const sendTaskEmail = async (from, to, task) => {
 }
 
 module.exports = {sendEmail , sendMessage, sendStatusEmail, sendTaskEmail};
+

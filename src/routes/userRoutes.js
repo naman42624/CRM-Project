@@ -18,6 +18,7 @@ const Task = require("../models/taskModel");
 const Application = require("../models/applicationModel");
 // Controllers
 const { assignedBy, assignedTo, createTask, updateTask } = require("../controllers/taskController");
+const branchManagerAuth = require("../middlewares/branchManagerAuth");
 
 const passport = require('passport');
 const date = require("../config/utilities/date");
@@ -139,7 +140,7 @@ router.get("/resend/:id/:email", (req, res) => {
     });
 })
 
-router.get("/register", function(req, res){
+router.get("/register", branchManagerAuth,function(req, res){
     res.render("register");
 });
 
