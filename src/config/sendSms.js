@@ -10,7 +10,8 @@ const sendStatusSms = async (application, branchManager, numbers) => {
     let number="";
     // console.log(application.enrolledLead);
     // console.log(application.appliedBy);
-    // console.log(branchManager);
+    console.log(application.status);
+    console.log(branchManager.phone);
     if(numbers.length === 0){
         number= application.appliedBy.phone +","+ ((application.enrolledLead)?application.enrolledLead.phone+",":"") + ((branchManager)?branchManager.phone:"");
         console.log(number);
@@ -19,7 +20,7 @@ const sendStatusSms = async (application, branchManager, numbers) => {
         number+=","+ application.appliedBy.phone +","+ (branchManager)?branchManager.phone:"";
         console.log(number);
     }
-    const url = process.env.API+"&numbers="+ number +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ application.status +".\nBells Overseas\n6292062929";
+    const url = process.env.API+"&numbers="+ number +"&message=Status of your application number "+ (application._id).toString().slice(-5) +" is changed to "+ application.status +". \nBells Overseas \n6292062929";
             console.log(url);
             const options = {
                 method: "GET",

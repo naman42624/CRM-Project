@@ -166,15 +166,14 @@ nodeCron.schedule("0 */4 * * *", async () => {
 // Every day at 10:00
 nodeCron.schedule("0 10 * * *", async () => {
     try {
-        const branchManager = await User.findOne({role: "Branch Manager"});
-        const applicationTeam = await User.find({role: "Application Team"});
         let numbers = [];
-        applicationTeam.forEach(async (teamMember) => {
-            numbers.push(teamMember.phone);
-        })
-        console.log(numbers);
         const applications = await Application.find({}).populate('enrolledLead appliedBy');
         applications.forEach(async (application) => {
+            const branchManager = await User.findOne({role: "Branch Manager", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            const applicationTeam = await User.find({role: "Application Team", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            applicationTeam.forEach(async (teamMember) => {
+                numbers.push(teamMember.phone);
+            })
             if(application.status==="Application Sent"){
                 sendStatusSms(application, branchManager, numbers);
             }
@@ -183,7 +182,7 @@ nodeCron.schedule("0 10 * * *", async () => {
                 sendStatusSms(application, branchManager, numbers);
             }
             if(application.status==="Documents Requested By Filing Team"){
-                const filingTeam = await User.find({role: "Filing Team"});
+                const filingTeam = await User.find({role: "Filing Team", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
                 filingTeam.forEach(async (teamMember) => {
                     numbers.push(teamMember.phone);
                 })
@@ -199,15 +198,14 @@ nodeCron.schedule("0 10 * * *", async () => {
 // Every 2 day at 10:00
 nodeCron.schedule("0 10 */2 * *", async () => {
     try {
-        const branchManager = await User.findOne({role: "Branch Manager"});
-        const applicationTeam = await User.find({role: "Application Team"});
         let numbers = [];
-        applicationTeam.forEach(async (teamMember) => {
-            numbers.push(teamMember.phone);
-        })
-        console.log(numbers);
         const applications = await Application.find({}).populate('enrolledLead appliedBy');
         applications.forEach(async (application) => {
+            const branchManager = await User.findOne({role: "Branch Manager", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            const applicationTeam = await User.find({role: "Application Team", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
+            applicationTeam.forEach(async (teamMember) => {
+                numbers.push(teamMember.phone);
+            })
             if(application.status==="Application Applied"){
                 sendStatusSms(application, branchManager, numbers);
             }
@@ -216,7 +214,7 @@ nodeCron.schedule("0 10 */2 * *", async () => {
                 sendFeeSms(application, branchManager, numbers);
             }
             if(application.status==="Partial Fee Paid"||application.status==="Full Fee Paid"){
-                const sopTeam = await User.find({role: "SOP Team"});
+                const sopTeam = await User.find({role: "SOP Team", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
                 sopTeam.forEach(async (teamMember) => {
                     numbers.push(teamMember.phone);
                 })
@@ -236,7 +234,8 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
         const applicationId = req.params.applicationId
         const application = await Application.findByIdAndUpdate(applicationId, req.body).populate('enrolledLead appliedBy');
         console.log(req.body);
-        const branchManager = await User.find({role: "Branch Manager"});
+        // console.log(application);
+        const branchManager = await User.findOne({role: "Branch Manager", branch: (application.enrolledLead)?application.enrolledLead.branch:null});
         if(application){
         if(Object.keys(req.body).length) {
             if(req.body.allDocumentsVerified)
@@ -249,7 +248,9 @@ router.post("/application/:enrolledId/applied/:applicationId", auth, counsAboveA
         }
         if(req.body.status){
             sendStatusEmail(application, application.enrolledLead, req.body.status);
-            sendStatusSms(application, branchManager, []);
+            const application1 = await Application.findByIdAndUpdate(applicationId, req.body).populate('enrolledLead appliedBy');
+            console.log(application1.status);
+            sendStatusSms(application1, branchManager, []);
             if(req.body.status == "Offer Letter Received"){
                sendFeeSms(application, branchManager, []);
             }
