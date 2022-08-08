@@ -104,9 +104,9 @@ router.get("/Telle-leads", auth, telleAuth, async function (req, res) {
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const hotCount = await Lead.countDocuments({ status: "Hot" });
-        const coldCount = await Lead.countDocuments({ status: "Cold" });
-        const allCount = await Lead.countDocuments();
+        const hotCount = await Lead.countDocuments({ status: "Hot" , tellecaller: req.user._id});
+        const coldCount = await Lead.countDocuments({ status: "Cold" , tellecaller: req.user._id});
+        const allCount = await Lead.countDocuments({ tellecaller: req.user._id});
         res.render("tellecaller/Telle-leads", { hotCount, coldCount, allCount, avatarSrc, user, date: date.newDateTopBar(), greeting: getGreeting() });
     } catch (error) {
         console.log(error);
