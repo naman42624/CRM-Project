@@ -13,8 +13,8 @@ const getGreeting = require("../config/utilities/greeting");
 module.exports.counsellorDashboard = async function(req, res) {
     try {
         const user = req.user
-        const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
-        const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
+        const tasks = await Task.find({ assingnedTo: req.user._id, status: { $ne: "Completed" } }).populate('assingnedBy')
+        const taskCount = await Task.countDocuments({ assingnedTo: req.user._id , status: { $ne: "Completed" } }).populate('assingnedBy');
         const leads = await Lead.find({counsellor: user._id, counsellorFollowUpDate: today}).populate('counsellor');
         const leadsToday = leads.length
         const hotLeads = await Lead.countDocuments({status: "Hot", counsellor: user._id})
@@ -136,6 +136,7 @@ module.exports.updateLead = async function (req, res) {
 }
 
 module.exports.createLead = async function (req, res) {
+    try {
     console.log(req.body);
     const lead = new Lead({
         ...req.body,
@@ -144,7 +145,15 @@ module.exports.createLead = async function (req, res) {
         branch: req.user.branch,
     });
     await lead.save();
-    res.redirect("/counsellor/leads/" + req.body.status);
+    if(req.body.status === "- Select Status -") {
+        res.redirect("/counsellor/leads/All");
+    } else {
+        res.redirect("/counsellor/leads/" + req.body.status);
+    }
+    } catch (err) {
+        console.log(err);
+        res.redirect("/500");
+    }
 }
 
 module.exports.updateCallResponse = async function (req, res) {

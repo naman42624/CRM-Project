@@ -19,8 +19,8 @@ module.exports.dashboard = async function(req, res) {
         const id = req.user._id 
         const branchManager = req.user
         // tasks
-        const tasks = await Task.find({assingnedTo: req.user._id}).populate('assingnedBy')
-        const taskCount = await Task.countDocuments({assingnedTo: req.user._id}).populate('assingnedBy');
+        const tasks = await Task.find({ assingnedTo: req.user._id, status: { $ne: "Completed" } }).populate('assingnedBy')
+        const taskCount = await Task.countDocuments({ assingnedTo: req.user._id , status: { $ne: "Completed" } }).populate('assingnedBy');
         // applications
         const applications = await Applications.find({branch: req.user.branch}).limit(5);
         const applicationsCount = await Applications.countDocuments({branch: req.user.branch})

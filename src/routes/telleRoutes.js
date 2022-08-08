@@ -240,7 +240,11 @@ router.post("/Telle-leadsList", auth, telleAuth, async function (req, res) {
             branch: req.user.branch,
         });
         await lead.save();
+        if(req.body.status === "- Select Status -") {
+            res.redirect("/tellecaller/Telle-leads/All");
+        } else {
         res.redirect("/tellecaller/Telle-leads/" + req.body.status);
+        }
     } catch (error) {
         console.log(error);
         res.redirect("/500");
