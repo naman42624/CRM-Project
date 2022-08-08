@@ -52,11 +52,11 @@ router.get("/", auth, telleAuth, isVerified, async function (req, res) {
     try {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const tasks = await Task.find({ assingnedTo: req.user._id }).populate('assingnedBy')
-        const taskCount = await Task.countDocuments({ assingnedTo: req.user._id }).populate('assingnedBy');
-        const leads = await Lead.find({ telleFollowUpDate: today })
+        const tasks = await Task.find({ assingnedTo: req.user._id, status: { $ne: "Completed" } }).populate('assingnedBy')
+        const taskCount = await Task.countDocuments({ assingnedTo: req.user._id , status: { $ne: "Completed" } }).populate('assingnedBy');
+        const leads = await Lead.find({ telleFollowUpDate: today , tellecaller: req.user._id });
         const leadsToday = leads.length;
-        const hotLeads = await Lead.countDocuments({ status: "Hot" });
+        const hotLeads = await Lead.countDocuments({ status: "Hot" , tellecaller: req.user._id });
         res.render("tellecaller/Telle-dashboard", { avatarSrc: avatarSrc, taskCount, tasks, user: user, leads: leads, leadsToday: leadsToday, hotLeads: hotLeads, date: date.newDateTopBar(), greeting: getGreeting() });
 
     } catch (error) {
