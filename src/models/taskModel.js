@@ -39,7 +39,11 @@ const taskSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         required: true
-    }
+    },
+    comments: {
+        type: String,
+        trim: true,
+    },
 },{timestamps: true})
 taskSchema.pre('save', async function(next){
     console.log('Saving Task')
