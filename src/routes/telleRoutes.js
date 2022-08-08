@@ -89,13 +89,26 @@ router.post('/uploadfile', upload.single("uploadfile"), (req, res) => {
     });
     // -> Log Excel Data to Console
     console.log(excelData);
-    Lead.insertMany(excelData.Sheet1, (err, data) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.redirect('/tellecaller/Telle-leads/All');
-        }
-    });
+    console.log(excelData.Sheet1);
+    try{
+    excelData.Sheet1.forEach(async (lead) => {
+        const newLead = new Lead({
+            name: lead.name,
+            email: lead.email,
+            phone: lead.phone,
+            tellecaller: req.user._id,
+            branch : req.user.branch,
+            leadFrom : "Excel",
+        });
+        await newLead.save();
+
+    })
+    res.redirect('/tellecaller/Telle-leads/All');
+    }catch(err){
+        console.log(err);
+        res.redirect("/500");
+    }
+
     fs.unlinkSync(filePath);
 });
 
@@ -135,12 +148,12 @@ router.get("/Telle-leads/:status", auth, telleAuth, async function (req, res) {
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
         if (status === "All") {
-            const leads = await Lead.find({});
+            const leads = await Lead.find({tellecaller: req.user._id}).populate("tellecaller");
             const count = leads.length;
             res.render("tellecaller/Telle-leadsList", { count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting() });
         }
         else {
-            const leads = await Lead.find({ status: status });
+            const leads = await Lead.find({ status: status , tellecaller: req.user._id}).populate("tellecaller");
             const count = leads.length;
             res.render("tellecaller/Telle-leadsList", { count, avatarSrc, user, leads, status, date: date.newDateTopBar(), greeting: getGreeting() });
         }
@@ -182,7 +195,7 @@ router.get("/leads/:id/followups", auth, async function (req, res) {
         const id = req.params.id;
         const user = req.user;
         const avatarSrc = "data:image/png;base64," + user.avatar.toString("base64");
-        const followups = await Followup.find({ lead: id }).populate("lead followupBy");
+        const followups = await Followup.find({ lead: id , followupBy: user._id}).populate("lead followupBy");
         res.render("tellecaller/Telle-followup", { avatarSrc, user, followups, leadId: id, date: date.newDateTopBar(), greeting: getGreeting() });
     } catch (error) {
         console.log(error);
